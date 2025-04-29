@@ -9,5 +9,4 @@ export const metadata: Metadata = generateMetadata(
   "An unexpected error has occurred. Please try again later.",
 )
 
-
 export default ErrorBoundary

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Loader2, User, LogOut, Settings, BookOpen } from "lucide-react"
+import { Loader2, User, LogOut, Settings, BookOpen, Activity } from "lucide-react"
 
 export function UserDropdown() {
   const { data: session, status } = useSession()
@@ -81,6 +81,12 @@ export function UserDropdown() {
           <Link href="/review">
             <BookOpen className="mr-2 h-4 w-4" />
             <span>My Contributions</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/activity">
+            <Activity className="mr-2 h-4 w-4" />
+            <span>Activity Log</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

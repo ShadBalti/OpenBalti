@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = !!token
 
   // Define protected routes
-  const protectedRoutes = ["/profile", "/settings"]
+  const protectedRoutes = ["/profile", "/settings", "/review", "/activity"]
   const adminRoutes = ["/admin"]
 
   // Check if the current path is a protected route
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect to home if accessing an admin route without admin role
-  if (isAdminRoute && (!isAuthenticated || token?.role !== "admin")) {
+  if (isAdminRoute && (!isAuthenticated || (token?.role !== "admin" && token?.role !== "owner"))) {
     return NextResponse.redirect(new URL("/", request.url))
   }
 
@@ -30,5 +30,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/settings/:path*", "/admin/:path*"],
+  matcher: [
+    "/profile/:path*",
+    "/settings/:path*",
+    "/admin/:path*",
+    "/review",
+    "/review/:path*",
+    "/activity",
+    "/activity/:path*",
+  ],
 }

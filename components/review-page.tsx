@@ -23,8 +23,12 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Search, CheckCircle, AlertCircle, Edit, Trash2, Save, X, Filter } from "lucide-react"
 import type { IWord } from "@/models/Word"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function ReviewPage() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [words, setWords] = useState<IWord[]>([])
   const [filteredWords, setFilteredWords] = useState<IWord[]>([])
   const [loading, setLoading] = useState(true)
@@ -40,8 +44,18 @@ export default function ReviewPage() {
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
 
   useEffect(() => {
-    fetchWords()
-  }, [])
+    // If not authenticated and authentication check is complete, redirect to login
+    if (status === "unauthenticated") {
+      toast.error("You need to be signed in to access the review page.")
+      router.push("/auth/signin?callbackUrl=/review")
+      return
+    }
+
+    // Only fetch words if authenticated
+    if (status === "authenticated") {
+      fetchWords()
+    }
+  }, [status, router])
 
   useEffect(() => {
     filterAndSortWords()
@@ -126,7 +140,12 @@ export default function ReviewPage() {
         // Mark as reviewed after update
         await updateReviewStatus(editingWord._id, "reviewed")
       } else {
-        toast.error(result.error || "Failed to update word")
+        if (result.error === "Authentication required") {
+          toast.error("Your session has expired. Please log in again.")
+          router.push("/auth/signin?callbackUrl=/review")
+        } else {
+          toast.error(result.error || "Failed to update word")
+        }
       }
     } catch (error) {
       console.error("Error updating word:", error)
@@ -148,7 +167,12 @@ export default function ReviewPage() {
         toast.success("Word deleted successfully!")
         fetchWords()
       } else {
-        toast.error(result.error || "Failed to delete word")
+        if (result.error === "Authentication required") {
+          toast.error("Your session has expired. Please log in again.")
+          router.push("/auth/signin?callbackUrl=/review")
+        } else {
+          toast.error(result.error || "Failed to delete word")
+        }
       }
     } catch (error) {
       console.error("Error deleting word:", error)
@@ -170,6 +194,18 @@ export default function ReviewPage() {
           reviewStatus: status,
         }),
       })
+
+      if (response.status === 401) {
+        toast.error("Your session has expired. Please log in again.")
+        router.push("/auth/signin?callbackUrl=/review")
+        return false
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        toast.error(errorData.error || `Error: ${response.statusText}`)
+        return false
+      }
 
       const result = await response.json()
 
@@ -255,6 +291,18 @@ export default function ReviewPage() {
 
   const getFlaggedCount = () => {
     return words.filter((word) => word.reviewStatus === "flagged").length
+  }
+
+  // Show loading state while checking authentication
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center py-16">
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

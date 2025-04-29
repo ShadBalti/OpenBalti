@@ -20,8 +20,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type { IWord } from "@/models/Word"
+// Add useSession import at the top
+import { useSession } from "next-auth/react"
+import Link from "next/link"
 
 export default function WordsPage() {
+  const { data: session } = useSession()
   const [words, setWords] = useState<IWord[]>([])
   const [loading, setLoading] = useState(true)
   const [direction, setDirection] = useState<"balti-to-english" | "english-to-balti">("balti-to-english")
@@ -160,7 +164,13 @@ export default function WordsPage() {
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "browse" | "add")} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="browse">Browse Dictionary</TabsTrigger>
-          <TabsTrigger value="add">Add New Word</TabsTrigger>
+          {session ? (
+            <TabsTrigger value="add">Add New Word</TabsTrigger>
+          ) : (
+            <TabsTrigger value="add" disabled>
+              Add New Word (Login Required)
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="browse" className="mt-6">
           {loading ? (
@@ -175,19 +185,39 @@ export default function WordsPage() {
               words={words}
               direction={direction}
               onEdit={(word) => {
+                if (!session) {
+                  toast.error("Please log in to edit words")
+                  return
+                }
                 setEditingWord(word)
                 setActiveTab("add")
               }}
-              onDelete={confirmDelete}
+              onDelete={(id) => {
+                if (!session) {
+                  toast.error("Please log in to delete words")
+                  return
+                }
+                confirmDelete(id)
+              }}
+              showActions={!!session}
             />
           )}
         </TabsContent>
         <TabsContent value="add" className="mt-6">
-          <WordForm
-            initialData={editingWord}
-            onSubmit={editingWord ? (data) => handleUpdateWord(editingWord._id, data) : handleAddWord}
-            onCancel={editingWord ? () => setEditingWord(null) : undefined}
-          />
+          {session ? (
+            <WordForm
+              initialData={editingWord}
+              onSubmit={editingWord ? (data) => handleUpdateWord(editingWord._id, data) : handleAddWord}
+              onCancel={editingWord ? () => setEditingWord(null) : undefined}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-8 border rounded-md">
+              <p className="mb-4 text-muted-foreground">You need to be logged in to add or edit words</p>
+              <Button asChild>
+                <Link href="/auth/signin?callbackUrl=/">Sign In</Link>
+              </Button>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
 

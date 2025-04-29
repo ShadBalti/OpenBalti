@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { ProfileCompletion } from "@/components/profile/profile-completion"
 
 export const metadata = generateMetadata("Your Profile", "Manage your OpenBalti account and view your contributions.")
 
@@ -32,6 +33,9 @@ export default async function ProfilePage() {
           <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Your Profile</h1>
           <p className="text-muted-foreground">Manage your account and view your contributions</p>
         </div>
+
+        {/* Profile Completion Card */}
+        <ProfileCompletion user={user} />
 
         <Card>
           <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

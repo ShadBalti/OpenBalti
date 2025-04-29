@@ -4,6 +4,8 @@ export interface IWord extends Document {
   balti: string
   english: string
   reviewStatus?: "flagged" | "reviewed" | null
+  createdBy?: string
+  updatedBy?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -24,6 +26,14 @@ const WordSchema: Schema = new Schema(
       type: String,
       enum: ["flagged", "reviewed", null],
       default: null,
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   {

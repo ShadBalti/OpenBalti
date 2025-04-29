@@ -1,5 +1,5 @@
 {
-  "name": "OpenBalti",
+  "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -41,7 +41,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "date-fns": "4.1.0",
+    "date-fns": "latest",
     "embla-carousel-react": "8.5.1",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
@@ -68,11 +68,11 @@
     "@mongodb-js/zstd": "latest",
     "mongodb-client-encryption": "latest",
     "@aws-sdk/credential-providers": "latest",
-    "react-toastify": "latest",
-    "mongoose": "latest",
     "next-auth": "latest",
     "@auth/mongodb-adapter": "latest",
-    "bcryptjs": "latest"
+    "bcryptjs": "latest",
+    "react-toastify": "latest",
+    "mongoose": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
