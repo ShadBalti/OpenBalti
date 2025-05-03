@@ -1,10 +1,6 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 
 export default function AuthErrorPage() {
   const searchParams = useSearchParams()
@@ -25,18 +21,17 @@ export default function AuthErrorPage() {
   return (
     <div className="container flex h-[calc(100vh-8rem)] items-center justify-center py-8 md:py-12">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[450px]">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Authentication Error</AlertTitle>
-          <AlertDescription>{errorMessage}</AlertDescription>
-        </Alert>
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-md">
+          <h2 className="text-lg font-semibold">Authentication Error</h2>
+          <p>{errorMessage}</p>
+        </div>
         <div className="flex justify-center space-x-4">
-          <Button asChild>
-            <Link href="/auth/signin">Try Again</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/">Go to Home</Link>
-          </Button>
+          <a href="/auth/signin" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+            Try Again
+          </a>
+          <a href="/" className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">
+            Go to Home
+          </a>
         </div>
       </div>
     </div>

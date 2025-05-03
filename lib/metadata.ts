@@ -1,30 +1,37 @@
 import type { Metadata } from "next"
-
-// Base metadata that can be extended by individual pages
 export const baseMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.vercel.app"),
   title: {
-    default: "OpenBalti Dictionary",
+    default: "OpenBalti Dictionary | Free Online Balti Language Resource",
     template: "%s | OpenBalti Dictionary",
   },
-  description: "A comprehensive digital dictionary for the Balti language",
+  description:
+    "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language. Explore Balti to English and English to Balti translations, linguistic insights, and cultural context for language preservation.",
   keywords: [
-    "Balti",
-    "dictionary",
-    "language",
-    "translation",
-    "linguistics",
-    "Baltistan",
-    "Tibetan",
-    "language preservation",
-    "Balti to English",
-    "English to Balti",
+    "Balti language",
     "Balti dictionary online",
-    "learn Balti",
+    "learn Balti language",
+    "Balti to English translation",
+    "English to Balti translator",
+    "Baltistan language",
+    "language preservation project",
+    "Tibetan dialects",
+    "Balti script",
+    "Balti culture",
+    "online language tool",
+    "dictionary for Balti words",
   ],
   authors: [{ name: "OpenBalti Team" }],
   creator: "OpenBalti Project",
   publisher: "OpenBalti Project",
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+  },
+  alternates: {
+    canonical: "https://openbalti.vercel.app",
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -33,16 +40,18 @@ export const baseMetadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "OpenBalti Dictionary",
-    description: "A comprehensive digital dictionary for the Balti language",
+    description:
+      "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
     images: ["/android-chrome-512x512.png"],
-    creator: "@openbalti", // Change this if the handle is incorrect
+    creator: "@openbalti",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://openbalti.vercel.app",
     title: "OpenBalti Dictionary",
-    description: "A comprehensive digital dictionary for the Balti language",
+    description:
+      "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
     siteName: "OpenBalti Dictionary",
     images: [
       {
@@ -52,13 +61,6 @@ export const baseMetadata: Metadata = {
         alt: "OpenBalti Dictionary",
       },
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "OpenBalti Dictionary",
-    description: "A comprehensive digital dictionary for the Balti language",
-    images: ["android-chrome-512x512.png"],
-    creator: "@openbalti",
   },
   icons: {
     icon: "/favicon.ico",

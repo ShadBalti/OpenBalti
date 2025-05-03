@@ -75,6 +75,23 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     if (originalWord.english !== word.english) {
       changes.push(`English: "${originalWord.english}" → "${word.english}"`)
     }
+    if (originalWord.phonetic !== word.phonetic) {
+      changes.push(`Phonetic: "${originalWord.phonetic || "none"}" → "${word.phonetic || "none"}"`)
+    }
+
+    // Check for category changes
+    const originalCategories = originalWord.categories || []
+    const newCategories = word.categories || []
+    if (JSON.stringify(originalCategories) !== JSON.stringify(newCategories)) {
+      changes.push(`Categories updated`)
+    }
+
+    // Check for example changes
+    const originalExamples = originalWord.examples || []
+    const newExamples = word.examples || []
+    if (JSON.stringify(originalExamples) !== JSON.stringify(newExamples)) {
+      changes.push(`Examples updated`)
+    }
 
     await logActivity({
       session,

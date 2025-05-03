@@ -1,84 +1,116 @@
 import { type NextRequest, NextResponse } from "next/server"
-import dbConnect from "@/lib/mongodb"
-import Word from "@/models/Word"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import dbConnect from "@/lib/mongodb"
+import Word from "@/models/Word"
 import { logActivity } from "@/lib/activity-logger"
 
 export async function GET(req: NextRequest) {
   try {
-    console.log("🔄 API: Connecting to MongoDB for fetching words...")
+    const url = new URL(req.url)
+    const search = url.searchParams.get("search") || ""
+    const category = url.searchParams.get("category")
+    const dialect = url.searchParams.get("dialect")
+    const difficulty = url.searchParams.get("difficulty")
+    const feedbackFilter = url.searchParams.get("feedback")
+
     await dbConnect()
-    console.log("✅ API: MongoDB connected for fetching words")
 
-    // Get search query from URL if present
-    const searchParams = req.nextUrl.searchParams
-    const search = searchParams.get("search") || ""
+    const query: any = {}
 
-    let query = {}
+    // Search query
     if (search) {
-      query = {
-        $or: [{ balti: { $regex: search, $options: "i" } }, { english: { $regex: search, $options: "i" } }],
-      }
+      query.$or = [{ balti: { $regex: search, $options: "i" } }, { english: { $regex: search, $options: "i" } }]
+    }
+
+    // Category filter
+    if (category) {
+      query.categories = category
+    }
+
+    // Dialect filter
+    if (dialect) {
+      query.dialect = dialect
+    }
+
+    // Difficulty filter
+    if (difficulty) {
+      query.difficultyLevel = difficulty
+    }
+
+    // Feedback filter
+    if (feedbackFilter) {
+      query[`feedbackStats.${feedbackFilter}`] = { $gt: 0 }
     }
 
     const words = await Word.find(query).sort({ createdAt: -1 })
-    console.log(`📋 API: Successfully fetched ${words.length} words`)
 
     return NextResponse.json({ success: true, data: words })
   } catch (error) {
-    console.error("❌ API Error fetching words:", error)
+    console.error("Error fetching words:", error)
     return NextResponse.json({ success: false, error: "Failed to fetch words" }, { status: 500 })
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    // Check if user is authenticated
     const session = await getServerSession(authOptions)
-
-    if (!session) {
-      return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 })
+    if (!session || !session.user) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    console.log("🔄 API: Connecting to MongoDB for creating a word...")
-    await dbConnect()
-    console.log("✅ API: MongoDB connected for creating a word")
+    const { balti, english, phonetic, categories, dialect, usageNotes, relatedWords, difficultyLevel } =
+      await req.json()
 
-    const body = await req.json()
-
-    // Validate required fields
-    if (!body.balti || !body.english) {
-      console.log("⚠️ API: Validation failed - missing required fields")
+    if (!balti || !english) {
       return NextResponse.json(
         { success: false, error: "Balti word and English translation are required" },
         { status: 400 },
       )
     }
 
-    // Add user ID to the word document
-    const wordData = {
-      ...body,
-      createdBy: session.user.id,
-      updatedBy: session.user.id,
-    }
+    await dbConnect()
 
-    const word = await Word.create(wordData)
-    console.log(`✅ API: Successfully created word: ${word.balti} - ${word.english}`)
-
-    // Log the activity
-    await logActivity({
-      session,
-      action: "create",
-      wordId: word._id,
-      wordBalti: word.balti,
-      wordEnglish: word.english,
-      details: "Added new word to dictionary",
+    // Check if word already exists
+    const existingWord = await Word.findOne({
+      balti: { $regex: new RegExp(`^${balti}$`, "i") },
     })
 
-    return NextResponse.json({ success: true, data: word }, { status: 201 })
+    if (existingWord) {
+      return NextResponse.json(
+        { success: false, error: "This Balti word already exists in the dictionary" },
+        { status: 409 },
+      )
+    }
+
+    const newWord = await Word.create({
+      balti,
+      english,
+      phonetic,
+      categories,
+      dialect,
+      usageNotes,
+      relatedWords,
+      difficultyLevel,
+      createdBy: session.user.id,
+      feedbackStats: { useful: 0, trusted: 0, needsReview: 0 },
+    })
+
+    await logActivity({
+      userId: session.user.id,
+      action: "created_word",
+      details: `Created new word: ${balti} (${english})`,
+      targetId: newWord._id,
+      targetType: "word",
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Word added successfully",
+      data: newWord,
+    })
   } catch (error) {
-    console.error("❌ API Error creating word:", error)
-    return NextResponse.json({ success: false, error: "Failed to create word" }, { status: 500 })
+    console.error("Error adding word:", error)
+    return NextResponse.json({ success: false, error: "Failed to add word" }, { status: 500 })
   }
 }

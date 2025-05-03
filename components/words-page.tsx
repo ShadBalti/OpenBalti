@@ -1,13 +1,18 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { useSearchParams, useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import { useToast } from "@/hooks/use-toast"
+import Link from "next/link"
+import { Loader2, Search } from "lucide-react"
 import WordList from "@/components/word-list"
 import WordForm from "@/components/word-form"
-import SearchBar from "@/components/search-bar"
+import type { IWord } from "@/models/Word"
+
 import { Button } from "@/components/ui/button"
-import { Loader2, RotateCw, ArrowLeftRight } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,50 +24,155 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { IWord } from "@/models/Word"
-// Add useSession import at the top
-import { useSession } from "next-auth/react"
-import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 
 export default function WordsPage() {
   const { data: session } = useSession()
+  const { toast } = useToast()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get("q") || ""
+  const [searchQuery, setSearchQuery] = useState(initialQuery)
   const [words, setWords] = useState<IWord[]>([])
-  const [loading, setLoading] = useState(true)
-  const [direction, setDirection] = useState<"balti-to-english" | "english-to-balti">("balti-to-english")
+  const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [editingWord, setEditingWord] = useState<IWord | null>(null)
-  const [deleteConfirm, setDeleteConfirm] = useState<{ open: boolean; wordId: string | null }>({
-    open: false,
-    wordId: null,
-  })
-  const [activeTab, setActiveTab] = useState<"browse" | "add">("browse")
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
+  const [wordToDelete, setWordToDelete] = useState<string | null>(null)
+  const [direction, setDirection] = useState<"balti-to-english" | "english-to-balti">("balti-to-english")
+  const [activeTab, setActiveTab] = useState<"browse" | "add" | "all" | "recent" | "popular">("browse")
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedDialect, setSelectedDialect] = useState<string | null>(null)
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null)
+  const [selectedFeedback, setSelectedFeedback] = useState<string | null>(null)
+  const [showFiltersSheet, setShowFiltersSheet] = useState(false)
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0)
 
+  // Initialize state from URL parameters
   useEffect(() => {
-    fetchWords()
-  }, [searchTerm])
+    const search = searchParams.get("search") || ""
+    const category = searchParams.get("category")
+    const dialect = searchParams.get("dialect")
+    const difficulty = searchParams.get("difficulty")
+    const feedback = searchParams.get("feedback")
 
-  const fetchWords = async () => {
+    setSearchTerm(search)
+    setSelectedCategory(category)
+    setSelectedDialect(dialect)
+    setSelectedDifficulty(difficulty)
+    setSelectedFeedback(feedback)
+
+    fetchWords(search, category, dialect, difficulty, feedback)
+
+    // Count active filters
+    let count = 0
+    if (category) count++
+    if (dialect) count++
+    if (difficulty) count++
+    if (feedback) count++
+    setActiveFiltersCount(count)
+
+    // Update search query when URL parameter changes
+    setSearchQuery(searchParams.get("q") || "")
+  }, [searchParams])
+
+  const fetchWords = async (
+    search = searchTerm,
+    category = selectedCategory,
+    dialect = selectedDialect,
+    difficulty = selectedDifficulty,
+    feedback = selectedFeedback,
+  ) => {
     try {
-      setLoading(true)
-      const url = searchTerm ? `/api/words?search=${encodeURIComponent(searchTerm)}` : "/api/words"
+      setIsLoading(true)
 
-      const response = await fetch(url)
+      // Build query string
+      const params = new URLSearchParams()
+      if (search) params.append("search", search)
+      if (category) params.append("category", category)
+      if (dialect) params.append("dialect", dialect)
+      if (difficulty) params.append("difficulty", difficulty)
+      if (feedback) params.append("feedback", feedback)
+
+      const response = await fetch(`/api/words?${params.toString()}`)
       const result = await response.json()
 
       if (result.success) {
         setWords(result.data)
       } else {
-        toast.error(result.error || "Failed to fetch words")
+        toast({
+          title: "Error",
+          description: result.error || "Failed to fetch words",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Error fetching words:", error)
-      toast.error("Failed to fetch words")
+      toast({
+        title: "Error",
+        description: "Failed to fetch words",
+        variant: "destructive",
+      })
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
-  const handleAddWord = async (wordData: { balti: string; english: string }) => {
+  const updateUrl = (
+    search = searchTerm,
+    category = selectedCategory,
+    dialect = selectedDialect,
+    difficulty = selectedDifficulty,
+    feedback = selectedFeedback,
+  ) => {
+    const params = new URLSearchParams()
+    if (search) params.append("search", search)
+    if (category) params.append("category", category)
+    if (dialect) params.append("dialect", dialect)
+    if (difficulty) params.append("difficulty", difficulty)
+    if (feedback) params.append("feedback", feedback)
+
+    const queryString = params.toString()
+    router.push(queryString ? `/?${queryString}` : "/")
+  }
+
+  const handleSearchChange = (term: string) => {
+    setSearchTerm(term)
+    updateUrl(term, selectedCategory, selectedDialect, selectedDifficulty, selectedFeedback)
+  }
+
+  const handleCategoryChange = (category: string | null) => {
+    setSelectedCategory(category)
+    updateUrl(searchTerm, category, selectedDialect, selectedDifficulty, selectedFeedback)
+  }
+
+  const handleDialectChange = (dialect: string | null) => {
+    setSelectedDialect(dialect)
+    updateUrl(searchTerm, selectedCategory, dialect, selectedDifficulty, selectedFeedback)
+  }
+
+  const handleDifficultyChange = (difficulty: string | null) => {
+    setSelectedDifficulty(difficulty)
+    updateUrl(searchTerm, selectedCategory, selectedDialect, difficulty, selectedFeedback)
+  }
+
+  const handleFeedbackChange = (feedback: string | null) => {
+    setSelectedFeedback(feedback)
+    updateUrl(searchTerm, selectedCategory, selectedDialect, selectedDifficulty, feedback)
+  }
+
+  const clearAllFilters = () => {
+    setSelectedCategory(null)
+    setSelectedDialect(null)
+    setSelectedDifficulty(null)
+    setSelectedFeedback(null)
+    setActiveFiltersCount(0)
+    updateUrl(searchTerm, null, null, null, null)
+    setShowFiltersSheet(false)
+  }
+
+  const handleAddWord = async (wordData: any) => {
     try {
       const response = await fetch("/api/words", {
         method: "POST",
@@ -75,21 +185,47 @@ export default function WordsPage() {
       const result = await response.json()
 
       if (result.success) {
-        toast.success("Word added successfully!")
-        fetchWords()
+        toast({
+          title: "Success",
+          description: "Word added successfully",
+        })
         setActiveTab("browse")
+        fetchWords() // Refresh the word list
       } else {
-        toast.error(result.error || "Failed to add word")
+        toast({
+          title: "Error",
+          description: result.error || "Failed to add word",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Error adding word:", error)
-      toast.error("Failed to add word")
+      toast({
+        title: "Error",
+        description: "Failed to add word",
+        variant: "destructive",
+      })
     }
   }
 
-  const handleUpdateWord = async (id: string, wordData: { balti: string; english: string }) => {
+  const handleEditWord = (word: IWord) => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to edit words",
+        variant: "destructive",
+      })
+      return
+    }
+    setEditingWord(word)
+    setActiveTab("add")
+  }
+
+  const handleUpdateWord = async (wordData: any) => {
+    if (!editingWord) return
+
     try {
-      const response = await fetch(`/api/words/${id}`, {
+      const response = await fetch(`/api/words/${editingWord._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,43 +236,76 @@ export default function WordsPage() {
       const result = await response.json()
 
       if (result.success) {
-        toast.success("Word updated successfully!")
+        toast({
+          title: "Success",
+          description: "Word updated successfully",
+        })
+        setActiveTab("browse")
         setEditingWord(null)
-        fetchWords()
+        fetchWords() // Refresh the word list
       } else {
-        toast.error(result.error || "Failed to update word")
+        toast({
+          title: "Error",
+          description: result.error || "Failed to update word",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Error updating word:", error)
-      toast.error("Failed to update word")
+      toast({
+        title: "Error",
+        description: "Failed to update word",
+        variant: "destructive",
+      })
     }
   }
 
   const confirmDelete = (id: string) => {
-    setDeleteConfirm({ open: true, wordId: id })
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to delete words",
+        variant: "destructive",
+      })
+      return
+    }
+    setWordToDelete(id)
+    setDeleteConfirmOpen(true)
   }
 
   const handleDeleteWord = async () => {
-    if (!deleteConfirm.wordId) return
+    if (!wordToDelete) return
 
     try {
-      const response = await fetch(`/api/words/${deleteConfirm.wordId}`, {
+      const response = await fetch(`/api/words/${wordToDelete}`, {
         method: "DELETE",
       })
 
       const result = await response.json()
 
       if (result.success) {
-        toast.success("Word deleted successfully!")
-        fetchWords()
+        toast({
+          title: "Success",
+          description: "Word deleted successfully",
+        })
+        fetchWords() // Refresh the word list
       } else {
-        toast.error(result.error || "Failed to delete word")
+        toast({
+          title: "Error",
+          description: result.error || "Failed to delete word",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Error deleting word:", error)
-      toast.error("Failed to delete word")
+      toast({
+        title: "Error",
+        description: "Failed to delete word",
+        variant: "destructive",
+      })
     } finally {
-      setDeleteConfirm({ open: false, wordId: null })
+      setDeleteConfirmOpen(false)
+      setWordToDelete(null)
     }
   }
 
@@ -144,89 +313,121 @@ export default function WordsPage() {
     setDirection((prev) => (prev === "balti-to-english" ? "english-to-balti" : "balti-to-english"))
   }
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/?q=${encodeURIComponent(searchQuery.trim())}`)
+    } else {
+      router.push("/")
+    }
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between gap-4">
-        <div className="flex-1">
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={toggleDirection} variant="outline" className="whitespace-nowrap">
-            <ArrowLeftRight className="mr-2 h-4 w-4" />
-            {direction === "balti-to-english" ? "Balti → English" : "English → Balti"}
+    <Card>
+      <CardHeader>
+        <CardTitle>Dictionary</CardTitle>
+        <CardDescription>Browse and search for Balti words and their translations</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <form onSubmit={handleSearch} className="flex w-full max-w-sm items-center space-x-2">
+          <Input
+            type="search"
+            placeholder="Search words..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1"
+          />
+          <Button type="submit">
+            <Search className="h-4 w-4 mr-2" />
+            Search
           </Button>
-          <Button onClick={() => fetchWords()} variant="outline" size="icon" aria-label="Refresh word list">
-            <RotateCw className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+        </form>
 
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "browse" | "add")} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="browse">Browse Dictionary</TabsTrigger>
-          {session ? (
-            <TabsTrigger value="add">Add New Word</TabsTrigger>
-          ) : (
-            <TabsTrigger value="add" disabled>
-              Add New Word (Login Required)
-            </TabsTrigger>
-          )}
-        </TabsList>
-        <TabsContent value="browse" className="mt-6">
-          {loading ? (
-            <div className="flex justify-center items-center py-16">
-              <div className="flex flex-col items-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
-                <p className="text-muted-foreground">Loading dictionary...</p>
+        <Tabs
+          defaultValue="all"
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as "browse" | "add" | "all" | "recent" | "popular")}
+        >
+          <TabsList>
+            <TabsTrigger value="all">All Words</TabsTrigger>
+            <TabsTrigger value="recent">Recent</TabsTrigger>
+            <TabsTrigger value="popular">Popular</TabsTrigger>
+            {session && <TabsTrigger value="add">{editingWord ? "Edit Word" : "Add New Word"}</TabsTrigger>}
+          </TabsList>
+          <TabsContent value="all" className="space-y-4">
+            <WordList query={searchQuery} sort="alphabetical" />
+          </TabsContent>
+          <TabsContent value="recent" className="space-y-4">
+            <WordList query={searchQuery} sort="recent" />
+          </TabsContent>
+          <TabsContent value="popular" className="space-y-4">
+            <WordList query={searchQuery} sort="popular" />
+          </TabsContent>
+          <TabsContent value="browse" className="focus:outline-none">
+            {isLoading ? (
+              <div className="flex justify-center items-center py-16">
+                <div className="flex flex-col items-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" aria-hidden="true" />
+                  <p className="text-muted-foreground">Loading dictionary...</p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <WordList
-              words={words}
-              direction={direction}
-              onEdit={(word) => {
-                if (!session) {
-                  toast.error("Please log in to edit words")
-                  return
-                }
-                setEditingWord(word)
-                setActiveTab("add")
-              }}
-              onDelete={(id) => {
-                if (!session) {
-                  toast.error("Please log in to delete words")
-                  return
-                }
-                confirmDelete(id)
-              }}
-              showActions={!!session}
-            />
-          )}
-        </TabsContent>
-        <TabsContent value="add" className="mt-6">
-          {session ? (
-            <WordForm
-              initialData={editingWord}
-              onSubmit={editingWord ? (data) => handleUpdateWord(editingWord._id, data) : handleAddWord}
-              onCancel={editingWord ? () => setEditingWord(null) : undefined}
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center p-8 border rounded-md">
-              <p className="mb-4 text-muted-foreground">You need to be logged in to add or edit words</p>
-              <Button asChild>
-                <Link href="/auth/signin?callbackUrl=/">Sign In</Link>
-              </Button>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+            ) : words.length > 0 ? (
+              <WordList
+                words={words}
+                direction={direction}
+                onEdit={handleEditWord}
+                onDelete={confirmDelete}
+                showActions={!!session}
+              />
+            ) : (
+              <Card className="p-8 text-center">
+                <div className="flex flex-col items-center justify-center gap-4">
+                  <p className="text-muted-foreground">No words found</p>
+                  {searchTerm || activeFiltersCount > 0 ? (
+                    <Button variant="outline" onClick={clearAllFilters}>
+                      Clear all filters
+                    </Button>
+                  ) : session ? (
+                    <Button onClick={() => setActiveTab("add")}>Add your first word</Button>
+                  ) : (
+                    <Button asChild>
+                      <Link href="/auth/signin">Sign in to add words</Link>
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            )}
+          </TabsContent>
 
-      <AlertDialog open={deleteConfirm.open} onOpenChange={(open) => setDeleteConfirm({ ...deleteConfirm, open })}>
+          <TabsContent value="add" className="focus:outline-none">
+            {session ? (
+              <WordForm
+                initialData={editingWord}
+                onSubmit={editingWord ? handleUpdateWord : handleAddWord}
+                onCancel={() => {
+                  setEditingWord(null)
+                  setActiveTab("browse")
+                }}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8 border rounded-md">
+                <p className="mb-4 text-muted-foreground">You need to be logged in to add or edit words</p>
+                <Button asChild>
+                  <Link href="/auth/signin?callbackUrl=/">Sign In</Link>
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the word from the dictionary.
+              This action cannot be undone. This will permanently delete the word and all associated data from the
+              dictionary.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -240,19 +441,6 @@ export default function WordsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-    </div>
+    </Card>
   )
 }

@@ -1,54 +1,50 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function WordsPageSkeleton() {
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between gap-4">
-        <Skeleton className="h-10 w-full max-w-md" />
-        <div className="flex gap-2">
-          <Skeleton className="h-10 w-32" />
-          <Skeleton className="h-10 w-10" />
+    <Card>
+      <CardHeader>
+        <CardTitle>Dictionary</CardTitle>
+        <CardDescription>Browse and search for Balti words and their translations</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="flex w-full max-w-sm items-center space-x-2">
+          <Skeleton className="h-10 flex-1" />
+          <Skeleton className="h-10 w-24" />
         </div>
-      </div>
 
-      <Tabs defaultValue="browse" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="browse" disabled>
-            Browse Dictionary
-          </TabsTrigger>
-          <TabsTrigger value="add" disabled>
-            Add New Word
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="browse" className="mt-6">
-          <Card>
-            <CardHeader className="pb-3">
-              <Skeleton className="h-6 w-48 mb-2" />
-              <Skeleton className="h-4 w-72" />
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="rounded-md border p-4">
-                <div className="space-y-4">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <Skeleton className="h-5 w-32" />
-                        <Skeleton className="h-4 w-48" />
-                      </div>
-                      <div className="flex gap-2">
-                        <Skeleton className="h-8 w-8 rounded-full" />
-                        <Skeleton className="h-8 w-8 rounded-full" />
-                      </div>
+        <div>
+          <div className="flex space-x-1 mb-4">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+
+          <div className="space-y-4">
+            {Array(3)
+              .fill(0)
+              .map((_, i) => (
+                <div key={i} className="border rounded-lg p-4 space-y-2">
+                  <div className="flex justify-between">
+                    <div>
+                      <Skeleton className="h-6 w-32 mb-1" />
+                      <Skeleton className="h-4 w-24" />
                     </div>
-                  ))}
+                    <div className="flex space-x-1">
+                      <Skeleton className="h-6 w-16" />
+                      <Skeleton className="h-6 w-16" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-9 w-32" />
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+              ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
+
+export default WordsPageSkeleton

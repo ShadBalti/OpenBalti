@@ -78,4 +78,6 @@ process.on("SIGINT", async () => {
   process.exit(0)
 })
 
+// Export both as named export and default export for backward compatibility
+export const connectToDatabase = dbConnect
 export default dbConnect
