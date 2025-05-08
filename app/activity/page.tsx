@@ -1,13 +1,7 @@
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { generateMetadata } from "@/lib/metadata"
-import dynamic from 'next/dynamic'
-
-// Dynamically import the ActivityLogList with no SSR
-const ActivityLogList = dynamic(
-  () => import("@/components/activity/activity-log-list"),
-  { ssr: false }
-)
+import ActivityWrapper from "@/components/activity/activity-wrapper"
 
 export const metadata = generateMetadata(
   "Activity Log",
@@ -33,7 +27,7 @@ export default function ActivityPage() {
             </div>
           }
         >
-          <ActivityLogList limit={20} />
+          <ActivityWrapper limit={20} />
         </Suspense>
       </div>
     </div>
