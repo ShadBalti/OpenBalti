@@ -1,84 +1,118 @@
-import Link from "next/link"
-import CommunityStats from "@/components/community-stats"
+'use client'
+
+import * as Accordion from '@radix-ui/react-accordion'
+import Link from 'next/link'
+import { ChevronDown } from 'lucide-react'
+import CommunityStats from '@/components/community-stats'
+import { cn } from '@/lib/utils'
 
 export function HomePageContent() {
   return (
     <section className="prose mx-auto max-w-3xl text-muted-foreground mt-16">
-      <h2 className="text-xl font-semibold">What is the Balti Language?</h2>
-      <p>
-        The <strong>Balti language</strong> is a Tibetic language spoken in the scenic mountains of Baltistan, a region
-        in northern Pakistan. It is considered one of the most preserved forms of classical Tibetan, retaining ancient
-        phonology and grammar. With deep cultural roots, the Balti language is a living heritage of the greater
-        Himalayan region.
-      </p>
+      <Accordion.Root
+        type="multiple"
+        className="space-y-4"
+        defaultValue={['balti', 'dictionary']}
+      >
+        <AccordionItem value="balti" title="What is the Balti Language?">
+          <p>
+            The <strong>Balti language</strong> is a Tibetic language spoken in the scenic mountains of Baltistan, a region in northern Pakistan. It is considered one of the most preserved forms of classical Tibetan, retaining ancient phonology and grammar.
+          </p>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Explore the OpenBalti Digital Dictionary</h2>
-      <p>
-        <strong>OpenBalti Dictionary</strong> is a free and open-source platform designed to help users{" "}
-        <strong>translate Balti to English</strong> and <strong>English to Balti</strong>. It’s built for students,
-        researchers, native speakers, and anyone interested in
-        <strong>preserving endangered languages</strong>. Our mission is to support language documentation, digital
-        access, and community knowledge-sharing.
-      </p>
+        <AccordionItem value="dictionary" title="Explore the OpenBalti Digital Dictionary">
+          <p>
+            <strong>OpenBalti Dictionary</strong> is a free and open-source platform to <strong>translate Balti to English</strong> and <strong>English to Balti</strong>. Built for learners, speakers, and culture enthusiasts.
+          </p>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Why Balti Matters</h2>
-      <ul>
-        <li>One of the oldest spoken Tibetan dialects in the world</li>
-        <li>Crucial for preserving the cultural identity of Baltistan</li>
-        <li>Still spoken in Skardu, Shigar, Kharmang, and Ghanche</li>
-        <li>Contains unique vocabulary not found in other Tibetan variants</li>
-      </ul>
+        <AccordionItem value="importance" title="Why Balti Matters">
+          <ul className="list-disc list-inside">
+            <li>One of the oldest spoken Tibetan dialects</li>
+            <li>Crucial for preserving Baltistan’s identity</li>
+            <li>Still spoken in Skardu, Shigar, Kharmang, and Ghanche</li>
+            <li>Unique vocabulary not found in other dialects</li>
+          </ul>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Learn Balti Online for Free</h2>
-      <p>
-        Whether you're a linguist, a student of Himalayan culture, or someone reconnecting with your roots, OpenBalti
-        provides a user-friendly experience to <strong>learn Balti online</strong>. Discover word meanings, suggested
-        usage, and historical context for each entry.
-      </p>
+        <AccordionItem value="learn" title="Learn Balti Online for Free">
+          <p>
+            OpenBalti helps you <strong>learn Balti online</strong> with meanings, usage, and historical context.
+          </p>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Features of the OpenBalti Dictionary</h2>
-      <ul>
-        <li>Fast and responsive interface for desktop and mobile</li>
-        <li>Real-time Balti word search and filtering by tags</li>
-        <li>Community submissions with expert review</li>
-        <li>Plans for audio pronunciation and sentence examples</li>
-        <li>Future support for Roman script and native script</li>
-      </ul>
+        <AccordionItem value="features" title="Features of the OpenBalti Dictionary">
+          <ul className="list-disc list-inside">
+            <li>Fast and responsive UI</li>
+            <li>Real-time word search and filtering</li>
+            <li>Community submissions and reviews</li>
+            <li>Plans for audio and sentence examples</li>
+            <li>Future support for Roman and native script</li>
+          </ul>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Technology Behind OpenBalti</h2>
-      <p>
-        This project is built using modern web technologies such as <strong>Next.js</strong>,
-        <strong> TypeScript</strong>, and <strong>Tailwind CSS</strong>. It is fully open-source and hosted on Vercel.
-        You can explore the code on{" "}
-        <Link href="https://github.com/ShadBalti/openbalti" className="text-primary underline" target="_blank">
-          GitHub
-        </Link>{" "}
-        and even contribute to our dictionary.
-      </p>
+        <AccordionItem value="tech" title="Technology Behind OpenBalti">
+          <p>
+            Built with <strong>Next.js</strong>, <strong>TypeScript</strong>, and <strong>Tailwind CSS</strong>. Hosted on Vercel. Check out the code on{' '}
+            <Link href="https://github.com/ShadBalti/openbalti" target="_blank" className="text-primary underline">
+              GitHub
+            </Link>.
+          </p>
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Contribute to Language Preservation</h2>
-      <p>
-        We believe language is culture. You can help keep Balti alive by{" "}
-        <Link href="/contribute" className="text-primary underline">
-          submitting words
-        </Link>
-        , fixing definitions, or sharing this platform. Every contribution adds value to this growing dictionary for the
-        Balti-speaking community and beyond.
-      </p>
+        <AccordionItem value="contribute" title="Contribute to Language Preservation">
+          <p>
+            <Link href="/contribute" className="text-primary underline">
+              Submit words
+            </Link>, fix definitions, or share the platform to help preserve Balti.
+          </p>
+        </AccordionItem>
 
-      <div className="mt-8">
-        <CommunityStats />
-      </div>
+        <AccordionItem value="stats" title="Community Stats">
+          <CommunityStats />
+        </AccordionItem>
 
-      <h2 className="text-xl font-semibold">Stay Connected</h2>
-      <p>
-        Follow us on Twitter (
-        <a href="https://twitter.com/ShadBalti" target="_blank" className="text-primary underline" rel="noreferrer">
-          @openbalti
-        </a>
-        ) for updates, featured words, and community stories. Let’s build a stronger future for the Balti
-        language—together.
-      </p>
+        <AccordionItem value="connect" title="Stay Connected">
+          <p>
+            Follow us on{' '}
+            <a href="https://twitter.com/ShadBalti" target="_blank" rel="noreferrer" className="text-primary underline">
+              @openbalti
+            </a>{' '}
+            for updates and word highlights.
+          </p>
+        </AccordionItem>
+      </Accordion.Root>
     </section>
+  )
+}
+
+function AccordionItem({
+  value,
+  title,
+  children,
+}: {
+  value: string
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <Accordion.Item value={value} className="border rounded-lg overflow-hidden">
+      <Accordion.Header>
+        <Accordion.Trigger
+          className={cn(
+            'w-full flex items-center justify-between px-4 py-3 font-medium bg-gray-100 hover:bg-gray-200 transition group'
+          )}
+        >
+          <span>{title}</span>
+          <ChevronDown
+            className="h-5 w-5 transition-transform duration-300 group-data-[state=open]:rotate-180"
+            aria-hidden
+          />
+        </Accordion.Trigger>
+      </Accordion.Header>
+      <Accordion.Content className="px-4 py-3 bg-white animate-slideDown">
+        {children}
+      </Accordion.Content>
+    </Accordion.Item>
   )
 }
