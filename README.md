@@ -106,7 +106,7 @@ npm install
 
 # Run development server
 npm run dev
-
+```
 Visit 👉 http://localhost:3000
 
 
@@ -163,5 +163,4 @@ empowering communities, learners, and researchers to connect with their linguist
 Made with ❤️ by Dilshad Hussain
 
 </div>
-```
 ---
