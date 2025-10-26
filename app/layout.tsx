@@ -31,6 +31,8 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
+       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNLNXHP2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <SkipLink />
