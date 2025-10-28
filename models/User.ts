@@ -19,6 +19,18 @@ export interface IUser extends Document {
     wordsEdited: number
     wordsReviewed: number
   }
+  searchPresets?: Array<{
+    _id?: string
+    name: string
+    query: string
+    filters: {
+      category?: string
+      dialect?: string
+      difficulty?: string
+      feedback?: string
+    }
+    createdAt?: Date
+  }>
   createdAt: Date
   updatedAt: Date
 }
@@ -92,6 +104,29 @@ const UserSchema: Schema = new Schema(
         default: 0,
       },
     },
+    searchPresets: [
+      {
+        name: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        query: {
+          type: String,
+          trim: true,
+        },
+        filters: {
+          category: String,
+          dialect: String,
+          difficulty: String,
+          feedback: String,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
