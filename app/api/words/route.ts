@@ -97,11 +97,12 @@ export async function POST(req: NextRequest) {
     })
 
     await logActivity({
-      userId: session.user.id,
-      action: "created_word",
+      session,
+      action: "create",
+      wordId: newWord._id,
+      wordBalti: newWord.balti,
+      wordEnglish: newWord.english,
       details: `Created new word: ${balti} (${english})`,
-      targetId: newWord._id,
-      targetType: "word",
     })
 
     return NextResponse.json({

@@ -70,22 +70,7 @@ export default function ContributorsList() {
       const result = await response.json()
 
       if (result.success) {
-        // Ensure all contributors have the required properties
-        const sanitizedContributors = result.data.map((contributor: any) => ({
-          ...contributor,
-          name: contributor.name || "Unknown User",
-          role: contributor.role || "member",
-          isPublic: contributor.isPublic ?? true,
-          contributionStats: {
-            wordsAdded: contributor.contributionStats?.wordsAdded || 0,
-            wordsEdited: contributor.contributionStats?.wordsEdited || 0,
-            wordsReviewed: contributor.contributionStats?.wordsReviewed || 0,
-            total: contributor.contributionStats?.total || 0,
-          },
-          createdAt: contributor.createdAt || new Date().toISOString(),
-        }))
-
-        setContributors(sanitizedContributors)
+        setContributors(result.data)
         setTotalPages(result.pagination.pages)
       } else {
         throw new Error(result.error || "Failed to fetch contributors")

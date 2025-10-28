@@ -1,12 +1,23 @@
 import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
+import WordComment from "@/models/WordComment"
+import WordFeedback from "@/models/WordFeedback"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { logActivity } from "@/lib/activity-logger"
+import { isValidObjectId } from "mongoose"
+
+const validateObjectId = (id: string): boolean => {
+  return isValidObjectId(id)
+}
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     console.log(`🔄 API: Connecting to MongoDB for fetching word ID: ${params.id}...`)
     await dbConnect()
     console.log(`✅ API: MongoDB connected for fetching word ID: ${params.id}`)
@@ -28,6 +39,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     // Check if user is authenticated
     const session = await getServerSession(authOptions)
 
@@ -111,6 +126,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     // Check if user is authenticated
     const session = await getServerSession(authOptions)
 
@@ -130,6 +149,10 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 
     console.log(`✅ API: Successfully deleted word: ${word.balti} - ${word.english}`)
+
+    await WordComment.deleteMany({ wordId: params.id })
+    await WordFeedback.deleteMany({ wordId: params.id })
+    console.log(`✅ API: Cascade deleted comments and feedback for word ${params.id}`)
 
     // Log the activity
     await logActivity({

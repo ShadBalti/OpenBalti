@@ -5,9 +5,18 @@ import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import WordComment from "@/models/WordComment"
 import { logActivity } from "@/lib/activity-logger"
+import { isValidObjectId } from "mongoose"
+
+const validateObjectId = (id: string): boolean => {
+  return isValidObjectId(id)
+}
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
@@ -46,11 +55,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     })
 
     await logActivity({
-      userId: session.user.id,
-      action: "added_comment",
+      session,
+      action: "create",
+      wordId: id,
+      wordBalti: word.balti,
+      wordEnglish: word.english,
       details: `Added a comment to word: ${word.balti}`,
-      targetId: id,
-      targetType: "word",
     })
 
     return NextResponse.json({
@@ -66,6 +76,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     const { id } = params
 
     await dbConnect()

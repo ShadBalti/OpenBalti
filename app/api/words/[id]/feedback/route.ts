@@ -5,9 +5,18 @@ import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import WordFeedback from "@/models/WordFeedback"
 import { logActivity } from "@/lib/activity-logger"
+import { isValidObjectId } from "mongoose"
+
+const validateObjectId = (id: string): boolean => {
+  return isValidObjectId(id)
+}
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
@@ -45,11 +54,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         })
 
         await logActivity({
-          userId: session.user.id,
-          action: "removed_feedback",
+          session,
+          action: "create",
+          wordId: id,
+          wordBalti: word.balti,
+          wordEnglish: word.english,
           details: `Removed ${type} feedback for word: ${word.balti}`,
-          targetId: id,
-          targetType: "word",
         })
 
         return NextResponse.json({
@@ -72,11 +82,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         })
 
         await logActivity({
-          userId: session.user.id,
-          action: "changed_feedback",
+          session,
+          action: "update",
+          wordId: id,
+          wordBalti: word.balti,
+          wordEnglish: word.english,
           details: `Changed feedback from ${oldType} to ${type} for word: ${word.balti}`,
-          targetId: id,
-          targetType: "word",
         })
 
         return NextResponse.json({
@@ -99,11 +110,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       })
 
       await logActivity({
-        userId: session.user.id,
-        action: "added_feedback",
+        session,
+        action: "create",
+        wordId: id,
+        wordBalti: word.balti,
+        wordEnglish: word.english,
         details: `Added ${type} feedback for word: ${word.balti}`,
-        targetId: id,
-        targetType: "word",
       })
 
       return NextResponse.json({
@@ -120,6 +132,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     const { id } = params
     const session = await getServerSession(authOptions)
 

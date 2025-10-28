@@ -8,7 +8,8 @@ import { incrementUserStat } from "@/lib/update-user-stats"
 type ActivityAction = "create" | "update" | "delete" | "review"
 
 interface LogActivityParams {
-  session: Session
+  session?: Session
+  userId?: string
   action: ActivityAction
   wordId?: string
   wordBalti?: string
@@ -18,14 +19,17 @@ interface LogActivityParams {
 
 export async function logActivity({
   session,
+  userId,
   action,
   wordId,
   wordBalti,
   wordEnglish,
   details,
 }: LogActivityParams): Promise<void> {
-  if (!session?.user?.id) {
-    console.warn("Attempted to log activity without a valid user session")
+  const actualUserId = session?.user?.id || userId
+
+  if (!actualUserId) {
+    console.warn("Attempted to log activity without a valid user session or userId")
     return
   }
 
@@ -34,7 +38,7 @@ export async function logActivity({
 
     // Log to activity log
     await ActivityLog.create({
-      user: session.user.id,
+      user: actualUserId,
       action,
       wordId,
       wordBalti,
@@ -42,30 +46,30 @@ export async function logActivity({
       details,
     })
 
-    console.log(`✅ Activity logged: ${action} by user ${session.user.id}`)
+    console.log(`✅ Activity logged: ${action} by user ${actualUserId}`)
 
     // Update user statistics based on the action
     if (action === "create") {
-      await incrementUserStat(session.user.id, "wordsAdded")
+      await incrementUserStat(actualUserId, "wordsAdded")
     } else if (action === "update") {
-      await incrementUserStat(session.user.id, "wordsEdited")
+      await incrementUserStat(actualUserId, "wordsEdited")
     } else if (action === "review") {
-      await incrementUserStat(session.user.id, "wordsReviewed")
+      await incrementUserStat(actualUserId, "wordsReviewed")
     }
 
     // Log to word history for create, update, delete actions
     if (["create", "update", "delete"].includes(action) && wordId && wordBalti && wordEnglish) {
       // Get user details for the history record
-      const user = await User.findById(session.user.id).select("name image").lean()
+      const user = await User.findById(actualUserId).select("name image").lean()
 
       await WordHistory.create({
         wordId,
         balti: wordBalti,
         english: wordEnglish,
         action: action as "create" | "update" | "delete",
-        userId: session.user.id,
-        userName: user?.name || session.user.name,
-        userImage: user?.image || session.user.image,
+        userId: actualUserId,
+        userName: user?.name || "Unknown User",
+        userImage: user?.image || undefined,
         details,
       })
 

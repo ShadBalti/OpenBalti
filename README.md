@@ -94,7 +94,7 @@
 
 ### 🧠 Installation
 
-```bash
+\`\`\`bash
 # Clone repository
 git clone https://github.com/ShadBalti/openbalti.git
 
@@ -106,7 +106,7 @@ npm install
 
 # Run development server
 npm run dev
-```
+\`\`\`
 Visit 👉 http://localhost:3000
 
 
