@@ -129,4 +129,3 @@ function AccordionItem({
     </Accordion.Item>
   )
 }
-

@@ -4,9 +4,18 @@ import Word from "@/models/Word"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { logActivity } from "@/lib/activity-logger"
+import { isValidObjectId } from "mongoose"
+
+const validateObjectId = (id: string): boolean => {
+  return isValidObjectId(id)
+}
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    if (!validateObjectId(params.id)) {
+      return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
+    }
+
     // Check if user is authenticated
     const session = await getServerSession(authOptions)
 

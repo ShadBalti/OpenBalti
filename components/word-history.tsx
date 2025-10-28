@@ -56,10 +56,7 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
       const response = await fetch(`/api/words/${wordId}/history?page=${page}`)
 
       if (!response.ok) {
-        if (response.status === 401) {
-          setError("Authentication required. Please sign in.")
-          return
-        } else if (response.status === 404) {
+        if (response.status === 404) {
           setError("Word not found")
         } else {
           setError(`Failed to load word history: ${response.statusText}`)
