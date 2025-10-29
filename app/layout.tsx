@@ -32,7 +32,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <SessionProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" disableTransitionOnChange>
             <SkipLink />
             <div className="relative min-h-screen flex flex-col">
               <Suspense fallback={<div className="h-16 border-b"></div>}>
