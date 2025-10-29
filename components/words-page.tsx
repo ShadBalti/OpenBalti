@@ -8,10 +8,10 @@ import Link from "next/link"
 import { Loader2, RotateCw, ArrowLeftRight, Filter, Plus, X } from "lucide-react"
 import WordList from "@/components/word-list"
 import WordForm from "@/components/word-form"
-import SearchBar from "@/components/search-bar"
 import DialectBrowser from "@/components/dialect-browser"
 import DifficultyBrowser from "@/components/difficulty-browser"
 import FeedbackFilter from "@/components/feedback-filter"
+import AdvancedSearch from "@/components/advanced-search"
 import type { IWord } from "@/models/Word"
 
 import { Button } from "@/components/ui/button"
@@ -59,6 +59,7 @@ export default function WordsPage() {
   const [selectedFeedback, setSelectedFeedback] = useState<string | null>(null)
   const [showFiltersSheet, setShowFiltersSheet] = useState(false)
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
+  const [fuzzySearch, setFuzzySearch] = useState(false)
 
   // Initialize state from URL parameters
   useEffect(() => {
@@ -91,29 +92,54 @@ export default function WordsPage() {
     dialect = selectedDialect,
     difficulty = selectedDifficulty,
     feedback = selectedFeedback,
+    useFuzzy = fuzzySearch,
   ) => {
     try {
       setIsLoading(true)
 
-      // Build query string
-      const params = new URLSearchParams()
-      if (search) params.append("search", search)
-      if (category) params.append("category", category)
-      if (dialect) params.append("dialect", dialect)
-      if (difficulty) params.append("difficulty", difficulty)
-      if (feedback) params.append("feedback", feedback)
+      const hasMultipleFilters = [category, dialect, difficulty, feedback].filter(Boolean).length > 1
 
-      const response = await fetch(`/api/words?${params.toString()}`)
-      const result = await response.json()
+      if (useFuzzy || hasMultipleFilters) {
+        const params = new URLSearchParams()
+        if (search) params.append("search", search)
+        if (useFuzzy) params.append("fuzzy", "true")
+        if (category) params.append("categories", category)
+        if (dialect) params.append("dialects", dialect)
+        if (difficulty) params.append("difficulties", difficulty)
+        if (feedback) params.append("feedback", feedback)
 
-      if (result.success) {
-        setWords(result.data)
+        const response = await fetch(`/api/words/search/advanced?${params.toString()}`)
+        const result = await response.json()
+
+        if (result.success) {
+          setWords(result.data)
+        } else {
+          toast({
+            title: "Error",
+            description: result.error || "Failed to fetch words",
+            variant: "destructive",
+          })
+        }
       } else {
-        toast({
-          title: "Error",
-          description: result.error || "Failed to fetch words",
-          variant: "destructive",
-        })
+        const params = new URLSearchParams()
+        if (search) params.append("search", search)
+        if (category) params.append("category", category)
+        if (dialect) params.append("dialect", dialect)
+        if (difficulty) params.append("difficulty", difficulty)
+        if (feedback) params.append("feedback", feedback)
+
+        const response = await fetch(`/api/words?${params.toString()}`)
+        const result = await response.json()
+
+        if (result.success) {
+          setWords(result.data)
+        } else {
+          toast({
+            title: "Error",
+            description: result.error || "Failed to fetch words",
+            variant: "destructive",
+          })
+        }
       }
     } catch (error) {
       console.error("Error fetching words:", error)
@@ -321,23 +347,35 @@ export default function WordsPage() {
     setDirection((prev) => (prev === "balti-to-english" ? "english-to-balti" : "balti-to-english"))
   }
 
+  const handleAdvancedSearch = (query: string, filters: any, fuzzy: boolean) => {
+    setSearchTerm(query)
+    setSelectedCategory(filters.categories?.[0] || null)
+    setSelectedDialect(filters.dialects?.[0] || null)
+    setSelectedDifficulty(filters.difficulties?.[0] || null)
+    setSelectedFeedback(filters.feedback?.[0] || null)
+    setFuzzySearch(fuzzy)
+    fetchWords(
+      query,
+      filters.categories?.[0],
+      filters.dialects?.[0],
+      filters.difficulties?.[0],
+      filters.feedback?.[0],
+      fuzzy,
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
         <h1 className="text-2xl font-bold tracking-tight sr-only">Balti Dictionary</h1>
         <div className="flex-1 w-full md:w-auto">
-          <SearchBar
-            searchTerm={searchTerm}
-            setSearchTerm={handleSearchChange}
-            placeholder="Search the dictionary..."
-            aria-label="Search for words"
-          />
+          <AdvancedSearch onSearch={handleAdvancedSearch} isLoading={isLoading} />
         </div>
 
         <div className="flex flex-wrap gap-2 w-full md:w-auto">
           <Sheet open={showFiltersSheet} onOpenChange={setShowFiltersSheet}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="flex gap-2">
+              <Button variant="outline" className="flex gap-2 bg-transparent">
                 <Filter className="h-4 w-4" />
                 <span>Filters</span>
                 {activeFiltersCount > 0 && (

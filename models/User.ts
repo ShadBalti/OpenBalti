@@ -1,6 +1,15 @@
 import mongoose, { Schema, type Document } from "mongoose"
 import { hash } from "bcryptjs"
 
+export interface IBadge {
+  type: "milestone" | "specialty"
+  id: string
+  name: string
+  description: string
+  icon: string
+  unlockedAt: Date
+}
+
 export interface IUser extends Document {
   name: string
   email: string
@@ -19,6 +28,19 @@ export interface IUser extends Document {
     wordsEdited: number
     wordsReviewed: number
   }
+  badges?: IBadge[]
+  searchPresets?: Array<{
+    _id?: string
+    name: string
+    query: string
+    filters: {
+      category?: string
+      dialect?: string
+      difficulty?: string
+      feedback?: string
+    }
+    createdAt?: Date
+  }>
   createdAt: Date
   updatedAt: Date
 }
@@ -92,6 +114,58 @@ const UserSchema: Schema = new Schema(
         default: 0,
       },
     },
+    badges: [
+      {
+        type: {
+          type: String,
+          enum: ["milestone", "specialty"],
+          required: true,
+        },
+        id: {
+          type: String,
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        icon: {
+          type: String,
+          required: true,
+        },
+        unlockedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    searchPresets: [
+      {
+        name: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        query: {
+          type: String,
+          trim: true,
+        },
+        filters: {
+          category: String,
+          dialect: String,
+          difficulty: String,
+          feedback: String,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

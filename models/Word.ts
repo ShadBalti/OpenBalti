@@ -9,6 +9,9 @@ export interface IWord extends Document {
   usageNotes?: string
   relatedWords?: string[]
   difficultyLevel?: "beginner" | "intermediate" | "advanced"
+  examples?: Array<{ balti: string; english: string }>
+  etymology?: string
+  culturalNotes?: string
   createdBy: mongoose.Types.ObjectId
   updatedBy?: mongoose.Types.ObjectId
   createdAt: Date
@@ -56,6 +59,31 @@ const WordSchema = new Schema(
       type: String,
       enum: ["beginner", "intermediate", "advanced"],
       default: "intermediate",
+    },
+    examples: {
+      type: [
+        {
+          balti: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          english: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+        },
+      ],
+      default: [],
+    },
+    etymology: {
+      type: String,
+      trim: true,
+    },
+    culturalNotes: {
+      type: String,
+      trim: true,
     },
     createdBy: {
       type: Schema.Types.ObjectId,

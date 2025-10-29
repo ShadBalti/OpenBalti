@@ -40,7 +40,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       wordsReviewed: 0,
     }
 
-    // Prepare the response data
     const userData = {
       id: user._id,
       name: user.name || "Anonymous User",
@@ -49,12 +48,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       bio: user.bio,
       location: user.location,
       website: user.website,
-      isPublic: user.isPublic !== false, // Default to true if not specified
+      isPublic: user.isPublic !== false,
       isVerified: user.isVerified || false,
       isFounder: user.isFounder || user.role === "owner" || false,
       contributionStats,
+      badges: user.badges || [],
       createdAt: user.createdAt || new Date().toISOString(),
-      // Only include email if it's the user's own profile or an admin
       ...(isOwnProfile || isAdmin ? { email: user.email } : {}),
     }
 
