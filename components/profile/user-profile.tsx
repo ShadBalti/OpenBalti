@@ -15,6 +15,7 @@ import ActivityLogList from "@/components/activity/activity-log-list"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { VerificationBadge } from "@/components/ui/verification-badge"
 import { FounderBadge } from "@/components/ui/founder-badge"
+import { BadgeGrid } from "@/components/badge-display"
 
 interface UserProfileProps {
   userId: string
@@ -37,6 +38,14 @@ interface UserData {
     wordsEdited: number
     wordsReviewed: number
   }
+  badges?: Array<{
+    type: "milestone" | "specialty"
+    id: string
+    name: string
+    description: string
+    icon: string
+    unlockedAt: Date
+  }>
   createdAt: string
 }
 
@@ -199,7 +208,7 @@ export default function UserProfile({ userId }: UserProfileProps) {
                 {user.email && (isOwnProfile || isAdmin) && <CardDescription>{user.email}</CardDescription>}
               </div>
               {isOwnProfile && (
-                <Button asChild size="sm" variant="outline" className="mt-2 sm:mt-0">
+                <Button asChild size="sm" variant="outline" className="mt-2 sm:mt-0 bg-transparent">
                   <Link href="/settings">
                     <Edit className="h-4 w-4 mr-2" />
                     Edit Profile
@@ -307,6 +316,13 @@ export default function UserProfile({ userId }: UserProfileProps) {
               </Card>
             </div>
           </div>
+
+          {user.badges && user.badges.length > 0 && (
+            <div className="pt-4 border-t">
+              <h3 className="text-base sm:text-lg font-medium mb-3 sm:mb-4">Achievements</h3>
+              <BadgeGrid badges={user.badges} size="md" />
+            </div>
+          )}
         </CardContent>
       </Card>
 

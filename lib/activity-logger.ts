@@ -4,6 +4,7 @@ import WordHistory from "@/models/WordHistory"
 import User from "@/models/User"
 import type { Session } from "next-auth"
 import { incrementUserStat } from "@/lib/update-user-stats"
+import { checkAndAwardBadges } from "@/lib/badge-system"
 
 type ActivityAction = "create" | "update" | "delete" | "review"
 
@@ -56,6 +57,8 @@ export async function logActivity({
     } else if (action === "review") {
       await incrementUserStat(actualUserId, "wordsReviewed")
     }
+
+    await checkAndAwardBadges(actualUserId)
 
     // Log to word history for create, update, delete actions
     if (["create", "update", "delete"].includes(action) && wordId && wordBalti && wordEnglish) {
