@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/about`,
       lastModified,
       changeFrequency: "monthly",
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/contribute`,
@@ -25,10 +25,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/leaderboard,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/review`,
       lastModified,
       changeFrequency: "weekly",
-      priority: 0.9,
+      priority: 0,
     },
     {
       url: `${baseUrl}/contributors`,
