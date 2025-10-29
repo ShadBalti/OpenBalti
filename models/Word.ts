@@ -3,6 +3,7 @@ import mongoose, { Schema, type Document } from "mongoose"
 export interface IWord extends Document {
   balti: string
   english: string
+  slug: string
   phonetic?: string
   categories?: string[]
   dialect?: string
@@ -34,6 +35,13 @@ const WordSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
     },
     phonetic: {
       type: String,
@@ -112,7 +120,7 @@ const WordSchema = new Schema(
   { timestamps: true },
 )
 
-// Create text indexes for search
 WordSchema.index({ balti: "text", english: "text" })
+WordSchema.index({ slug: 1 })
 
 export default mongoose.models.Word || mongoose.model<IWord>("Word", WordSchema)

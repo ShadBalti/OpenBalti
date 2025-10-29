@@ -90,6 +90,8 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
     }
   }
 
+  const historyLink = word.slug ? `/words/${word.slug}/history` : `/words/${word._id}/history`
+
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-start justify-between space-y-0">
@@ -110,7 +112,7 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
             </Button>
           )}
           <Button variant="ghost" size="icon" asChild aria-label="View word history">
-            <Link href={`/words/${word._id}/history`}>
+            <Link href={historyLink}>
               <History className="h-4 w-4" />
             </Link>
           </Button>

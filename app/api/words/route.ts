@@ -4,6 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import { logActivity } from "@/lib/activity-logger"
+import { generateSlug, generateUniqueSlug } from "@/lib/slug-utils"
 
 export async function GET(req: NextRequest) {
   try {
@@ -59,8 +60,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    const { balti, english, phonetic, categories, dialect, usageNotes, relatedWords, difficultyLevel } =
-      await req.json()
+    const {
+      balti,
+      english,
+      phonetic,
+      categories,
+      dialect,
+      usageNotes,
+      relatedWords,
+      difficultyLevel,
+      examples,
+      etymology,
+      culturalNotes,
+    } = await req.json()
 
     if (!balti || !english) {
       return NextResponse.json(
@@ -83,15 +95,26 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const baseSlug = generateSlug(balti)
+    const existingSlugs = await Word.find({ slug: { $regex: `^${baseSlug}` } }).select("slug")
+    const uniqueSlug = generateUniqueSlug(
+      baseSlug,
+      existingSlugs.map((w) => w.slug),
+    )
+
     const newWord = await Word.create({
       balti,
       english,
+      slug: uniqueSlug,
       phonetic,
       categories,
       dialect,
       usageNotes,
       relatedWords,
       difficultyLevel,
+      examples,
+      etymology,
+      culturalNotes,
       createdBy: session.user.id,
       feedbackStats: { useful: 0, trusted: 0, needsReview: 0 },
     })

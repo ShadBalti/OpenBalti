@@ -186,7 +186,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                         aria-label="View word history"
                         className="h-8 w-8 text-muted-foreground hover:text-primary"
                       >
-                        <Link href={`/words/${word._id}/history`}>
+                        <Link href={word.slug ? `/words/${word.slug}/history` : `/words/${word._id}/history`}>
                           <History className="h-4 w-4" />
                         </Link>
                       </Button>

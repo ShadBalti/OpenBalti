@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { IWord } from "@/models/Word"
+import { generateSlug } from "@/lib/slug-utils"
 
 interface WordFormProps {
   initialData: IWord | null
@@ -48,6 +49,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
   const [etymology, setEtymology] = useState("")
   const [culturalNotes, setCulturalNotes] = useState("")
   const [errors, setErrors] = useState({ balti: "", english: "" })
+  const [slugPreview, setSlugPreview] = useState("")
 
   useEffect(() => {
     if (initialData) {
@@ -63,6 +65,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setEtymology(initialData.etymology || "")
       setCulturalNotes(initialData.culturalNotes || "")
       setErrors({ balti: "", english: "" })
+      setSlugPreview(initialData.slug || "")
     } else {
       setBalti("")
       setEnglish("")
@@ -76,8 +79,15 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setEtymology("")
       setCulturalNotes("")
       setErrors({ balti: "", english: "" })
+      setSlugPreview("")
     }
   }, [initialData])
+
+  useEffect(() => {
+    if (!initialData && balti.trim()) {
+      setSlugPreview(generateSlug(balti))
+    }
+  }, [balti, initialData])
 
   const validate = () => {
     const newErrors = { balti: "", english: "" }
@@ -131,6 +141,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setExamples([])
       setEtymology("")
       setCulturalNotes("")
+      setSlugPreview("")
     }
   }
 
@@ -234,6 +245,18 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
               {errors.english && <p className="text-xs text-destructive mt-1">{errors.english}</p>}
             </div>
           </div>
+
+          {slugPreview && (
+            <div className="p-3 bg-muted rounded-md">
+              <Label className="text-xs font-medium text-muted-foreground">URL Slug Preview</Label>
+              <p className="text-sm font-mono mt-1">/words/{slugPreview}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {initialData
+                  ? "This slug is read-only for existing words"
+                  : "This slug will be auto-generated from the Balti word"}
+              </p>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="phonetic">Pronunciation Guide (Phonetic)</Label>
