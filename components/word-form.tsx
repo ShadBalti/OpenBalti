@@ -24,6 +24,9 @@ interface WordFormProps {
     usageNotes?: string
     relatedWords?: string[]
     difficultyLevel?: "beginner" | "intermediate" | "advanced"
+    examples?: Array<{ balti: string; english: string }>
+    etymology?: string
+    culturalNotes?: string
   }) => void
   onCancel?: () => void
 }
@@ -39,6 +42,11 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
   const [relatedWordInput, setRelatedWordInput] = useState("")
   const [relatedWords, setRelatedWords] = useState<string[]>([])
   const [difficultyLevel, setDifficultyLevel] = useState<"beginner" | "intermediate" | "advanced">("intermediate")
+  const [exampleBaltiInput, setExampleBaltiInput] = useState("")
+  const [exampleEnglishInput, setExampleEnglishInput] = useState("")
+  const [examples, setExamples] = useState<Array<{ balti: string; english: string }>>([])
+  const [etymology, setEtymology] = useState("")
+  const [culturalNotes, setCulturalNotes] = useState("")
   const [errors, setErrors] = useState({ balti: "", english: "" })
 
   useEffect(() => {
@@ -51,6 +59,9 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setUsageNotes(initialData.usageNotes || "")
       setRelatedWords(initialData.relatedWords || [])
       setDifficultyLevel(initialData.difficultyLevel || "intermediate")
+      setExamples(initialData.examples || [])
+      setEtymology(initialData.etymology || "")
+      setCulturalNotes(initialData.culturalNotes || "")
       setErrors({ balti: "", english: "" })
     } else {
       setBalti("")
@@ -61,6 +72,9 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setUsageNotes("")
       setRelatedWords([])
       setDifficultyLevel("intermediate")
+      setExamples([])
+      setEtymology("")
+      setCulturalNotes("")
       setErrors({ balti: "", english: "" })
     }
   }, [initialData])
@@ -99,6 +113,9 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       usageNotes: usageNotes.trim() || undefined,
       relatedWords: relatedWords.length > 0 ? relatedWords : undefined,
       difficultyLevel,
+      examples: examples.length > 0 ? examples : undefined,
+      etymology: etymology.trim() || undefined,
+      culturalNotes: culturalNotes.trim() || undefined,
     })
 
     if (!initialData) {
@@ -111,6 +128,9 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
       setUsageNotes("")
       setRelatedWords([])
       setDifficultyLevel("intermediate")
+      setExamples([])
+      setEtymology("")
+      setCulturalNotes("")
     }
   }
 
@@ -134,6 +154,24 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
 
   const removeRelatedWord = (word: string) => {
     setRelatedWords(relatedWords.filter((w) => w !== word))
+  }
+
+  const addExample = () => {
+    if (exampleBaltiInput.trim() && exampleEnglishInput.trim()) {
+      setExamples([
+        ...examples,
+        {
+          balti: exampleBaltiInput.trim(),
+          english: exampleEnglishInput.trim(),
+        },
+      ])
+      setExampleBaltiInput("")
+      setExampleEnglishInput("")
+    }
+  }
+
+  const removeExample = (index: number) => {
+    setExamples(examples.filter((_, i) => i !== index))
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -262,6 +300,73 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
             />
             <p className="text-xs text-muted-foreground">
               Add cultural context or additional information about this word
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Usage Examples</Label>
+            <div className="space-y-2">
+              <Input
+                value={exampleBaltiInput}
+                onChange={(e) => setExampleBaltiInput(e.target.value)}
+                placeholder="Example in Balti"
+              />
+              <Input
+                value={exampleEnglishInput}
+                onChange={(e) => setExampleEnglishInput(e.target.value)}
+                placeholder="English translation of example"
+              />
+              <Button type="button" onClick={addExample} variant="outline" size="sm">
+                Add Example
+              </Button>
+            </div>
+            {examples.length > 0 && (
+              <div className="space-y-2 mt-2">
+                {examples.map((example, index) => (
+                  <div key={index} className="p-3 bg-muted rounded-md">
+                    <p className="font-medium text-sm">{example.balti}</p>
+                    <p className="text-sm text-muted-foreground">{example.english}</p>
+                    <Button
+                      type="button"
+                      onClick={() => removeExample(index)}
+                      variant="ghost"
+                      size="sm"
+                      className="mt-2"
+                    >
+                      <X className="h-3 w-3 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="etymology">Etymology (Word Origin)</Label>
+            <Textarea
+              id="etymology"
+              value={etymology}
+              onChange={(e) => setEtymology(e.target.value)}
+              placeholder="Describe the origin and history of this word"
+              rows={2}
+            />
+            <p className="text-xs text-muted-foreground">
+              Explain where this word comes from and its historical context
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="culturalNotes">Cultural Significance</Label>
+            <Textarea
+              id="culturalNotes"
+              value={culturalNotes}
+              onChange={(e) => setCulturalNotes(e.target.value)}
+              placeholder="Describe the cultural significance and context of this word"
+              rows={2}
+            />
+            <p className="text-xs text-muted-foreground">
+              Add information about the cultural importance and context of this word
             </p>
           </div>
 

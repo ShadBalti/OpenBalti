@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Bookmark, BookmarkCheck, History, Lightbulb, GraduationCap } from "lucide-react"
+import { Bookmark, BookmarkCheck, History, Lightbulb, GraduationCap, BookOpen, Scroll } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { toast } from "react-toastify"
@@ -158,6 +158,43 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
               <h3 className="font-medium">Usage Notes</h3>
             </div>
             <p className="text-muted-foreground">{word.usageNotes}</p>
+          </div>
+        )}
+
+        {word.examples && word.examples.length > 0 && (
+          <div className="p-3 bg-muted rounded-md">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="h-4 w-4 text-blue-500" />
+              <h3 className="font-medium">Usage Examples</h3>
+            </div>
+            <div className="space-y-3">
+              {word.examples.map((example, index) => (
+                <div key={index} className="pl-3 border-l-2 border-primary">
+                  <p className="font-medium text-sm">{example.balti}</p>
+                  <p className="text-sm text-muted-foreground">{example.english}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {word.etymology && (
+          <div className="p-3 bg-muted rounded-md">
+            <div className="flex items-center gap-2 mb-2">
+              <Scroll className="h-4 w-4 text-purple-500" />
+              <h3 className="font-medium">Etymology</h3>
+            </div>
+            <p className="text-muted-foreground text-sm">{word.etymology}</p>
+          </div>
+        )}
+
+        {word.culturalNotes && (
+          <div className="p-3 bg-muted rounded-md">
+            <div className="flex items-center gap-2 mb-2">
+              <Lightbulb className="h-4 w-4 text-amber-500" />
+              <h3 className="font-medium">Cultural Significance</h3>
+            </div>
+            <p className="text-muted-foreground text-sm">{word.culturalNotes}</p>
           </div>
         )}
 
