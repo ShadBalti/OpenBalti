@@ -1,10 +1,12 @@
 import { generateMetadata } from "@/lib/metadata";
+import { getKeywordsFor } from "@/lib/seoKeywords";
 import React from "react";
 import LearnContinue from "@/components/LearnContinue";
 
 export const metadata = generateMetadata(
   "Balti Dialects | Learn Balti Language | OpenBalti",
   "Explore the regional dialects of the Balti language spoken across Baltistan and Ladakh. Learn how pronunciation, vocabulary, and accent vary between Skardu, Khaplu, Shigar, Rondu, Kharmang, Chorbat, and Kargil.",
+{ keywords: getKeywordsFor("learn/dialectal") }
 );
 
 export default function DialectalPage() {
