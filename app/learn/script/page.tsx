@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata = generateMetadata(
   "Balti Script (བལྟི) | Learn Balti | OpenBalti",
     "Discover the original Tibetan-based Balti script — its letters, sounds, and deep connection to Baltistan’s cultural identity.",
-};
+);
 
 export default function ScriptPage() {
   return (
