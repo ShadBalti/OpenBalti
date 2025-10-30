@@ -187,6 +187,134 @@ export default function LearnPage() {
           ))}
         </div>
       </section>
+       
+      {/* FAQ Section */}
+<section className="max-w-5xl mx-auto px-6 py-20 border-t border-gray-800">
+  <h2 className="text-3xl font-semibold text-center mb-10">
+    Frequently Asked Questions
+  </h2>
+
+  <div className="space-y-10 text-gray-300">
+
+    {/* Q1 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        What is the Balti language?
+      </h3>
+      <p className="leading-relaxed">
+        Balti is an ancient Tibetic language spoken mainly in Baltistan, located in the Karakoram range
+        of northern Pakistan. It evolved from Classical Tibetan and preserves many of its original
+        linguistic and cultural traits, making it one of the most authentic Tibetan dialects still in use today.
+      </p>
+    </div>
+
+    {/* Q2 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Why is learning Balti important?
+      </h3>
+      <p className="leading-relaxed">
+        Learning Balti helps preserve a centuries-old cultural identity. By studying and speaking it,
+        you’re helping to protect the history, values, and worldview of the Balti people — ensuring the language
+        continues to thrive in the digital age.
+      </p>
+    </div>
+
+    {/* Q3 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        How can I start learning Balti?
+      </h3>
+      <p className="leading-relaxed">
+        Begin with the <Link href="/learn/script" className="text-blue-400 hover:underline">Balti Script</Link> to
+        learn how to read and write letters, then explore <Link href="/learn/grammar" className="text-blue-400 hover:underline">Grammar Basics</Link> 
+        to understand sentence structures. Finally, use <Link href="/learn/phrases" className="text-blue-400 hover:underline">Common Phrases</Link> 
+        for practical, everyday conversations.
+      </p>
+    </div>
+
+    {/* Q4 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Is Balti similar to Tibetan or Ladakhi?
+      </h3>
+      <p className="leading-relaxed">
+        Yes, Balti, Tibetan, and Ladakhi share the same linguistic roots. However, Balti has developed
+        unique sounds, vocabulary, and expressions shaped by the culture and environment of Baltistan.
+        It’s often considered the most conservative form of Classical Tibetan still spoken.
+      </p>
+    </div>
+
+    {/* Q5 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Can I learn Balti online for free?
+      </h3>
+      <p className="leading-relaxed">
+        Yes! OpenBalti is a free, community-driven platform that provides structured lessons, examples,
+        and cultural insights to help you learn at your own pace. There’s no cost — only curiosity and dedication.
+      </p>
+    </div>
+
+    {/* Q6 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Does Balti have its own script?
+      </h3>
+      <p className="leading-relaxed">
+        Balti uses a Tibetan-based script known as <span className="italic">Balti Yig</span>. 
+        It’s written vertically or horizontally and closely resembles the Uchen style of Tibetan writing. 
+        You can learn it in the <Link href="/learn/script" className="text-blue-400 hover:underline">Script Section</Link>.
+      </p>
+    </div>
+
+    {/* Q7 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Is Balti difficult to learn?
+      </h3>
+      <p className="leading-relaxed">
+        Not at all! While the script might seem complex at first, Balti grammar is logical and consistent. 
+        With regular practice, you’ll quickly pick up pronunciation, writing, and everyday phrases.
+      </p>
+    </div>
+
+    {/* Q8 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        Who can learn Balti?
+      </h3>
+      <p className="leading-relaxed">
+        Anyone! Whether you’re a native speaker wanting to reconnect with your roots or a language enthusiast 
+        fascinated by Himalayan cultures, OpenBalti is designed to make Balti learning accessible to everyone.
+      </p>
+    </div>
+
+    {/* Q9 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        How long does it take to learn Balti?
+      </h3>
+      <p className="leading-relaxed">
+        It depends on your pace — with consistent practice, learners can start forming sentences in a few weeks. 
+        The more you listen, read, and speak, the more natural it becomes. OpenBalti offers resources to support
+        both beginners and intermediate learners.
+      </p>
+    </div>
+
+    {/* Q10 */}
+    <div>
+      <h3 className="text-xl font-semibold text-blue-400 mb-2">
+        How can I contribute to OpenBalti?
+      </h3>
+      <p className="leading-relaxed">
+        You can help by adding example sentences, suggesting new lessons, or improving translations.
+        Visit the <Link href="/about" className="text-blue-400 hover:underline">About</Link> page to
+        learn more about contributing to the Balti language revival movement.
+      </p>
+    </div>
+  </div>
+</section>
     </main>
   );
 }
