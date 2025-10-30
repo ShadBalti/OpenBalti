@@ -1,6 +1,7 @@
 import { generateMetadata } from "@/lib/metadata";
 import React from "react";
 import Link from "next/link";
+import LearnContinue from "@/components/LearnContinue";
 
 export const metadata = generateMetadata(
   "Balti Script (བལྟི) | Learn Balti | OpenBalti",
@@ -143,6 +144,14 @@ export default function ScriptPage() {
           <li>“Winter” → <strong>དགུན་ཝགྷ།</strong> (*Gon wagh*)</li>
         </ul>
       </section>
+
+        <LearnContinue
+        title="Keep Exploring"
+        links={[
+          { label: "Balti Dialectal", href: "/learn/dialectal" },
+          { label: "Balti Script →", href: "/learn/script", variant: "secondary" },
+        ]}
+      />
 
       <footer className="mt-16 text-center border-t border-gray-700 pt-8">
         <p className="text-gray-400">
