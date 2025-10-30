@@ -3,8 +3,7 @@ import React from "react";
 import Link from "next/link";
 
 export const metadata = generateMetadata(
-  title: "Common Balti Phrases | Learn Balti | OpenBalti",
-  description:
+    "Common Balti Phrases | Learn Balti | OpenBalti",
     "Explore useful Balti phrases for everyday conversations — greetings, travel, and emotions with English translations.",
 );
 
