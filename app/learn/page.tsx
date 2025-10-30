@@ -72,11 +72,12 @@ export default function LearnPage() {
             link: "/learn/script",
           },
           {
-            icon: "🔡",
-            title: "Romanized Balti",
-            desc: "Learn how Balti is written using English letters — making it easier to type and read.",
-            link: "/learn/romanized",
-          },
+  icon: "🗣️",
+  title: "Balti Dialectal",
+  desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
+  link: "/learn/dialectal",
+} 
+           
           {
             icon: "🧱",
             title: "Grammar & Structure",
