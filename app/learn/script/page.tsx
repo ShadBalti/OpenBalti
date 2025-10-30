@@ -1,4 +1,5 @@
 import { generateMetadata } from "@/lib/metadata";
+import { getKeywordsFor } from "@/lib/seoKeywords";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import LearnContinue from "@/components/LearnContinue";
 export const metadata = generateMetadata(
   "Balti Script (བལྟི) | Learn Balti | OpenBalti",
     "Discover the original Tibetan-based Balti script — its letters, sounds, and deep connection to Baltistan’s cultural identity.",
+{ keywords: getKeywordsFor("learn/script") }
 );
 
 export default function ScriptPage() {
