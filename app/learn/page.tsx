@@ -1,10 +1,9 @@
-import { generateMetadata } from "@/lib/metadata"
- import React from "react";
+import { generateMetadata } from "@/lib/metadata";
+import React from "react";
 import Link from "next/link";
 
 export const metadata = generateMetadata(
   "Learn Balti Language | OpenBalti",
-  description",
   "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan.",
 )
 
