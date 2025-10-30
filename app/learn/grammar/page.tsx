@@ -1,4 +1,5 @@
 import { generateMetadata } from "@/lib/metadata";
+import { getKeywordsFor } from "@/lib/seoKeywords";
 import React from "react";
 import Link from "next/link";
 import LearnContinue from "@/components/LearnContinue";
@@ -6,6 +7,7 @@ import LearnContinue from "@/components/LearnContinue";
 export const metadata = generateMetadata( 
 "Balti Grammar & Structure | Learn Balti | OpenBalti",
     "Learn how Balti sentences are structured — from nouns and verbs to natural flow, tones, and expressions deeply tied to culture.",
+{ keywords: getKeywordsFor("learn/grammar") }
 );
 
 export default function GrammarPage() {
