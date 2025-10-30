@@ -1,4 +1,5 @@
 import { generateMetadata } from "@/lib/metadata";
+import { getKeywordsFor } from "@/lib/seoKeywords";
 import React from "react";
 import Link from "next/link";
 import LearnContinue from "@/components/LearnContinue";
@@ -6,6 +7,7 @@ import LearnContinue from "@/components/LearnContinue";
 export const metadata = generateMetadata(
     "Common Balti Phrases | Learn Balti | OpenBalti",
     "Explore useful Balti phrases for everyday conversations — greetings, travel, and emotions with English translations.",
+{ keywords: getKeywordsFor("learn/phrases") }
 );
 
 export default function PhrasesPage() {
