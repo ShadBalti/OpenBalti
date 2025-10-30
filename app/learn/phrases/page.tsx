@@ -1,6 +1,7 @@
 import { generateMetadata } from "@/lib/metadata";
 import React from "react";
 import Link from "next/link";
+import LearnContinue from "@/components/LearnContinue";
 
 export const metadata = generateMetadata(
     "Common Balti Phrases | Learn Balti | OpenBalti",
@@ -122,24 +123,13 @@ export default function PhrasesPage() {
         </div>
       </section>
 
-      {/* Continue Section */}
-      <section className="bg-gray-950 py-16 text-center">
-        <h2 className="text-2xl font-semibold mb-6">Continue Learning</h2>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/learn/grammar"
-            className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl transition"
-          >
-            ← Grammar Basics
-          </Link>
-          <Link
-            href="/learn/script"
-            className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition"
-          >
-            Balti Script →
-          </Link>
-        </div>
-      </section>
+     <LearnContinue
+        title="Keep Exploring"
+        links={[
+          { label: "Balti Grammar", href: "/learn/grammar" },
+          { label: "Balti Script →", href: "/learn/script", variant: "secondary" },
+        ]}
+      />
     </main>
   );
 }
