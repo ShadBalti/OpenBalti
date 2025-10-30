@@ -5,9 +5,8 @@ import Image from "next/image";
 
 export const metadata = generateMetadata(
   "Learn Balti Language | OpenBalti",
-  "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan.",
-)
-
+  "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan."
+);
 
 export default function LearnPage() {
   return (
@@ -15,15 +14,14 @@ export default function LearnPage() {
       {/* Hero Section */}
       <section className="text-center py-20 px-6">
         <h1 className="text-4xl sm:text-6xl font-bold mb-4">
-          Learn Balti with OpenBalti
+          Learn Balti with <span className="text-blue-500">OpenBalti</span>
         </h1>
         <p className="text-xl text-gray-300 mb-6">
           Preserving our language through knowledge and technology.
         </p>
         <blockquote className="italic text-gray-400 max-w-2xl mx-auto mb-8">
           “Start your journey to learn the Balti language — from script and
-          grammar to real expressions deeply rooted in the culture of
-          Baltistan.”
+          grammar to real expressions deeply rooted in the culture of Baltistan.”
         </blockquote>
         <Link
           href="#categories"
@@ -51,10 +49,12 @@ export default function LearnPage() {
           The Path to Learning Balti
         </h2>
         <p className="text-gray-300 text-lg leading-relaxed">
-          Balti is one of the oldest living forms of the Tibetan language, with
-          its own unique sounds, grammar, and deep cultural meanings. Through
-          OpenBalti, you can explore it step by step — understanding not only
-          how it’s spoken but why it matters.
+          Balti is one of the oldest surviving forms of the Tibetan language,
+          with its own unique script, sounds, and grammar. Through OpenBalti, we
+          aim to make it easy for learners to explore this heritage — step by
+          step, from alphabets to fluent communication. You’ll not only learn
+          how it’s spoken but also understand the stories and traditions
+          interwoven with each word.
         </p>
       </section>
 
@@ -79,13 +79,13 @@ export default function LearnPage() {
           {
             icon: "🧱",
             title: "Grammar & Structure",
-            desc: "Explore how Balti sentences are formed: nouns, verbs, tenses, and natural flow.",
+            desc: "Explore how Balti sentences are formed: nouns, verbs, tenses, and the natural rhythm of speech.",
             link: "/learn/grammar",
           },
           {
             icon: "💬",
             title: "Phrases & Usage",
-            desc: "Common Balti sentences used in greetings, travel, and daily life, with English meanings.",
+            desc: "Practice common Balti expressions for greetings, travel, and emotions — with English translations.",
             link: "/learn/phrases",
           },
         ].map(({ icon, title, desc, link }) => (
@@ -110,8 +110,10 @@ export default function LearnPage() {
             Featured Lesson — Grammar Basics
           </h2>
           <p className="text-gray-300 mb-6">
-            Learn how Balti sentences are structured, from subjects and verbs to
-            particles that add rhythm and meaning.
+            Dive into the structure of Balti sentences — how subjects, verbs,
+            and particles create balance and meaning. This lesson lays the
+            foundation for understanding how Balti reflects thought and
+            identity.
           </p>
           <Link
             href="/learn/grammar"
@@ -122,21 +124,20 @@ export default function LearnPage() {
         </div>
         <div className="flex-1">
           <Image
-          src="/balti-script.png"
-          alt="Balti Script — Vowels & Consonants| OpenBalti"
-          width={1200}
-          height={700}
-          priority
-          className="rounded-2xl shadow-lg object-contain"
-        />
-          
+            src="/balti-script.png"
+            alt="Balti Script — Vowels & Consonants | OpenBalti"
+            width={1200}
+            height={700}
+            priority
+            className="rounded-2xl shadow-lg object-contain"
+          />
         </div>
       </section>
 
       {/* Cultural Insight Section */}
-      <section className="relative text-center py-20 px-6 bg-gray-950">
+      <section className="relative text-center py-20 px-6 bg-gray-950 overflow-hidden">
         <div
-          className="absolute inset-0 bg-[url('/images/baltistan-valley.jpg')] bg-cover bg-center opacity-20"
+          className="absolute inset-0 bg-[url('/images/baltistan-valley.jpg')] bg-cover bg-center opacity-25"
           aria-hidden="true"
         />
         <div className="relative max-w-3xl mx-auto">
@@ -145,8 +146,9 @@ export default function LearnPage() {
           </h2>
           <p className="text-gray-300 text-lg leading-relaxed">
             Every Balti word carries a story — of respect, kinship, and
-            connection to nature. Through learning, we don’t just preserve
-            vocabulary; we keep alive the worldview of our ancestors.
+            connection to the mountains and the divine. Through learning, we
+            don’t just preserve vocabulary; we sustain a living culture and
+            worldview passed down through generations.
           </p>
         </div>
       </section>
@@ -161,17 +163,17 @@ export default function LearnPage() {
             {
               icon: "📖",
               title: "Follow Lessons",
-              desc: "Explore Balti step by step — from basic script to fluent understanding.",
+              desc: "Explore Balti step by step — from script to fluent expression, all in one place.",
             },
             {
               icon: "🧩",
               title: "Contribute Examples",
-              desc: "Add example sentences or cultural meanings to help others learn.",
+              desc: "Add real-world examples or cultural meanings to help enrich the learning experience.",
             },
             {
               icon: "🪶",
               title: "Share Knowledge",
-              desc: "Share what you learn with friends, family, or online to spread the language.",
+              desc: "Share what you learn with others — your words might inspire someone to reconnect with their roots.",
             },
           ].map(({ icon, title, desc }) => (
             <div
