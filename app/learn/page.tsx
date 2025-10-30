@@ -1,4 +1,5 @@
 import { generateMetadata } from "@/lib/metadata";
+import { getKeywordsFor } from "@/lib/seoKeywords";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,7 +7,8 @@ import FAQSection from "@/components/FAQSection";
 
 export const metadata = generateMetadata(
   "Learn Balti Language | OpenBalti",
-  "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan."
+  "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan.",
+{ keywords: getKeywordsFor("learn") }
 );
 
 export default function LearnPage() {
