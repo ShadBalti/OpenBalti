@@ -143,7 +143,7 @@ export default function FAQSection() {
             {openIndex === index && (
               <div
                 id={`faq-${index}`}
-                className="px-6 pb-6 text-gray-300 text-base leading-relaxed border-t border-gray-700/60 animate-fadeIn"
+                className="px-6 pb-6 pt-6 text-gray-300 text-base leading-relaxed border-t border-gray-700/60 animate-fadeIn"
               >
                 {faq.answer}
               </div>
@@ -151,17 +151,6 @@ export default function FAQSection() {
           </div>
         ))}
       </div>
-
-      <p className="text-center text-sm text-gray-400 mt-12">
-        Still have questions?{" "}
-        <a
-          href="/contact"
-          className="text-amber-400 hover:text-amber-300 underline"
-        >
-          Contact us
-        </a>{" "}
-        — we’d love to help you start your Balti learning journey.
-      </p>
     </section>
   );
 }
