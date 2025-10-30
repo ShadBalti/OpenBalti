@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { UserDropdown } from "@/components/auth/user-dropdown"
 import { useSession } from "next-auth/react"
-import { Bookmark, BookOpen, Info, Menu, Users, Medal, X } from "lucide-react"
+import { Bookmark, BookOpen, Info, Menu, Users, Medal, X, BookOpenText} from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
@@ -26,6 +26,7 @@ export function Header() {
 
   const navItems = [
     { href: "/", label: "Dictionary", icon: <BookOpen className="h-4 w-4 mr-2" /> },
+   { href: "/learn", label: "Learn", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/about", label: "About", icon: <Info className="h-4 w-4 mr-2" /> },
     { href: "/contributors", label: "Contributors", icon: <Users className="h-4 w-4 mr-2" /> },
     { href: "/leaderboard", label: "leaderboard", icon: <Medal className="h-4 w-4 mr-2" /> },
