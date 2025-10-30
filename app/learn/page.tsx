@@ -193,7 +193,6 @@ export default function LearnPage() {
         <div className="mt-20">
           <FAQSection />
         </div>
-      </section>
-    </main>
+  </main>
   );
 }
