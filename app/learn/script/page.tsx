@@ -1,6 +1,7 @@
 import { generateMetadata } from "@/lib/metadata";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import LearnContinue from "@/components/LearnContinue";
 
 export const metadata = generateMetadata(
