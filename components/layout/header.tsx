@@ -45,7 +45,7 @@ export function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="mx-6 hidden md:flex md:items-center md:space-x-4 lg:space-x-6">
+        <nav className="mx-2 hidden md:flex md:items-center md:space-x-4 lg:space-x-6">
           {navItems.map((item) => (
             <Button
               key={item.href}
