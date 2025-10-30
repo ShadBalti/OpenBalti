@@ -1,6 +1,7 @@
 import { generateMetadata } from "@/lib/metadata";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = generateMetadata(
   "Learn Balti Language | OpenBalti",
@@ -120,11 +121,15 @@ export default function LearnPage() {
           </Link>
         </div>
         <div className="flex-1">
-          <img
-            src="/images/balti-script.png"
-            alt="Balti Script"
-            className="rounded-2xl shadow-lg object-cover w-full"
-          />
+          <Image
+          src="/balti-script.png"
+          alt="Balti Script — Vowels & Consonants| OpenBalti"
+          width={1200}
+          height={700}
+          priority
+          className="rounded-2xl shadow-lg object-contain"
+        />
+          
         </div>
       </section>
 
