@@ -6,8 +6,8 @@ import Image from "next/image";
 import FAQSection from "@/components/FAQSection";
 
 export const metadata = generateMetadata(
-  "Learn Balti Language | OpenBalti",
-  "Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in the culture of Baltistan.",
+  "Learn Balti Language Online | OpenBalti – Balti Script, Grammar & Culture",
+  "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!",
 { keywords: getKeywordsFor("learn") }
 );
 
