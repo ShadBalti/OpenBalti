@@ -1,5 +1,6 @@
 import { generateMetadata } from "@/lib/metadata";
 import React from "react";
+import LearnContinue from "@/components/LearnContinue";
 
 export const metadata = generateMetadata(
   "Balti Dialects | Learn Balti Language | OpenBalti",
@@ -186,6 +187,13 @@ export default function DialectalPage() {
           not only words, but the spirit of Baltistan itself.
         </p>
       </section>
+       <LearnContinue
+        title="Keep Exploring"
+        links={[
+          { label: "Common Phrases", href: "/learn/phrases" },
+          { label: "Balti Script →", href: "/learn/script", variant: "secondary" },
+        ]}
+      />
     </main>
   );
 }
