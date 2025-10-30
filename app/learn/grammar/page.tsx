@@ -1,4 +1,4 @@
-import { generateMetadata } from "@/lib/metadata"
+import { generateMetadata } from "@/lib/metadata";
 import React from "react";
 import Link from "next/link";
 
