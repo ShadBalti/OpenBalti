@@ -76,7 +76,7 @@ export default function LearnPage() {
   title: "Balti Dialectal",
   desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
   link: "/learn/dialectal",
-} 
+},
            
           {
             icon: "🧱",
