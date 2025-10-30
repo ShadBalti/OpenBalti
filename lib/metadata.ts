@@ -92,11 +92,21 @@ export const baseMetadata: Metadata = {
 }
 
 // Helper function to generate metadata for specific pages
-export function generateMetadata(title: string, description?: string, overrides: Partial<Metadata> = {}): Metadata {
+export function generateMetadata(
+  title: string,
+  description?: string,
+  options?: {
+    keywords?: string[]
+    overrides?: Partial<Metadata>
+  }
+): Metadata {
+  const { keywords = [], overrides = {} } = options || {}
+
   return {
     ...baseMetadata,
     title,
     description: description || baseMetadata.description,
+    keywords: [...baseMetadata.keywords!, ...keywords],
     openGraph: {
       ...baseMetadata.openGraph,
       title,
