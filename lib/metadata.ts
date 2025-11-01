@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 export const baseMetadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"),
   title: {
     default: "OpenBalti Dictionary | Free Online Balti Language Resource",
     template: "%s | OpenBalti Dictionary",
@@ -51,7 +51,7 @@ export const baseMetadata: Metadata = {
     nocache: false,
   },
   alternates: {
-    canonical: "https://openbalti.vercel.app",
+    canonical: "https://openbalti.com",
   },
   formatDetection: {
     email: false,
@@ -69,7 +69,7 @@ export const baseMetadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://openbalti.vercel.app",
+    url: "https://openbalti.com",
     title: "OpenBalti Dictionary",
     description:
       "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
