@@ -13,7 +13,7 @@ export function DictionaryStructuredData({
   description = baseMetadata.description as string,
   wordCount,
 }: DictionaryStructuredDataProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.vercel.app"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
 
   const structuredData = {
     "@context": "https://schema.org",
