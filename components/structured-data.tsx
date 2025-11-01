@@ -47,7 +47,7 @@ export function DictionaryStructuredData({
 }
 
 export function OrganizationStructuredData() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.vercel.app"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
 
   const structuredData = {
     "@context": "https://schema.org",
