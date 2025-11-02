@@ -60,7 +60,7 @@ export const baseMetadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenBalti Dictionary",
+    title: "OpenBalti Dictionary | Free Online Balti Language Resource",
     description:
       "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
     images: ["/android-chrome-512x512.png"],
@@ -70,7 +70,7 @@ export const baseMetadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://openbalti.com",
-    title: "OpenBalti Dictionary",
+    title: "OpenBalti Dictionary | Free Online Balti Language Resource",
     description:
       "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
     siteName: "OpenBalti Dictionary",
