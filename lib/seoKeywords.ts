@@ -1,5 +1,6 @@
 // lib/seoKeywords.ts
 export type PageKey =
+  | "/"
   | "learn"
   | "learn/phrases"
   | "learn/script"
@@ -7,6 +8,42 @@ export type PageKey =
   | "learn/grammar";
 
 export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
+  "/": [
+    "Balti language",
+    "Balti dictionary online",
+    "Balti translator",
+    "Balti to English translation",
+    "English to Balti translator",
+    "Balti words meaning",
+    "Balti vocabulary",
+    "learn Balti language",
+    "Balti grammar guide",
+    "Balti phrases for beginners",
+    "Balti script",
+    "Balti writing system",
+    "Baltistan language",
+    "Balti culture",
+    "Balti language app",
+    "Balti to Urdu translation",
+    "language preservation project",
+    "Balti language revival",
+    "Tibetan dialects",
+    "Balti and Tibetan connection",
+    "digital Balti dictionary",
+    "Balti translation tool",
+    "endangered languages Pakistan",
+    "learn Balti script",
+    "Balti language learning resources",
+    "Balti heritage",
+    "online language tool",
+    "dictionary for Balti words",
+    "support Balti language preservation",
+    "Balti dialects variations",
+    "Baltistan tourism language guide",
+    "Balti vocabulary flashcards",
+    "Balti community portal",
+  ],
+
   "learn": [
     "learn Balti language online",
     "Balti language lessons for beginners",
