@@ -1,4 +1,6 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
+import { getKeywordsFor } from "@/lib/seoKeywords";
+
 export const baseMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"),
   title: {
@@ -7,41 +9,7 @@ export const baseMetadata: Metadata = {
   },
   description:
     "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language. Explore Balti to English and English to Balti translations, linguistic insights, and cultural context for language preservation.",
-  keywords: [
-    "Balti language",
-    "Balti dictionary online",
-    "Balti translator",
-    "Balti to English translation",
-    "English to Balti translator",
-    "Balti words meaning",
-    "Balti vocabulary",
-    "learn Balti language",
-    "Balti grammar guide",
-    "Balti phrases for beginners",
-    "Balti script",
-    "Balti writing system",
-    "Baltistan language",
-    "Balti culture",
-    "Balti language app",
-    "Balti to Urdu translation",
-    "language preservation project",
-    "Balti language revival",
-    "Tibetan dialects",
-    "Balti and Tibetan connection",
-    "digital Balti dictionary",
-    "Balti translation tool",
-    "endangered languages Pakistan",
-    "learn Balti script",
-    "Balti language learning resources",
-    "Balti heritage",
-    "online language tool",
-    "dictionary for Balti words",
-    "support Balti language preservation",
-    "Balti dialects variations",
-    "Baltistan tourism language guide",
-    "Balti vocabulary flashcards",
-    "Balti community portal",
-  ],
+  keywords: getKeywordsFor("learn"),
   authors: [{ name: "OpenBalti Team" }],
   creator: "OpenBalti Project",
   publisher: "OpenBalti Project",
