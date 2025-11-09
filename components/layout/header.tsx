@@ -29,7 +29,7 @@ export function Header() {
    { href: "/learn", label: "Learn", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/about", label: "About", icon: <Info className="h-4 w-4 mr-2" /> },
     { href: "/contributors", label: "Contributors", icon: <Users className="h-4 w-4 mr-2" /> },
-    { href: "/leaderboard", label: "leaderboard", icon: <Medal className="h-4 w-4 mr-2" /> },
+    { href: "/leaderboard", label: "board", icon: <Medal className="h-4 w-4 mr-2" /> },
     ...(session ? [{ href: "/favorites", label: "Favorites", icon: <Bookmark className="h-4 w-4 mr-2" /> }] : []),
   ]
 
@@ -45,7 +45,7 @@ export function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="mx-6 hidden md:flex md:items-center md:space-x-2 lg:space-x-4">
+        <nav className="mx-6 hidden md:flex md:items-center md:space-x-2 lg:space-x-2">
           {navItems.map((item) => (
             <Button
               key={item.href}
