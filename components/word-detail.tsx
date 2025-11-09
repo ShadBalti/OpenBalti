@@ -14,26 +14,26 @@ import WordComments from "@/components/word-comments"
 
 interface WordDetailProps {
   word: IWord
-  onClose?: () => void
+  onClose ? : () => void
 }
 
 export default function WordDetail({ word, onClose }: WordDetailProps) {
   const { data: session } = useSession()
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  
   useEffect(() => {
     // Check if this word is in user's favorites
     if (session) {
       checkFavoriteStatus()
     }
   }, [session, word._id])
-
+  
   const checkFavoriteStatus = async () => {
     try {
       const response = await fetch("/api/favorites")
       const result = await response.json()
-
+      
       if (result.success) {
         const favorites = result.data
         setIsFavorite(favorites.some((fav: any) => fav.wordId._id === word._id))
@@ -42,13 +42,13 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
       console.error("Error checking favorite status:", error)
     }
   }
-
+  
   const toggleFavorite = async () => {
     if (!session) {
       toast.error("Please log in to save favorites")
       return
     }
-
+    
     setIsLoading(true)
     try {
       if (isFavorite) {
@@ -57,7 +57,7 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
           method: "DELETE",
         })
         const result = await response.json()
-
+        
         if (result.success) {
           setIsFavorite(false)
           toast.success("Removed from favorites")
@@ -74,7 +74,7 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
           body: JSON.stringify({ wordId: word._id }),
         })
         const result = await response.json()
-
+        
         if (result.success) {
           setIsFavorite(true)
           toast.success("Added to favorites")
@@ -89,7 +89,7 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
       setIsLoading(false)
     }
   }
-
+  
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-start justify-between space-y-0">

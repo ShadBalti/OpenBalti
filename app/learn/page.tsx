@@ -7,8 +7,7 @@ import FAQSection from "@/components/FAQSection";
 
 export const metadata = generateMetadata(
   "Learn Balti Language Online | OpenBalti – Balti Script, Grammar & Culture",
-  "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!",
-{ keywords: getKeywordsFor("learn") }
+  "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!", { keywords: getKeywordsFor("learn") }
 );
 
 export default function LearnPage() {
@@ -74,11 +73,11 @@ export default function LearnPage() {
             link: "/learn/script",
           },
           {
-  icon: "🗣️",
-  title: "Balti Dialectal",
-  desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
-  link: "/learn/dialectal",
-},
+            icon: "🗣️",
+            title: "Balti Dialectal",
+            desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
+            link: "/learn/dialectal",
+          },
            
           {
             icon: "🧱",

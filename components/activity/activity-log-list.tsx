@@ -19,55 +19,55 @@ interface ActivityLog {
     email: string
   }
   action: "create" | "update" | "delete" | "review"
-  wordId?: string
-  wordBalti?: string
-  wordEnglish?: string
-  details?: string
+  wordId ? : string
+  wordBalti ? : string
+  wordEnglish ? : string
+  details ? : string
   createdAt: string
 }
 
 interface ActivityLogListProps {
-  userId?: string
-  wordId?: string
-  limit?: number
+  userId ? : string
+  wordId ? : string
+  limit ? : number
 }
 
 export default function ActivityLogList({ userId, wordId, limit = 10 }: ActivityLogListProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [logs, setLogs] = useState<ActivityLog[]>([])
+  const [logs, setLogs] = useState < ActivityLog[] > ([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [actionFilter, setActionFilter] = useState<string>("all")
-
+  const [actionFilter, setActionFilter] = useState < string > ("all")
+  
   useEffect(() => {
     if (status === "unauthenticated") {
       toast.error("You need to be signed in to access the activity log.")
       router.push("/auth/signin?callbackUrl=/activity")
       return
     }
-
+    
     if (status === "authenticated") {
       fetchLogs()
     }
   }, [status, page, actionFilter, userId, wordId, router])
-
+  
   const fetchLogs = async () => {
     try {
       setLoading(true)
-
+      
       // Build query parameters
       const params = new URLSearchParams()
       params.append("page", page.toString())
       params.append("limit", limit.toString())
-
+      
       if (userId) params.append("userId", userId)
       if (wordId) params.append("wordId", wordId)
       if (actionFilter !== "all") params.append("action", actionFilter)
-
+      
       const response = await fetch(`/api/activity?${params.toString()}`)
-
+      
       if (!response.ok) {
         if (response.status === 401) {
           toast.error("Your session has expired. Please log in again.")
@@ -77,9 +77,9 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
         toast.error(`Error: ${response.statusText || "Failed to fetch activity logs"}`)
         return
       }
-
+      
       const result = await response.json()
-
+      
       if (result.success) {
         setLogs(result.data)
         setTotalPages(result.pagination.pages)
@@ -93,7 +93,7 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
       setLoading(false)
     }
   }
-
+  
   const getActionBadge = (action: string) => {
     switch (action) {
       case "create":
@@ -108,11 +108,11 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
         return <Badge>{action}</Badge>
     }
   }
-
+  
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "MMM d, yyyy 'at' h:mm a")
   }
-
+  
   if (status === "loading") {
     return (
       <div className="flex justify-center items-center py-16">
@@ -123,7 +123,7 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
       </div>
     )
   }
-
+  
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between gap-4">

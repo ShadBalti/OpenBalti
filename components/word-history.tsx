@@ -18,7 +18,7 @@ interface WordData {
   id: string
   balti: string
   english: string
-  reviewStatus?: string
+  reviewStatus ? : string
 }
 
 interface HistoryEntry {
@@ -28,33 +28,33 @@ interface HistoryEntry {
   english: string
   action: "create" | "update" | "delete"
   userId: string
-  userName?: string
-  userImage?: string
-  details?: string
+  userName ? : string
+  userImage ? : string
+  details ? : string
   createdAt: string
 }
 
 export default function WordHistory({ wordId }: WordHistoryProps) {
   const router = useRouter()
-  const [word, setWord] = useState<WordData | null>(null)
-  const [history, setHistory] = useState<HistoryEntry[]>([])
+  const [word, setWord] = useState < WordData | null > (null)
+  const [history, setHistory] = useState < HistoryEntry[] > ([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState < string | null > (null)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-
+  
   useEffect(() => {
     fetchWordHistory()
   }, [wordId, page])
-
+  
   // Improve error handling for API requests
   const fetchWordHistory = async () => {
     try {
       setLoading(true)
       setError(null)
-
+      
       const response = await fetch(`/api/words/${wordId}/history?page=${page}`)
-
+      
       if (!response.ok) {
         if (response.status === 404) {
           setError("Word not found")
@@ -63,9 +63,9 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
         }
         return
       }
-
+      
       const result = await response.json()
-
+      
       if (result.success) {
         setWord(result.data.word)
         setHistory(result.data.history)
@@ -80,11 +80,11 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
       setLoading(false)
     }
   }
-
+  
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "MMM d, yyyy 'at' h:mm a")
   }
-
+  
   const getActionIcon = (action: string) => {
     switch (action) {
       case "create":
@@ -97,7 +97,7 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
         return null
     }
   }
-
+  
   const getActionBadge = (action: string) => {
     switch (action) {
       case "create":
@@ -110,7 +110,7 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
         return <Badge>{action}</Badge>
     }
   }
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center py-16">
@@ -121,7 +121,7 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
       </div>
     )
   }
-
+  
   if (error) {
     return (
       <Card>
@@ -141,9 +141,9 @@ export default function WordHistory({ wordId }: WordHistoryProps) {
       </Card>
     )
   }
-
+  
   if (!word) return null
-
+  
   return (
     <div className="space-y-6">
       <Card>

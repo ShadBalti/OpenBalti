@@ -23,21 +23,21 @@ type FeedbackType = "useful" | "trusted" | "needsReview"
 export default function WordFeedback({ wordId }: WordFeedbackProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
-  const [stats, setStats] = useState<FeedbackStats>({ useful: 0, trusted: 0, needsReview: 0 })
-  const [userFeedback, setUserFeedback] = useState<FeedbackType | null>(null)
+  const [stats, setStats] = useState < FeedbackStats > ({ useful: 0, trusted: 0, needsReview: 0 })
+  const [userFeedback, setUserFeedback] = useState < FeedbackType | null > (null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  
   useEffect(() => {
     fetchFeedback()
   }, [wordId])
-
+  
   const fetchFeedback = async () => {
     try {
       setIsLoading(true)
       const response = await fetch(`/api/words/${wordId}/feedback`)
       const result = await response.json()
-
+      
       if (result.success) {
         setStats(result.data.stats)
         setUserFeedback(result.data.userFeedback)
@@ -53,7 +53,7 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
       setIsLoading(false)
     }
   }
-
+  
   const handleFeedback = async (type: FeedbackType) => {
     if (!session) {
       toast({
@@ -63,7 +63,7 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
       })
       return
     }
-
+    
     try {
       setIsSubmitting(true)
       const response = await fetch(`/api/words/${wordId}/feedback`, {
@@ -73,9 +73,9 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
         },
         body: JSON.stringify({ type }),
       })
-
+      
       const result = await response.json()
-
+      
       if (result.success) {
         // Update local state based on the action
         if (result.action === "added") {
@@ -129,7 +129,7 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
       setIsSubmitting(false)
     }
   }
-
+  
   const getFeedbackLabel = (type: FeedbackType): string => {
     switch (type) {
       case "useful":
@@ -142,7 +142,7 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
         return ""
     }
   }
-
+  
   const getFeedbackIcon = (type: FeedbackType) => {
     switch (type) {
       case "useful":
@@ -153,14 +153,14 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
         return <AlertTriangle className="h-4 w-4" />
     }
   }
-
+  
   const totalFeedback = stats.useful + stats.trusted + stats.needsReview
-
+  
   const getProgressValue = (count: number): number => {
     if (totalFeedback === 0) return 0
     return (count / totalFeedback) * 100
   }
-
+  
   if (isLoading) {
     return (
       <div className="flex justify-center py-4">
@@ -168,7 +168,7 @@ export default function WordFeedback({ wordId }: WordFeedbackProps) {
       </div>
     )
   }
-
+  
   return (
     <Card>
       <CardHeader className="pb-2">

@@ -9,84 +9,69 @@ interface FAQItem {
 }
 
 const faqData: FAQItem[] = [
-  {
-    question: "How long does it take to learn the Balti language?",
-    answer:
-      "Learning speed varies from person to person. With consistent daily practice, you can start forming basic Balti phrases within a few weeks. Becoming comfortable with grammar, pronunciation, and script may take a few months of steady progress.",
-  },
-  {
-    question: "Is Balti similar to Tibetan?",
-    answer:
-      "Yes — Balti originates from Classical Tibetan but has evolved with influences from Persian, Urdu, and local Himalayan languages. While it shares Tibetan roots, it’s now a distinct language that beautifully reflects the culture of Baltistan.",
-  },
-  {
-    question: "Can I contribute to OpenBalti lessons?",
-    answer:
-      "Absolutely! OpenBalti is a community-driven project. You can contribute example sentences, lesson ideas, or cultural notes. Every contribution helps preserve and share the Balti language globally.",
-  },
-  {
-    question: "Where can I hear native Balti speakers?",
-    answer:
-      "We’re preparing an Audio Lessons feature with recordings from native Balti speakers. For now, you can listen to traditional Balti songs and regional storytelling videos on YouTube and local culture platforms.",
-  },
-  {
-    question: "Do I need to know Tibetan to learn Balti?",
-    answer:
-      "No — OpenBalti is designed for beginners. Lessons are fully in English, and we teach everything from pronunciation to grammar step by step.",
-  },
-  {
-    question: "What is the Balti script?",
-    answer:
-      "The Balti script (བལྟི) is based on Tibetan writing. It includes unique letters and pronunciation rules that connect deeply with Balti identity. You can start learning it in our Script Lessons section.",
-  },
-  {
-    question: "Does Balti have regional differences?",
-    answer:
-      "Yes, there are slight dialectal variations between regions in Baltistan, mainly in pronunciation. However, all Balti speakers can understand each other easily.",
-  },
-  {
-    question: "Can I learn Balti using English letters?",
-    answer:
-      "Yes! We use Romanized Balti to make the language accessible for everyone. You’ll learn both writing systems — Romanized and Balti script — side by side.",
-  },
-  {
-    question: "Is Balti still spoken today?",
-    answer:
-      "Yes, Balti is actively spoken in Baltistan and among diaspora communities. Through projects like OpenBalti, we’re working to preserve and promote it for future generations.",
-  },
-  {
-    question: "Can children learn Balti through OpenBalti?",
-    answer:
-      "Definitely! The lessons are simple and visually engaging, making them ideal for children and families who want to reconnect with their roots.",
-  },
-  {
-    question: "Will there be pronunciation guides or audio lessons?",
-    answer:
-      "Yes! Upcoming updates will include pronunciation recordings from native speakers and phonetic spellings to help learners practice authentic sounds.",
-  },
-  {
-    question: "What makes Balti language special?",
-    answer:
-      "Balti reflects the beauty, humility, and wisdom of mountain life. Each word often carries emotional and spiritual depth, connecting speakers to their ancestors and nature.",
-  },
-  {
-    question: "Is Balti a written or only spoken language?",
-    answer:
-      "Balti is both written and spoken. Traditionally, it used a Tibetan-derived script, and in modern contexts, it’s often written using Roman letters for easier typing.",
-  },
-  {
-    question: "Can I type Balti on my phone or computer?",
-    answer:
-      "Yes! Balti script is supported in Unicode. You can use Tibetan-based fonts or our upcoming Balti Keyboard feature on OpenBalti to write and share Balti online.",
-  },
-];
+{
+  question: "How long does it take to learn the Balti language?",
+  answer: "Learning speed varies from person to person. With consistent daily practice, you can start forming basic Balti phrases within a few weeks. Becoming comfortable with grammar, pronunciation, and script may take a few months of steady progress.",
+},
+{
+  question: "Is Balti similar to Tibetan?",
+  answer: "Yes — Balti originates from Classical Tibetan but has evolved with influences from Persian, Urdu, and local Himalayan languages. While it shares Tibetan roots, it’s now a distinct language that beautifully reflects the culture of Baltistan.",
+},
+{
+  question: "Can I contribute to OpenBalti lessons?",
+  answer: "Absolutely! OpenBalti is a community-driven project. You can contribute example sentences, lesson ideas, or cultural notes. Every contribution helps preserve and share the Balti language globally.",
+},
+{
+  question: "Where can I hear native Balti speakers?",
+  answer: "We’re preparing an Audio Lessons feature with recordings from native Balti speakers. For now, you can listen to traditional Balti songs and regional storytelling videos on YouTube and local culture platforms.",
+},
+{
+  question: "Do I need to know Tibetan to learn Balti?",
+  answer: "No — OpenBalti is designed for beginners. Lessons are fully in English, and we teach everything from pronunciation to grammar step by step.",
+},
+{
+  question: "What is the Balti script?",
+  answer: "The Balti script (བལྟི) is based on Tibetan writing. It includes unique letters and pronunciation rules that connect deeply with Balti identity. You can start learning it in our Script Lessons section.",
+},
+{
+  question: "Does Balti have regional differences?",
+  answer: "Yes, there are slight dialectal variations between regions in Baltistan, mainly in pronunciation. However, all Balti speakers can understand each other easily.",
+},
+{
+  question: "Can I learn Balti using English letters?",
+  answer: "Yes! We use Romanized Balti to make the language accessible for everyone. You’ll learn both writing systems — Romanized and Balti script — side by side.",
+},
+{
+  question: "Is Balti still spoken today?",
+  answer: "Yes, Balti is actively spoken in Baltistan and among diaspora communities. Through projects like OpenBalti, we’re working to preserve and promote it for future generations.",
+},
+{
+  question: "Can children learn Balti through OpenBalti?",
+  answer: "Definitely! The lessons are simple and visually engaging, making them ideal for children and families who want to reconnect with their roots.",
+},
+{
+  question: "Will there be pronunciation guides or audio lessons?",
+  answer: "Yes! Upcoming updates will include pronunciation recordings from native speakers and phonetic spellings to help learners practice authentic sounds.",
+},
+{
+  question: "What makes Balti language special?",
+  answer: "Balti reflects the beauty, humility, and wisdom of mountain life. Each word often carries emotional and spiritual depth, connecting speakers to their ancestors and nature.",
+},
+{
+  question: "Is Balti a written or only spoken language?",
+  answer: "Balti is both written and spoken. Traditionally, it used a Tibetan-derived script, and in modern contexts, it’s often written using Roman letters for easier typing.",
+},
+{
+  question: "Can I type Balti on my phone or computer?",
+  answer: "Yes! Balti script is supported in Unicode. You can use Tibetan-based fonts or our upcoming Balti Keyboard feature on OpenBalti to write and share Balti online.",
+}, ];
 
 export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
+  const [openIndex, setOpenIndex] = useState < number | null > (null);
+  
   const toggleFAQ = (index: number) =>
     setOpenIndex(openIndex === index ? null : index);
-
+  
   // ✅ Structured data for SEO (JSON-LD)
   const faqSchema = {
     "@context": "https://schema.org",
@@ -100,7 +85,7 @@ export default function FAQSection() {
       },
     })),
   };
-
+  
   return (
     <section
       id="faq"

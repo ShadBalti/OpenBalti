@@ -24,31 +24,31 @@ interface Suggestion {
 }
 
 interface SearchPreset {
-  _id?: string
+  _id ? : string
   name: string
   query: string
   filters: {
-    category?: string
-    dialect?: string
-    difficulty?: string
-    feedback?: string
+    category ? : string
+    dialect ? : string
+    difficulty ? : string
+    feedback ? : string
   }
 }
 
 interface AdvancedSearchProps {
   onSearch: (query: string, filters: any, fuzzy: boolean) => void
-  isLoading?: boolean
+  isLoading ? : boolean
 }
 
 export default function AdvancedSearch({ onSearch, isLoading = false }: AdvancedSearchProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
-
+  
   const [searchQuery, setSearchQuery] = useState("")
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  const [suggestions, setSuggestions] = useState < Suggestion[] > ([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [fuzzyEnabled, setFuzzyEnabled] = useState(false)
-  const [presets, setPresets] = useState<SearchPreset[]>([])
+  const [presets, setPresets] = useState < SearchPreset[] > ([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [presetName, setPresetName] = useState("")
   const [selectedFilters, setSelectedFilters] = useState({
@@ -57,24 +57,24 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     difficulties: [] as string[],
     feedback: [] as string[],
   })
-
-  const suggestionsRef = useRef<HTMLDivElement>(null)
-  const debounceTimer = useRef<NodeJS.Timeout>()
-
+  
+  const suggestionsRef = useRef < HTMLDivElement > (null)
+  const debounceTimer = useRef < NodeJS.Timeout > ()
+  
   // Fetch autocomplete suggestions
   useEffect(() => {
     if (searchQuery.length < 2) {
       setSuggestions([])
       return
     }
-
+    
     if (debounceTimer.current) clearTimeout(debounceTimer.current)
-
+    
     debounceTimer.current = setTimeout(async () => {
       try {
         const response = await fetch(`/api/words/search/autocomplete?q=${encodeURIComponent(searchQuery)}&limit=8`)
         const result = await response.json()
-
+        
         if (result.success) {
           setSuggestions(result.data)
           setShowSuggestions(true)
@@ -83,24 +83,24 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         console.error("Error fetching suggestions:", error)
       }
     }, 300)
-
+    
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current)
     }
   }, [searchQuery])
-
+  
   // Fetch user's saved presets
   useEffect(() => {
     if (session?.user?.id) {
       fetchPresets()
     }
   }, [session])
-
+  
   const fetchPresets = async () => {
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`)
       const result = await response.json()
-
+      
       if (result.success) {
         setPresets(result.data)
       }
@@ -108,17 +108,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       console.error("Error fetching presets:", error)
     }
   }
-
+  
   const handleSearch = () => {
     onSearch(searchQuery, selectedFilters, fuzzyEnabled)
     setShowSuggestions(false)
   }
-
+  
   const handleSuggestionClick = (suggestion: Suggestion) => {
     setSearchQuery(suggestion.balti)
     setShowSuggestions(false)
   }
-
+  
   const handleSavePreset = async () => {
     if (!presetName.trim()) {
       toast({
@@ -128,7 +128,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
       return
     }
-
+    
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`, {
         method: "POST",
@@ -144,9 +144,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           },
         }),
       })
-
+      
       const result = await response.json()
-
+      
       if (result.success) {
         toast({
           title: "Success",
@@ -165,7 +165,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
     }
   }
-
+  
   const handleLoadPreset = (preset: SearchPreset) => {
     setSearchQuery(preset.query)
     setSelectedFilters({
@@ -175,17 +175,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       feedback: preset.filters.feedback ? [preset.filters.feedback] : [],
     })
   }
-
+  
   const handleDeletePreset = async (presetId: string | undefined) => {
     if (!presetId) return
-
+    
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets?presetId=${presetId}`, {
         method: "DELETE",
       })
-
+      
       const result = await response.json()
-
+      
       if (result.success) {
         toast({
           title: "Success",
@@ -202,7 +202,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
     }
   }
-
+  
   const toggleFilter = (filterType: keyof typeof selectedFilters, value: string) => {
     setSelectedFilters((prev) => {
       const current = prev[filterType]
@@ -219,7 +219,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       }
     })
   }
-
+  
   return (
     <div className="space-y-4">
       <div className="relative">
