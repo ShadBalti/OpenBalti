@@ -8,8 +8,8 @@ export const baseMetadata: Metadata = {
     template: "%s | OpenBalti Dictionary",
   },
   description:
-    "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language. Explore Balti to English and English to Balti translations, linguistic insights, and cultural context for language preservation.",
-  keywords: getKeywordsFor("learn"),
+    "OpenBalti is a fast, accurate Balti–English dictionary to translate, learn, and preserve the Balti language. Explore meanings, cultural context, and more.",
+  keywords: getKeywordsFor("/"),
   authors: [{ name: "OpenBalti Team" }],
   creator: "OpenBalti Project",
   publisher: "OpenBalti Project",
