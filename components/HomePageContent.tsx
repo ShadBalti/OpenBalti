@@ -14,9 +14,9 @@ export function HomePageContent() {
       itemType="https://schema.org/Article"
     >
       <header className="mb-10">
-        <h1 className="text-2xl font-bold text-foreground dark:text-white" itemProp="headline">
+        <h2 className="text-2xl font-bold text-foreground dark:text-white" itemProp="headline">
           OpenBalti – Free Balti to English Dictionary & Language Learning Tool
-        </h1>
+        </h2>
         <p className="mt-2 text-sm" itemProp="description">
           Learn Balti online for free. Explore our open-source Balti–English dictionary, community stats, and language preservation tools.
         </p>
@@ -24,9 +24,9 @@ export function HomePageContent() {
 
       {/* Community Stats at the Top */}
       <section aria-labelledby="community-stats" className="mb-10">
-        <h2 id="community-stats" className="text-xl font-semibold text-foreground dark:text-white mb-2">
+        <h3 id="community-stats" className="text-xl font-semibold text-foreground dark:text-white mb-2">
           Community Stats
-        </h2>
+        </h3>
         <CommunityStats />
       </section>
 
