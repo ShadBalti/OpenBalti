@@ -28,6 +28,17 @@ interface LeaderboardTableProps {
   showBadges?: boolean
 }
 
+/**
+ * A component that fetches and displays a leaderboard of users based on their contribution scores.
+ * It shows user rankings, avatars, names, roles, and total contributions.
+ * It also includes visual indicators for top positions and can optionally display user badges.
+ * The component handles its own loading and error states.
+ *
+ * @param {LeaderboardTableProps} props - The component props.
+ * @param {number} [props.limit=50] - The maximum number of users to display on the leaderboard.
+ * @param {boolean} [props.showBadges=true] - Whether to display a preview of users' earned badges.
+ * @returns {JSX.Element} The rendered leaderboard table.
+ */
 export function LeaderboardTable({ limit = 50, showBadges = true }: LeaderboardTableProps) {
   const [users, setUsers] = useState<LeaderboardUser[]>([])
   const [loading, setLoading] = useState(true)

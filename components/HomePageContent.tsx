@@ -6,6 +6,13 @@ import { ChevronDown } from 'lucide-react'
 import CommunityStats from '@/components/community-stats'
 import { cn } from '@/lib/utils'
 
+/**
+ * Renders the main content for the homepage, including a welcome message, community statistics,
+ * and an accordion section with details about the Balti language and the OpenBalti project.
+ * It uses schema.org microdata for SEO.
+ *
+ * @returns {JSX.Element} The rendered homepage content.
+ */
 export function HomePageContent() {
   return (
     <article
@@ -99,6 +106,16 @@ export function HomePageContent() {
   )
 }
 
+/**
+ * A reusable accordion item component used within the homepage content.
+ * It provides a consistent structure for accordion elements with a trigger and content panel.
+ *
+ * @param {object} props - The component props.
+ * @param {string} props.value - A unique value for the accordion item.
+ * @param {string} props.title - The title displayed in the accordion trigger.
+ * @param {React.ReactNode} props.children - The content to be displayed when the accordion item is open.
+ * @returns {JSX.Element} The rendered accordion item.
+ */
 function AccordionItem({
   value,
   title,

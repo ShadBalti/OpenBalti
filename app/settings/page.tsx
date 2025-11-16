@@ -9,6 +9,13 @@ import AccountSettings from "@/components/settings/account-settings"
 
 export const metadata = generateMetadata("Settings", "Manage your OpenBalti account settings and preferences.")
 
+/**
+ * Renders the user settings page, which allows authenticated users to manage their profile
+ * and account settings. It uses a tabbed interface to separate profile information from account actions.
+ * This is a server component that fetches the session and redirects if the user is not authenticated.
+ *
+ * @returns {Promise<JSX.Element>} The rendered settings page.
+ */
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions)
 

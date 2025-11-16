@@ -17,6 +17,14 @@ const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-int
 
 export const metadata: Metadata = baseMetadata
 
+/**
+ * The root layout for the entire application.
+ * It sets up the HTML structure, includes global metadata, fonts, and providers like ThemeProvider and SessionProvider.
+ *
+ * @param {Readonly<{ children: React.ReactNode }>} props - The props for the component.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
+ * @returns {JSX.Element} The root layout of the application.
+ */
 export default function RootLayout({
   children,
 }: Readonly < {

@@ -17,6 +17,14 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null }
 }
 
+/**
+ * Establishes a connection to the MongoDB database using Mongoose.
+ * It implements a caching mechanism to reuse existing connections, which is crucial for performance in serverless environments.
+ * During development, it leverages a global cache to persist connections across hot reloads.
+ *
+ * @returns {Promise<typeof mongoose>} A promise that resolves to the Mongoose connection instance.
+ * @throws {Error} If the `MONGODB_URI` environment variable is not set or if the connection fails.
+ */
 async function dbConnect() {
   if (cached.conn) {
     console.log("✅ Using existing MongoDB connection")

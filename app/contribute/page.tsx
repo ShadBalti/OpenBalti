@@ -9,6 +9,12 @@ export const metadata = generateMetadata(
   "Help preserve and document the Balti language by contributing to the OpenBalti dictionary project.",
 )
 
+/**
+ * Renders the "Contribute" page, which outlines the various ways users can contribute to the OpenBalti project.
+ * It includes sections for adding words, reviewing entries, making technical contributions, and sharing the project.
+ *
+ * @returns {JSX.Element} The rendered "Contribute" page.
+ */
 export default function ContributePage() {
   return (
     <div className="container py-8 md:py-12">

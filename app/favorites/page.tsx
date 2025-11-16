@@ -7,6 +7,13 @@ export const metadata = {
   description: "View and manage your favorite Balti words",
 }
 
+/**
+ * Renders the "My Favorites" page, which displays a list of the user's saved words.
+ * This page is protected and will prompt unauthenticated users to sign in.
+ * It uses the `FavoritesList` component to handle the logic of fetching and displaying the favorite words.
+ *
+ * @returns {JSX.Element} The rendered favorites page.
+ */
 export default function FavoritesPage() {
   return (
     <div className="container py-8 md:py-12">

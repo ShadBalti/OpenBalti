@@ -10,6 +10,13 @@ export const metadata = generateMetadata(
 { keywords: getKeywordsFor("learn/grammar") }
 );
 
+/**
+ * Renders the page dedicated to explaining Balti grammar and sentence structure.
+ * It covers the basic Subject-Object-Verb (SOV) order, main parts of speech,
+ * and provides example sentences to illustrate the concepts.
+ *
+ * @returns {JSX.Element} The rendered grammar information page.
+ */
 export default function GrammarPage() {
   return (
     <main className="text-gray-100 bg-gradient-to-b from-gray-950 to-gray-900 min-h-screen">

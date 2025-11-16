@@ -6,6 +6,13 @@ export const metadata = generateMetadata(
   "Discover the history, importance, and preservation efforts of the Balti language through OpenBalti — an open-source project led by Dilshad Hussain dedicated to documenting and celebrating this ancient Tibetic language.",
 )
 
+/**
+ * Renders the "About" page, which provides detailed information about the Balti language,
+ * the mission of the OpenBalti project, and the developer. It also includes a call to action
+ * for community contributions.
+ *
+ * @returns {JSX.Element} The rendered "About" page.
+ */
 export default function AboutPage() {
   return (
     <div className="container py-10 md:py-16">

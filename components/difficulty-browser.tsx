@@ -11,6 +11,14 @@ interface DifficultyGroup {
   count: number
 }
 
+/**
+ * A component that fetches and displays a list of word difficulty levels from the dictionary.
+ * It shows each level (e.g., 'Beginner', 'Intermediate') and the number of words associated with it.
+ * Each level is a link that allows users to filter the dictionary by that difficulty.
+ * The component manages its own loading and error states.
+ *
+ * @returns {JSX.Element} The rendered difficulty browser component.
+ */
 export default function DifficultyBrowser() {
   const [difficulties, setDifficulties] = useState<DifficultyGroup[]>([])
   const [loading, setLoading] = useState(true)

@@ -1,4 +1,13 @@
-// lib/seoKeywords.ts
+/**
+ * @module seoKeywords
+ * @description This module centralizes Search Engine Optimization (SEO) keywords for different pages of the application.
+ * It provides a structured way to manage and retrieve keywords, ensuring that each page has relevant metadata to improve search engine rankings.
+ */
+
+/**
+ * @typedef { "/" | "learn" | "learn/phrases" | "learn/script" | "learn/dialectal" | "learn/grammar"} PageKey
+ * @description Represents the unique identifiers for pages that have a dedicated set of SEO keywords.
+ */
 export type PageKey =
   | "/"
   | "learn"
@@ -7,6 +16,11 @@ export type PageKey =
   | "learn/dialectal"
   | "learn/grammar";
 
+/**
+ * @const {Record<PageKey, string[]>} PAGE_KEYWORDS
+ * @description A dictionary mapping each `PageKey` to an array of SEO-optimized keywords.
+ * This structure allows for easy maintenance and retrieval of keywords for specific pages.
+ */
 export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
   "/": [
     "Balti language",
@@ -111,7 +125,10 @@ export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
 };
 
 /**
- * Helper: return keywords for a page key
+ * Retrieves the SEO keywords for a given page.
+ *
+ * @param {PageKey} page - The unique identifier of the page for which to retrieve keywords.
+ * @returns {string[]} An array of keywords for the specified page. Returns an empty array if the page key is not found.
  */
 export function getKeywordsFor(page: PageKey): string[] {
   return PAGE_KEYWORDS[page] ?? [];

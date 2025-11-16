@@ -3,6 +3,14 @@ import { Suspense } from "react"
 import { DictionaryStructuredData } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 import { HomePageContent } from "@/components/HomePageContent"
+
+/**
+ * Renders the homepage of the application.
+ * It includes the main heading, a brief introduction, and the interactive `WordsPage` component
+ * for browsing the dictionary, which is loaded with a suspense fallback.
+ *
+ * @returns {JSX.Element} The rendered homepage.
+ */
 export default function Home() {
   return (
     <div className="container py-8 md:py-12">

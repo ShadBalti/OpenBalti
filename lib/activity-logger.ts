@@ -18,6 +18,21 @@ interface LogActivityParams {
   details?: string
 }
 
+/**
+ * Logs user activity and updates relevant records in the database.
+ * This function handles logging to the main activity log, updating user statistics,
+ * awarding badges, and recording word history for create, update, and delete actions.
+ *
+ * @param {LogActivityParams} params - The parameters for the activity log.
+ * @param {Session} [params.session] - The user's session object, used to identify the user.
+ * @param {string} [params.userId] - The ID of the user performing the action (used if session is not available).
+ * @param {ActivityAction} params.action - The type of action being logged (e.g., 'create', 'update').
+ * @param {string} [params.wordId] - The ID of the word associated with the activity.
+ * @param {string} [params.wordBalti] - The Balti representation of the word.
+ * @param {string} [params.wordEnglish] - The English translation of the word.
+ * @param {string} [params.details] - Additional details about the activity.
+ * @returns {Promise<void>} A promise that resolves when the activity has been logged.
+ */
 export async function logActivity({
   session,
   userId,

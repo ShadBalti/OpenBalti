@@ -2,6 +2,13 @@
 
 import Link from "next/link";
 
+/**
+ * Renders the license page for the OpenBalti project.
+ * It provides detailed information about the MIT License under which the software is distributed,
+ * as well as guidelines on contributions, branding, and third-party content.
+ *
+ * @returns {JSX.Element} The rendered license page.
+ */
 export default function LicensePage() {
   return (
     <main className="max-w-3xl mx-auto px-6 py-16 text-gray-300">

@@ -10,6 +10,13 @@ export const metadata = generateMetadata(
   "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!", { keywords: getKeywordsFor("learn") }
 );
 
+/**
+ * Renders the main "Learn" page, which serves as a hub for all language learning resources.
+ * It provides an introduction to the Balti language and links to detailed sections on script,
+ * grammar, phrases, and dialects.
+ *
+ * @returns {JSX.Element} The rendered "Learn" page.
+ */
 export default function LearnPage() {
   return (
     <main className="text-gray-100 bg-gradient-to-b from-gray-950 to-gray-900 min-h-screen">

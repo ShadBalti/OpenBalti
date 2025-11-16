@@ -71,6 +71,12 @@
 
 ---
 
+## 📚 **Documentation**
+
+The codebase is thoroughly documented using **JSDoc** comments. This provides detailed explanations for all functions, classes, and components, making it easier for new developers to understand the code and contribute effectively.
+
+---
+
 ## 🗃️ **Database Models**
 
 | Model | Description |
@@ -88,9 +94,9 @@
 ## 🚀 **Getting Started**
 
 ### 🧩 Prerequisites
-- Node.js 18+  
-- MongoDB (local or Atlas)  
-- Environment variables for NextAuth & DB connection  
+- Node.js 18+
+- MongoDB (local or Atlas)
+- Environment variables for NextAuth & DB connection. Create a `.env.local` file in the root of the project and add the necessary environment variables.
 
 ### 🧠 Installation
 
@@ -109,6 +115,9 @@ npm run dev
 \`\`\`
 Visit 👉 http://localhost:3000
 
+### 🐳 Deployment
+
+The application is optimized for deployment on **Vercel**. Simply fork the repository, connect it to your Vercel account, and Vercel will handle the rest.
 
 ---
 

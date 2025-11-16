@@ -13,6 +13,17 @@ interface FeedbackBadgesProps {
   showLabels?: boolean
 }
 
+/**
+ * Renders a set of badges to visually represent community feedback on a word.
+ * It displays counts for 'useful', 'trusted', and 'needs review' feedback,
+ * highlighting the most frequent feedback type.
+ *
+ * @param {FeedbackBadgesProps} props - The component props.
+ * @param {FeedbackStats} [props.feedbackStats={ useful: 0, trusted: 0, needsReview: 0 }] - An object containing the counts for each feedback type.
+ * @param {"sm" | "md" | "lg"} [props.size="md"] - The size of the badges.
+ * @param {boolean} [props.showLabels=false] - Whether to show text labels next to the feedback counts.
+ * @returns {JSX.Element} The rendered feedback badges or a "No feedback yet" message.
+ */
 export default function FeedbackBadges({
   feedbackStats = { useful: 0, trusted: 0, needsReview: 0 },
   size = "md",

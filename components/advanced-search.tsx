@@ -40,6 +40,16 @@ interface AdvancedSearchProps {
   isLoading ? : boolean
 }
 
+/**
+ * A comprehensive search component that provides advanced filtering, autocomplete suggestions,
+ * fuzzy matching, and the ability for authenticated users to save and manage search presets.
+ * It handles the UI and logic for search queries, suggestions, filters, and preset management.
+ *
+ * @param {AdvancedSearchProps} props - The component props.
+ * @param {(query: string, filters: any, fuzzy: boolean) => void} props.onSearch - Callback function invoked when a search is executed.
+ * @param {boolean} [props.isLoading=false] - A flag to indicate if a search is currently in progress, disabling the search button.
+ * @returns {JSX.Element} The rendered advanced search component.
+ */
 export default function AdvancedSearch({ onSearch, isLoading = false }: AdvancedSearchProps) {
   const { data: session } = useSession()
   const { toast } = useToast()

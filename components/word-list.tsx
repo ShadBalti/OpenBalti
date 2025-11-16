@@ -19,6 +19,19 @@ interface WordListProps {
   showActions?: boolean
 }
 
+/**
+ * Renders a sortable and interactive list of dictionary words in a table format.
+ * It supports both Balti-to-English and English-to-Balti directions, allows sorting by either language,
+ * and provides actions to view, edit, or delete words.
+ *
+ * @param {WordListProps} props - The component props.
+ * @param {IWord[]} props.words - An array of word objects to display.
+ * @param {"balti-to-english" | "english-to-balti"} props.direction - The translation direction to display.
+ * @param {(word: IWord) => void} props.onEdit - Callback function to handle editing a word.
+ * @param {(id: string) => void} props.onDelete - Callback function to handle deleting a word.
+ * @param {boolean} [props.showActions=true] - Whether to show the edit and delete action buttons.
+ * @returns {JSX.Element} The rendered word list component.
+ */
 export default function WordList({ words, direction, onEdit, onDelete, showActions = true }: WordListProps) {
   const [sortField, setSortField] = useState<"balti" | "english">("balti")
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")

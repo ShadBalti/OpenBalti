@@ -17,6 +17,14 @@ interface Favorite {
   createdAt: string
 }
 
+/**
+ * A component that displays a list of the current user's favorite words.
+ * It handles user authentication status, fetches the user's favorites from the API,
+ * and provides functionality to remove a word from favorites.
+ * It also manages loading and empty states, guiding unauthenticated or new users appropriately.
+ *
+ * @returns {JSX.Element} The rendered list of favorite words or a relevant status message.
+ */
 export default function FavoritesList() {
   const { data: session, status } = useSession()
   const [favorites, setFavorites] = useState<Favorite[]>([])

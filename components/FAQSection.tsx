@@ -66,6 +66,13 @@ const faqData: FAQItem[] = [
   answer: "Yes! Balti script is supported in Unicode. You can use Tibetan-based fonts or our upcoming Balti Keyboard feature on OpenBalti to write and share Balti online.",
 }, ];
 
+/**
+ * Renders a Frequently Asked Questions (FAQ) section as an accordion.
+ * This component displays a list of questions and answers, allowing users to expand and collapse each item.
+ * It also includes structured data (JSON-LD) for SEO, which helps search engines understand the content and display it as a rich snippet.
+ *
+ * @returns {JSX.Element} The rendered FAQ section component.
+ */
 export default function FAQSection() {
   const [openIndex, setOpenIndex] = useState < number | null > (null);
   

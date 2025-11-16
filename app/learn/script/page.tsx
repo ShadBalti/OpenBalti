@@ -11,6 +11,13 @@ export const metadata = generateMetadata(
 { keywords: getKeywordsFor("learn/script") }
 );
 
+/**
+ * Renders the page dedicated to the Balti script and linguistic structure.
+ * It provides a detailed overview of the Yige script, its history, and modern adaptations,
+ * as well as information on Balti morphology, verb systems, and honorifics.
+ *
+ * @returns {JSX.Element} The rendered Balti script information page.
+ */
 export default function ScriptPage() {
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 text-gray-200 leading-relaxed">

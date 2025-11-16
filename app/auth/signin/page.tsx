@@ -8,6 +8,12 @@ export const metadata: Metadata = generateMetadata(
   "Sign in to your OpenBalti account to contribute to the dictionary.",
 )
 
+/**
+ * Renders the sign-in page for the application.
+ * It provides a clean layout and displays the `SignInForm` component, which handles the authentication logic.
+ *
+ * @returns {JSX.Element} The rendered sign-in page.
+ */
 export default function SignInPage() {
   return (
     <div className="container flex h-[calc(100vh-8rem)] items-center justify-center py-8 md:py-12">

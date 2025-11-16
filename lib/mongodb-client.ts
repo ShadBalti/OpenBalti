@@ -28,6 +28,16 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = client.connect()
 }
 
+/**
+ * @module mongodb-client
+ * @description This module handles the connection to the MongoDB database.
+ * It implements a singleton pattern to ensure that a single MongoDB client instance is created and reused across the application,
+ * which is a recommended practice for performance and resource management.
+ * In a development environment, it uses a global variable to persist the connection across Hot Module Replacements (HMR),
+ * preventing multiple connections during development. In production, it creates a direct connection.
+ * The module exports a promise that resolves to the connected MongoClient instance.
+ */
+
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
 export default clientPromise

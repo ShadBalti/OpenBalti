@@ -39,6 +39,15 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 
+/**
+ * The main component for the dictionary page, providing a comprehensive interface for browsing,
+ * searching, filtering, adding, editing, and deleting words.
+ * It integrates various sub-components like `AdvancedSearch`, `WordList`, and `WordForm`
+ * to create a full-featured dictionary experience.
+ * It manages the state for the word list, search terms, filters, and user interactions.
+ *
+ * @returns {JSX.Element} The rendered words page.
+ */
 export default function WordsPage() {
   const { data: session } = useSession()
   const { toast } = useToast()

@@ -31,6 +31,17 @@ interface WordFormProps {
   onCancel?: () => void
 }
 
+/**
+ * A comprehensive form for adding or editing a dictionary word.
+ * It includes fields for Balti and English translations, phonetic spelling, categories, dialect, usage notes,
+ * related words, difficulty level, and usage examples. The form handles its own state and validation.
+ *
+ * @param {WordFormProps} props - The component props.
+ * @param {IWord | null} props.initialData - The initial data for the form, used for editing an existing word. If null, the form is in 'add' mode.
+ * @param {Function} props.onSubmit - The callback function to execute when the form is submitted with valid data.
+ * @param {Function} [props.onCancel] - An optional callback function to handle form cancellation.
+ * @returns {JSX.Element} The rendered word form component.
+ */
 export default function WordForm({ initialData, onSubmit, onCancel }: WordFormProps) {
   const [balti, setBalti] = useState("")
   const [english, setEnglish] = useState("")

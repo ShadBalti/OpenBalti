@@ -13,7 +13,18 @@ interface ErrorBoundaryProps {
   children: React.ReactNode
 }
 
-// Export the component as a named export
+/**
+ * A React error boundary component that catches JavaScript errors in its child component tree,
+ * logs those errors, and displays a fallback UI instead of the crashed component tree.
+ * It provides a user-friendly way to handle runtime errors and allows for a recovery action.
+ *
+ * @param {ErrorBoundaryProps} props - The component props.
+ * @param {Error & { digest?: string }} [props.error] - The error object caught by the boundary.
+ * @param {() => void} [props.reset] - A function to reset the component's state and re-render the children.
+ * @param {React.ReactNode} [props.fallback] - A custom fallback component to render on error. If not provided, a default UI is used.
+ * @param {React.ReactNode} props.children - The child components to be rendered within the boundary.
+ * @returns {JSX.Element} The fallback UI if an error is caught, otherwise the children.
+ */
 export function ErrorBoundary({ error, reset, fallback, children }: ErrorBoundaryProps) {
   const [hasError, setHasError] = useState<boolean>(!!error)
 

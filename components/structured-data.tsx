@@ -13,6 +13,17 @@ export function DictionaryStructuredData({
   description = baseMetadata.description as string,
   wordCount,
 }: DictionaryStructuredDataProps) {
+  /**
+   * Generates JSON-LD structured data for a dictionary dataset.
+   * This helps search engines understand the content as a structured dataset, which can improve SEO.
+   *
+   * @param {DictionaryStructuredDataProps} props - The component props.
+   * @param {string} props.url - The canonical URL of the dictionary page.
+   * @param {string} [props.name="OpenBalti Dictionary"] - The name of the dictionary.
+   * @param {string} [props.description=baseMetadata.description] - A description of the dictionary.
+   * @param {number} [props.wordCount] - The number of entries in the dictionary.
+   * @returns {JSX.Element} A script tag containing the JSON-LD structured data.
+   */
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
 
   const structuredData = {
@@ -46,6 +57,12 @@ export function DictionaryStructuredData({
   )
 }
 
+/**
+ * Generates JSON-LD structured data for the OpenBalti organization.
+ * This provides search engines with key information about the project, such as its name, logo, and social media profiles.
+ *
+ * @returns {JSX.Element} A script tag containing the JSON-LD structured data for the organization.
+ */
 export function OrganizationStructuredData() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
 

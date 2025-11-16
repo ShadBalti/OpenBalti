@@ -14,6 +14,15 @@ interface WordHistoryProps {
   wordId: string
 }
 
+/**
+ * Renders a detailed history of all changes made to a specific word.
+ * It fetches the word's current state and its revision history, displaying each change
+ * with user attribution and timestamps. The component includes pagination to navigate through the history.
+ *
+ * @param {WordHistoryProps} props - The component props.
+ * @param {string} props.wordId - The ID of the word for which to display the history.
+ * @returns {JSX.Element} The rendered word history page.
+ */
 interface WordData {
   id: string
   balti: string

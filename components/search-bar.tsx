@@ -11,6 +11,15 @@ interface SearchBarProps {
   setSearchTerm: (term: string) => void
 }
 
+/**
+ * A controlled search bar component with debouncing to optimize search performance.
+ * It includes a search icon and a clear button to enhance user experience.
+ *
+ * @param {SearchBarProps} props - The component props.
+ * @param {string} props.searchTerm - The current search term, managed by the parent component.
+ * @param {(term: string) => void} props.setSearchTerm - A callback function to update the search term in the parent component.
+ * @returns {JSX.Element} The rendered search bar component.
+ */
 export default function SearchBar({ searchTerm, setSearchTerm }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchTerm)
   const [debouncedValue, setDebouncedValue] = useState(searchTerm)

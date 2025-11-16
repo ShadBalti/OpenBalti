@@ -8,6 +8,15 @@ interface FeedbackFilterProps {
   activeFilter: string | null
 }
 
+/**
+ * Renders a set of buttons that allow users to filter a list of words based on community feedback.
+ * Users can select a filter (e.g., 'Most Useful', 'Most Trusted') to apply it and click the same filter again to clear it.
+ *
+ * @param {FeedbackFilterProps} props - The component props.
+ * @param {(filter: string | null) => void} props.onFilterChange - A callback function that is invoked when the filter selection changes.
+ * @param {string | null} props.activeFilter - The currently active filter.
+ * @returns {JSX.Element} The rendered feedback filter component.
+ */
 export default function FeedbackFilter({ onFilterChange, activeFilter }: FeedbackFilterProps) {
   const filters = [
     { id: "useful", label: "Most Useful", icon: <ThumbsUp className="h-4 w-4 mr-2" /> },

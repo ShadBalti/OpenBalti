@@ -6,6 +6,13 @@ import { AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
+/**
+ * Renders a page to display authentication-related errors.
+ * It reads the error type from the URL query parameters and shows a user-friendly message
+ * corresponding to the specific error, such as invalid credentials or an unlinked OAuth account.
+ *
+ * @returns {JSX.Element} The rendered authentication error page.
+ */
 export default function AuthErrorPage() {
   const searchParams = useSearchParams()
   const error = searchParams.get("error")

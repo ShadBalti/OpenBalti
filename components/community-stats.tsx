@@ -32,6 +32,16 @@ interface CommunityStats {
   }>
 }
 
+/**
+ * A component that fetches and displays key statistics about the OpenBalti community.
+ * It shows metrics like the total number of words, contributors, feedback, and comments,
+ * as well as lists of top contributors and most active users.
+ * It handles its own loading and error states.
+ *
+ * @param {CommunityStatsProps} props - The component props.
+ * @param {string} [props.className] - Optional CSS class name for custom styling.
+ * @returns {JSX.Element} The rendered community statistics card.
+ */
 export default function CommunityStats({ className }: CommunityStatsProps) {
   const { toast } = useToast()
   const [stats, setStats] = useState<CommunityStats | null>(null)

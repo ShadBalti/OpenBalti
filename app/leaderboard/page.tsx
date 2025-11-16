@@ -6,6 +6,13 @@ import ErrorBoundary from "@/components/error-boundary"
 
 export const metadata = generateMetadata("Leaderboard", "See the top contributors to the OpenBalti dictionary project.")
 
+/**
+ * Renders the leaderboard page, which displays a ranked list of top contributors.
+ * It uses the `LeaderboardTable` component to fetch and display the data,
+ * with a suspense fallback for loading states and an error boundary to handle potential errors.
+ *
+ * @returns {JSX.Element} The rendered leaderboard page.
+ */
 export default function LeaderboardPage() {
   return (
     <div className="container py-8 md:py-12">
