@@ -2,6 +2,16 @@ import dbConnect from "@/lib/mongodb"
 import User from "@/models/User"
 import type { IBadge } from "@/models/User"
 
+/**
+ * @interface BadgeDefinition
+ * @description Defines the structure for a badge, including its metadata and the requirement to unlock it.
+ * @property {string} id - A unique identifier for the badge.
+ * @property {"milestone" | "specialty"} type - The category of the badge.
+ * @property {string} name - The display name of the badge.
+ * @property {string} description - A short description of the badge's achievement.
+ * @property {string} icon - An emoji or icon representing the badge.
+ * @property {(stats: { wordsAdded: number; wordsEdited: number; wordsReviewed: number }) => boolean} requirement - A function that returns true if the user's stats meet the unlock criteria.
+ */
 export interface BadgeDefinition {
   id: string
   type: "milestone" | "specialty"
@@ -11,7 +21,11 @@ export interface BadgeDefinition {
   requirement: (stats: { wordsAdded: number; wordsEdited: number; wordsReviewed: number }) => boolean
 }
 
-// Define all available badges
+/**
+ * @const {BadgeDefinition[]} BADGE_DEFINITIONS
+ * @description A comprehensive list of all badges available in the system.
+ * Each badge is defined by its ID, type, name, description, icon, and unlock requirement.
+ */
 export const BADGE_DEFINITIONS: BadgeDefinition[] = [
   // Milestone badges for words added
   {
@@ -137,6 +151,14 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
   },
 ]
 
+/**
+ * Checks a user's statistics against badge requirements and awards new badges if criteria are met.
+ * It fetches the user, compares their stats to all badge definitions not already earned,
+ * and saves any new badges to the user's profile.
+ *
+ * @param {string} userId - The ID of the user to check for new badges.
+ * @returns {Promise<IBadge[]>} A promise that resolves with an array of newly awarded badges. Returns an empty array if no new badges were awarded or if an error occurred.
+ */
 export async function checkAndAwardBadges(userId: string): Promise<IBadge[]> {
   try {
     await dbConnect()
@@ -188,6 +210,12 @@ export async function checkAndAwardBadges(userId: string): Promise<IBadge[]> {
   }
 }
 
-export function getBadgeDefinition(badgeId: string): BadgeDefinition | undefined {
+/**
+ * Retrieves the definition of a specific badge by its ID.
+ *
+ * @param {string} badgeId - The ID of the badge to retrieve.
+ * @returns {BadgeDefinition | undefined} The badge definition object if found, otherwise undefined.
+ */
+export function getBadgeDefinition(badgeId:string): BadgeDefinition | undefined {
   return BADGE_DEFINITIONS.find((b) => b.id === badgeId)
 }

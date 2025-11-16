@@ -9,6 +9,13 @@ import Link from "next/link"
 
 export const metadata = generateMetadata("Your Profile", "Manage your OpenBalti account and view your contributions.")
 
+/**
+ * Renders the user's profile page, displaying their account information and contribution stats.
+ * This is a server component that fetches the user's session and redirects to the sign-in page
+ * if the user is not authenticated.
+ *
+ * @returns {Promise<JSX.Element>} The rendered profile page.
+ */
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions)
 

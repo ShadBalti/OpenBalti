@@ -2,6 +2,13 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getToken } from "next-auth/jwt"
 
+/**
+ * Next.js middleware for handling authentication and authorization for protected routes.
+ * It checks if a user is authenticated and has the required role to access certain pages.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {Promise<NextResponse>} A response that either allows the request to proceed or redirects the user.
+ */
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request })
   const isAuthenticated = !!token

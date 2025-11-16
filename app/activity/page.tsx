@@ -8,6 +8,13 @@ export const metadata = generateMetadata(
   "View the history of changes made to the OpenBalti dictionary.",
 )
 
+/**
+ * Renders the "Activity Log" page, which displays a list of recent contributions and changes
+ * to the dictionary. It uses the `ActivityLogList` component to fetch and show the data.
+ * The page includes a suspense fallback to handle the loading state.
+ *
+ * @returns {JSX.Element} The rendered activity log page.
+ */
 export default function ActivityPage() {
   return (
     <div className="container py-8 md:py-12">

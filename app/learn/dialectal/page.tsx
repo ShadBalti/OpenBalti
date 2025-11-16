@@ -9,6 +9,13 @@ export const metadata = generateMetadata(
 { keywords: getKeywordsFor("learn/dialectal") }
 );
 
+/**
+ * Renders the page dedicated to explaining the various dialects of the Balti language.
+ * It provides information on the major dialectal divisions, geographical distribution,
+ * and examples of variations in vocabulary and pronunciation.
+ *
+ * @returns {JSX.Element} The rendered dialectal information page.
+ */
 export default function DialectalPage() {
   return (
     <main className="text-gray-100 bg-gradient-to-b from-gray-950 to-gray-900 min-h-screen">

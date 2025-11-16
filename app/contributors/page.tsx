@@ -9,6 +9,13 @@ export const metadata = generateMetadata(
   "Discover the people contributing to the OpenBalti dictionary project.",
 )
 
+/**
+ * Renders the "Contributors" page, which displays a list of all users who have contributed to the dictionary.
+ * It uses the `ContributorsList` component to fetch and display the data, with a suspense fallback for loading states
+ * and an error boundary to handle potential fetching errors.
+ *
+ * @returns {JSX.Element} The rendered contributors page.
+ */
 export default function ContributorsPage() {
   return (
     <div className="container py-8 md:py-12">

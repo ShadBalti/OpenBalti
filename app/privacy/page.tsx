@@ -1,5 +1,12 @@
 import Link from "next/link"
 
+/**
+ * Renders the privacy policy page for the OpenBalti project.
+ * It outlines the types of information collected, how it is used, and the rights of users
+ * regarding their data.
+ *
+ * @returns {JSX.Element} The rendered privacy policy page.
+ */
 export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">

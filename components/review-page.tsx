@@ -26,6 +26,14 @@ import type { IWord } from "@/models/Word"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
+/**
+ * A comprehensive admin component for reviewing and managing dictionary entries.
+ * It provides functionalities for viewing, searching, filtering, sorting, editing, and deleting words.
+ * It also includes a statistics tab to track the review progress.
+ * This component is protected and requires the user to be authenticated.
+ *
+ * @returns {JSX.Element} The rendered review page component.
+ */
 export default function ReviewPage() {
   const { data: session, status } = useSession()
   const router = useRouter()

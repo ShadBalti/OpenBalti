@@ -1,6 +1,18 @@
 import mongoose, { Schema, type Document } from "mongoose"
 import { hash } from "bcryptjs"
 
+/**
+ * @interface IBadge
+ * @description Represents a badge that can be awarded to a user for their contributions.
+ * Badges are embedded within the User document.
+ *
+ * @property {"milestone" | "specialty"} type - The category of the badge.
+ * @property {string} id - A unique identifier for the badge.
+ * @property {string} name - The display name of the badge.
+ * @property {string} description - A short description of what the badge represents.
+ * @property {string} icon - An emoji or icon representing the badge.
+ * @property {Date} unlockedAt - The date when the badge was awarded to the user.
+ */
 export interface IBadge {
   type: "milestone" | "specialty"
   id: string
@@ -10,6 +22,34 @@ export interface IBadge {
   unlockedAt: Date
 }
 
+/**
+ * @interface IUser
+ * @extends {Document}
+ * @description Represents a user account in the application.
+ * This interface defines all the properties of a user, including their personal information,
+ * authentication details, role, profile settings, and contribution data.
+ *
+ * @property {string} name - The user's full name.
+ * @property {string} email - The user's email address (must be unique).
+ * @property {string} password - The user's hashed password.
+ * @property {string} [image] - The URL of the user's profile picture.
+ * @property {"user" | "admin" | "contributor" | "owner"} role - The user's role, which determines their permissions.
+ * @property {Date} [emailVerified] - The timestamp when the user's email was verified.
+ * @property {string} [bio] - A short biography of the user.
+ * @property {string} [location] - The user's location.
+ * @property {string} [website] - The URL of the user's personal website.
+ * @property {boolean} isPublic - Whether the user's profile is public.
+ * @property {boolean} isVerified - Whether the user is a verified contributor.
+ * @property {boolean} isFounder - Whether the user is a founder of the project.
+ * @property {object} contributionStats - An object tracking the user's contributions.
+ * @property {number} contributionStats.wordsAdded - The number of words added by the user.
+ * @property {number} contributionStats.wordsEdited - The number of words edited by the user.
+ * @property {number} contributionStats.wordsReviewed - The number of words reviewed by the user.
+ * @property {IBadge[]} [badges] - An array of badges awarded to the user.
+ * @property {Array<object>} [searchPresets] - An array of saved search presets for the user.
+ * @property {Date} createdAt - The timestamp when the user account was created.
+ * @property {Date} updatedAt - The timestamp when the user account was last updated.
+ */
 export interface IUser extends Document {
   name: string
   email: string
@@ -45,6 +85,12 @@ export interface IUser extends Document {
   updatedAt: Date
 }
 
+/**
+ * @const UserSchema
+ * @description The Mongoose schema for the User model.
+ * It defines the structure, validation, and middleware for user documents stored in MongoDB.
+ * This schema includes a pre-save hook to automatically hash user passwords.
+ */
 const UserSchema: Schema = new Schema(
   {
     name: {

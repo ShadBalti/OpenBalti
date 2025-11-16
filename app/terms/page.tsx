@@ -1,5 +1,12 @@
 import Link from "next/link"
 
+/**
+ * Renders the Terms of Use page for the OpenBalti project.
+ * It provides a summary of the rules and guidelines for using the service,
+ * including user conduct, intellectual property, and liability.
+ *
+ * @returns {JSX.Element} The rendered Terms of Use page.
+ */
 export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">

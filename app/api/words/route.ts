@@ -5,6 +5,13 @@ import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import { logActivity } from "@/lib/activity-logger"
 
+/**
+ * Handles GET requests to fetch dictionary words.
+ * It supports filtering by search term, category, dialect, difficulty level, and community feedback.
+ *
+ * @param {NextRequest} req - The incoming Next.js request object.
+ * @returns {Promise<NextResponse>} A response containing the list of words or an error message.
+ */
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url)
@@ -52,6 +59,14 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/**
+ * Handles POST requests to add a new word to the dictionary.
+ * This is a protected route that requires user authentication.
+ * It validates the input, checks for duplicate entries, and logs the activity.
+ *
+ * @param {NextRequest} req - The incoming Next.js request object containing the new word data.
+ * @returns {Promise<NextResponse>} A response confirming the creation of the word or an error message.
+ */
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions)

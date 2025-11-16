@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { getKeywordsFor } from "@/lib/seoKeywords";
 
+/**
+ * @const {Metadata} baseMetadata
+ * @description Serves as the base metadata configuration for the entire application.
+ * It includes default values for titles, descriptions, SEO keywords, social media cards (Twitter/OpenGraph),
+ * and other essential metadata fields to ensure consistent branding and SEO performance.
+ * This object is extended by the `generateMetadata` function for page-specific overrides.
+ */
 export const baseMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"),
   title: {
@@ -59,7 +66,17 @@ export const baseMetadata: Metadata = {
   manifest: "/site.webmanifest",
 }
 
-// Helper function to generate metadata for specific pages
+/**
+ * Generates page-specific metadata by extending the `baseMetadata` object.
+ * This allows for custom titles, descriptions, and keywords while maintaining consistent base settings.
+ *
+ * @param {string} title - The title for the specific page.
+ * @param {string} [description] - A custom description for the page. If not provided, the default description from `baseMetadata` is used.
+ * @param {object} [options] - Optional parameters for further customization.
+ * @param {string[]} [options.keywords=[]] - An array of additional keywords to append to the base keywords.
+ * @param {Partial<Metadata>} [options.overrides={}] - An object to deeply override any specific properties of the `baseMetadata`.
+ * @returns {Metadata} A fully constructed metadata object for the page.
+ */
 export function generateMetadata(
   title: string,
   description?: string,

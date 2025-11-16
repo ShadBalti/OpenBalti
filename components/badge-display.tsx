@@ -6,6 +6,15 @@ interface BadgeDisplayProps {
   size?: "sm" | "md" | "lg"
 }
 
+/**
+ * Renders a single badge with an icon and a tooltip that reveals the badge's name and description on hover.
+ * The size of the badge can be customized.
+ *
+ * @param {BadgeDisplayProps} props - The component props.
+ * @param {IBadge} props.badge - The badge object containing its metadata (icon, name, description).
+ * @param {"sm" | "md" | "lg"} [props.size="md"] - The size of the badge.
+ * @returns {JSX.Element} The rendered badge component.
+ */
 export function BadgeDisplay({ badge, size = "md" }: BadgeDisplayProps) {
   const sizeClasses = {
     sm: "text-lg w-8 h-8",
@@ -39,6 +48,14 @@ interface BadgeGridProps {
   size?: "sm" | "md" | "lg"
 }
 
+/**
+ * Renders a grid of badges. If the user has no badges, it displays a message encouraging contribution.
+ *
+ * @param {BadgeGridProps} props - The component props.
+ * @param {IBadge[]} props.badges - An array of badge objects to be displayed.
+ * @param {"sm" | "md" | "lg"} [props.size="md"] - The size of the badges in the grid.
+ * @returns {JSX.Element} The rendered grid of badges or a placeholder message.
+ */
 export function BadgeGrid({ badges, size = "md" }: BadgeGridProps) {
   if (badges.length === 0) {
     return (

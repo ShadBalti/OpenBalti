@@ -9,6 +9,13 @@ export const metadata = generateMetadata(
   "Help improve the OpenBalti dictionary by reviewing and editing entries for accuracy and completeness.",
 )
 
+/**
+ * Renders the dictionary review page, which provides a comprehensive interface for moderators and administrators
+ * to review, edit, and manage dictionary entries.
+ * The core functionality is encapsulated within the `ReviewPage` component.
+ *
+ * @returns {JSX.Element} The rendered review page.
+ */
 export default function Review() {
   return (
     <div className="container py-8 md:py-12">

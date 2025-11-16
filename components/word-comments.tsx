@@ -16,6 +16,15 @@ interface WordCommentsProps {
   wordId: string
 }
 
+/**
+ * Renders the comment section for a specific word, allowing users to view and add comments.
+ * It fetches existing comments and provides a form for authenticated users to submit new ones.
+ * The component handles its own state for loading, submitting, and displaying comments.
+ *
+ * @param {WordCommentsProps} props - The component props.
+ * @param {string} props.wordId - The ID of the word for which to display comments.
+ * @returns {JSX.Element} The rendered word comments component.
+ */
 interface Comment {
   _id: string
   content: string

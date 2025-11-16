@@ -11,6 +11,14 @@ interface DialectGroup {
   count: number
 }
 
+/**
+ * A component that fetches and displays a list of regional dialects from the dictionary.
+ * It shows each dialect's name and the number of words associated with it.
+ * Each dialect is a link that allows users to filter the dictionary by that region.
+ * The component handles its own loading and error states.
+ *
+ * @returns {JSX.Element} The rendered dialect browser component.
+ */
 export default function DialectBrowser() {
   const [dialects, setDialects] = useState<DialectGroup[]>([])
   const [loading, setLoading] = useState(true)

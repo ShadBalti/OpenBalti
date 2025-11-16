@@ -4,7 +4,12 @@ import ActivityLog from "@/models/ActivityLog"
 
 /**
  * Updates contributor statistics based on recent activity.
- * Can be run periodically to ensure stats stay in sync.
+ * Recalculates and updates the contribution statistics for all users in the database.
+ * This function iterates through each user, counts their contributions (words added, edited, and reviewed)
+ * from the `ActivityLog`, and updates their profile with the corrected counts.
+ * It is designed to be run periodically as a maintenance task to ensure data integrity.
+ *
+ * @returns {Promise<void>} A promise that resolves when all user statistics have been updated.
  */
 export async function updateAllUserStatistics(): Promise<void> {
   try {

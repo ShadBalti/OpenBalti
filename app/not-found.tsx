@@ -8,6 +8,13 @@ export const metadata: Metadata = generateMetadata(
   "The page you are looking for does not exist or has been moved.",
 )
 
+/**
+ * Renders the 404 "Not Found" page.
+ * This component is displayed automatically by Next.js when a requested route does not exist.
+ * It provides a user-friendly message and navigation links to help users find their way.
+ *
+ * @returns {JSX.Element} The rendered 404 page.
+ */
 export default function NotFound() {
   return (
     <div className="container flex flex-col items-center justify-center min-h-[70vh] py-8 md:py-12">

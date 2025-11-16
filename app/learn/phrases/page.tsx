@@ -10,6 +10,13 @@ export const metadata = generateMetadata(
 { keywords: getKeywordsFor("learn/phrases") }
 );
 
+/**
+ * Renders the page dedicated to teaching common Balti phrases.
+ * The page is organized into categories such as greetings, travel, and emotions,
+ * providing both the Balti phrase and its English translation.
+ *
+ * @returns {JSX.Element} The rendered phrases information page.
+ */
 export default function PhrasesPage() {
   return (
     <main className="text-gray-100 bg-gradient-to-b from-gray-950 to-gray-900 min-h-screen">

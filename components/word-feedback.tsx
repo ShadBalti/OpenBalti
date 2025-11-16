@@ -12,6 +12,15 @@ interface WordFeedbackProps {
   wordId: string
 }
 
+/**
+ * A component that allows users to provide and view feedback on a specific word.
+ * It displays feedback statistics (useful, trusted, needs review) and provides buttons for authenticated users to cast or change their vote.
+ * The component handles fetching feedback data and submitting new feedback, including loading and submitting states.
+ *
+ * @param {WordFeedbackProps} props - The component props.
+ * @param {string} props.wordId - The ID of the word to which the feedback is related.
+ * @returns {JSX.Element} The rendered word feedback component.
+ */
 interface FeedbackStats {
   useful: number
   trusted: number

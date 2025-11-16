@@ -8,6 +8,16 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   return generateUserMetadata("User Profile", "View contributor profile and statistics")
 }
 
+/**
+ * Renders a specific user's public profile page.
+ * It retrieves the user ID from the URL parameters and passes it to the `UserProfile` component,
+ * which is responsible for fetching and displaying the user's data.
+ * The page includes suspense and error boundaries to handle loading and error states gracefully.
+ *
+ * @param {{ params: { id: string } }} props - The component props, containing the dynamic route parameters.
+ * @param {string} props.params.id - The ID of the user whose profile is to be displayed.
+ * @returns {JSX.Element} The rendered user profile page.
+ */
 export default function UserProfilePage({ params }: { params: { id: string } }) {
   return (
     <div className="container py-8 md:py-12">
