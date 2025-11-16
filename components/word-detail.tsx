@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Bookmark, BookmarkCheck, History, Lightbulb, GraduationCap, BookOpen, Scroll } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
-import { toast } from "react-toastify"
+import { useToast } from "@/hooks/use-toast"
 import type { IWord } from "@/models/Word"
 import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
@@ -19,6 +19,7 @@ interface WordDetailProps {
 
 export default function WordDetail({ word, onClose }: WordDetailProps) {
   const { data: session } = useSession()
+  const { toast } = useToast()
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   
@@ -45,7 +46,11 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
   
   const toggleFavorite = async () => {
     if (!session) {
-      toast.error("Please log in to save favorites")
+      toast({
+        title: "Authentication required",
+        description: "Please log in to save favorites",
+        variant: "destructive",
+      })
       return
     }
     
@@ -60,9 +65,16 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
         
         if (result.success) {
           setIsFavorite(false)
-          toast.success("Removed from favorites")
+          toast({
+            title: "Success",
+            description: "Removed from favorites",
+          })
         } else {
-          toast.error(result.error || "Failed to remove from favorites")
+          toast({
+            title: "Error",
+            description: result.error || "Failed to remove from favorites",
+            variant: "destructive",
+          })
         }
       } else {
         // Add to favorites
@@ -77,14 +89,25 @@ export default function WordDetail({ word, onClose }: WordDetailProps) {
         
         if (result.success) {
           setIsFavorite(true)
-          toast.success("Added to favorites")
+          toast({
+            title: "Success",
+            description: "Added to favorites",
+          })
         } else {
-          toast.error(result.error || "Failed to add to favorites")
+          toast({
+            title: "Error",
+            description: result.error || "Failed to add to favorites",
+            variant: "destructive",
+          })
         }
       }
     } catch (error) {
       console.error("Error toggling favorite:", error)
-      toast.error("An error occurred")
+      toast({
+        title: "Error",
+        description: "An error occurred while managing favorites",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }
