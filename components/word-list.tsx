@@ -229,6 +229,17 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                   </TableCell>
                 </TableRow>
               ))}
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5655217642954931"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-hh-7+2n-1d-69"
+     data-ad-client="ca-pub-5655217642954931"
+     data-ad-slot="5442066389"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
             </TableBody>
           </Table>
         </div>
