@@ -43,7 +43,7 @@ export const baseMetadata: Metadata = {
   "Balti nouns",
   "Balti adjectives",
   "Balti new words",
-]
+],
   authors: [{ name: "OpenBalti Team" }],
   creator: "OpenBalti Project",
   publisher: "OpenBalti Project",
