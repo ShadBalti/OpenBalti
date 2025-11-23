@@ -15,7 +15,7 @@ export const baseMetadata: Metadata = {
     template: "%s | OpenBalti Dictionary",
   },
   description:
-    "OpenBalti is a fast, accurate Balti–English dictionary to translate, learn, and preserve the Balti language. Explore meanings, cultural context, and more.",
+    "OpenBalti is a clean, modern Balti–English dictionary that helps you explore meanings, learn everyday phrases, and understand Balti culture while supporting language preservation.",
   keywords: [
   "Balti language",
   "Balti dictionary",
