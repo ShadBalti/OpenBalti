@@ -1,15 +1,26 @@
+import type { Metadata } from "next"
+import { generateMetadata as generatePageMetadata } from "@/lib/metadata"
 import WordsPage from "@/components/words-page"
 import { Suspense } from "react"
 import { DictionaryStructuredData } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 
-/**
- * Renders the dictionary page of the application.
- * It includes the main heading and the interactive `WordsPage` component
- * for browsing, searching, and filtering the dictionary.
- *
- * @returns {JSX.Element} The rendered dictionary page.
- */
+export const metadata: Metadata = generatePageMetadata(
+  "Dictionary | OpenBalti",
+  "Browse and search the OpenBalti dictionary. Explore Balti-English translations, word definitions, and contribute to language preservation.",
+  {
+    keywords: [
+      "Balti dictionary",
+      "Balti translator",
+      "English to Balti translation",
+      "Balti vocabulary",
+      "Balti words",
+      "search Balti language",
+      "Balti word meanings",
+    ],
+  },
+)
+
 export default function DictionaryPage() {
   return (
     <div className="container py-8 md:py-12">

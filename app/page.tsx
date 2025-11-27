@@ -1,34 +1,43 @@
 import { Suspense } from "react"
-import { HomePageContent } from "@/components/HomePageContent"
 import { HomeCardsSection } from "@/components/home-cards-section"
+import { HeroSection } from "@/components/hero-section"
+import { FeaturesShowcase } from "@/components/features-showcase"
+import { TestimonialsSection } from "@/components/testimonials-section"
+import { CTASection } from "@/components/cta-section"
+import { StatsSection } from "@/components/stats-section"
 
-/**
- * Renders the homepage with hero section, navigation cards, and content.
- * Optimized for SEO with semantic structure and proper heading hierarchy.
- *
- * @returns {JSX.Element} The rendered homepage
- */
 export default function Home() {
   return (
-    <div className="container py-8 md:py-12">
-      <div className="mx-auto max-w-5xl space-y-8">
-        <div className="space-y-2 text-center">
-          <h1 className="text-4xl sm:text-6xl font-bold mb-4">
-            <span className="text-blue-500">OpenBalti</span> – Preserve Balti
-          </h1>
-          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-lg">
-            Explore and contribute to the digital preservation of the Balti language
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-950">
+      {/* Hero Section */}
+      <Suspense fallback={<div className="py-24" />}>
+        <HeroSection />
+      </Suspense>
 
-        <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-          <HomeCardsSection />
-        </Suspense>
+      {/* Main Navigation Cards */}
+      <Suspense fallback={<div className="py-16" />}>
+        <HomeCardsSection />
+      </Suspense>
 
-        <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
-          <HomePageContent />
-        </Suspense>
-      </div>
+      {/* Features Showcase */}
+      <Suspense fallback={<div className="py-24" />}>
+        <FeaturesShowcase />
+      </Suspense>
+
+      {/* Community Stats */}
+      <Suspense fallback={<div className="py-24" />}>
+        <StatsSection />
+      </Suspense>
+
+      {/* Testimonials */}
+      <Suspense fallback={<div className="py-24" />}>
+        <TestimonialsSection />
+      </Suspense>
+
+      {/* Call-to-Action Sections */}
+      <Suspense fallback={<div className="py-24" />}>
+        <CTASection />
+      </Suspense>
     </div>
   )
 }
