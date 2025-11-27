@@ -5,7 +5,7 @@ import CommunityStats from "@/components/community-stats"
 
 export function ImpactSection() {
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16 md:py-24" aria-label="Community impact section">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Community Impact</h2>

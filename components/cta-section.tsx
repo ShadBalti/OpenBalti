@@ -5,11 +5,14 @@ import { ArrowRight, Sparkles } from "lucide-react"
 
 export function CTASection() {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-r from-blue-600/20 via-transparent to-cyan-600/20 border-y border-blue-500/20">
+    <section
+      className="py-16 md:py-24 bg-gradient-to-r from-blue-600/20 via-transparent to-cyan-600/20 border-y border-blue-500/20"
+      aria-label="Call to action section"
+    >
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full">
-            <Sparkles className="h-4 w-4 text-blue-400" />
+            <Sparkles className="h-4 w-4 text-blue-400" aria-hidden="true" />
             <span className="text-sm text-blue-400 font-medium">Get Started</span>
           </div>
 
@@ -23,17 +26,17 @@ export function CTASection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Link
               href="/dictionary"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
             >
               Browse Dictionary
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
               href="/contribute"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-full transition-all hover:scale-105 border border-gray-600 hover:border-gray-500"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-full transition-all hover:scale-105 border border-gray-600 hover:border-gray-500"
             >
               Contribute Now
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </Link>
           </div>
         </div>

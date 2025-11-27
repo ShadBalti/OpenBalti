@@ -48,28 +48,32 @@ import { Card } from "@/components/ui/card"
  *
  * @returns {JSX.Element} The rendered words page.
  */
-export default function WordsPage() {
+interface WordsPageProps {
+  initialWords?: IWord[]
+}
+
+export default function WordsPage({ initialWords = [] }: WordsPageProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
   const router = useRouter()
   const searchParams = useSearchParams()
-  
-  const [words, setWords] = useState < IWord[] > ([])
-  const [isLoading, setIsLoading] = useState(true)
+
+  const [words, setWords] = useState<IWord[]>(initialWords)
+  const [isLoading, setIsLoading] = useState(initialWords.length === 0)
   const [searchTerm, setSearchTerm] = useState("")
-  const [editingWord, setEditingWord] = useState < IWord | null > (null)
+  const [editingWord, setEditingWord] = useState<IWord | null>(null)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
-  const [wordToDelete, setWordToDelete] = useState < string | null > (null)
-  const [direction, setDirection] = useState < "balti-to-english" | "english-to-balti" > ("balti-to-english")
-  const [activeTab, setActiveTab] = useState < "browse" | "add" > ("browse")
-  const [selectedCategory, setSelectedCategory] = useState < string | null > (null)
-  const [selectedDialect, setSelectedDialect] = useState < string | null > (null)
-  const [selectedDifficulty, setSelectedDifficulty] = useState < string | null > (null)
-  const [selectedFeedback, setSelectedFeedback] = useState < string | null > (null)
+  const [wordToDelete, setWordToDelete] = useState<string | null>(null)
+  const [direction, setDirection] = useState<"balti-to-english" | "english-to-balti">("balti-to-english")
+  const [activeTab, setActiveTab] = useState<"browse" | "add">("browse")
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedDialect, setSelectedDialect] = useState<string | null>(null)
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(null)
+  const [selectedFeedback, setSelectedFeedback] = useState<string | null>(null)
   const [showFiltersSheet, setShowFiltersSheet] = useState(false)
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
   const [fuzzySearch, setFuzzySearch] = useState(false)
-  
+
   // Initialize state from URL parameters
   useEffect(() => {
     const search = searchParams.get("search") || ""
@@ -77,15 +81,15 @@ export default function WordsPage() {
     const dialect = searchParams.get("dialect")
     const difficulty = searchParams.get("difficulty")
     const feedback = searchParams.get("feedback")
-    
+
     setSearchTerm(search)
     setSelectedCategory(category)
     setSelectedDialect(dialect)
     setSelectedDifficulty(difficulty)
     setSelectedFeedback(feedback)
-    
+
     fetchWords(search, category, dialect, difficulty, feedback)
-    
+
     // Count active filters
     let count = 0
     if (category) count++
@@ -94,7 +98,7 @@ export default function WordsPage() {
     if (feedback) count++
     setActiveFiltersCount(count)
   }, [searchParams])
-  
+
   const fetchWords = async (
     search = searchTerm,
     category = selectedCategory,
@@ -105,9 +109,9 @@ export default function WordsPage() {
   ) => {
     try {
       setIsLoading(true)
-      
+
       const hasMultipleFilters = [category, dialect, difficulty, feedback].filter(Boolean).length > 1
-      
+
       if (useFuzzy || hasMultipleFilters) {
         const params = new URLSearchParams()
         if (search) params.append("search", search)
@@ -116,10 +120,10 @@ export default function WordsPage() {
         if (dialect) params.append("dialects", dialect)
         if (difficulty) params.append("difficulties", difficulty)
         if (feedback) params.append("feedback", feedback)
-        
+
         const response = await fetch(`/api/words/search/advanced?${params.toString()}`)
         const result = await response.json()
-        
+
         if (result.success) {
           setWords(result.data)
         } else {
@@ -136,10 +140,10 @@ export default function WordsPage() {
         if (dialect) params.append("dialect", dialect)
         if (difficulty) params.append("difficulty", difficulty)
         if (feedback) params.append("feedback", feedback)
-        
+
         const response = await fetch(`/api/words?${params.toString()}`)
         const result = await response.json()
-        
+
         if (result.success) {
           setWords(result.data)
         } else {
@@ -161,7 +165,7 @@ export default function WordsPage() {
       setIsLoading(false)
     }
   }
-  
+
   const updateUrl = (
     search = searchTerm,
     category = selectedCategory,
@@ -175,36 +179,36 @@ export default function WordsPage() {
     if (dialect) params.append("dialect", dialect)
     if (difficulty) params.append("difficulty", difficulty)
     if (feedback) params.append("feedback", feedback)
-    
+
     const queryString = params.toString()
     router.push(queryString ? `/?${queryString}` : "/")
   }
-  
+
   const handleSearchChange = (term: string) => {
     setSearchTerm(term)
     updateUrl(term, selectedCategory, selectedDialect, selectedDifficulty, selectedFeedback)
   }
-  
+
   const handleCategoryChange = (category: string | null) => {
     setSelectedCategory(category)
     updateUrl(searchTerm, category, selectedDialect, selectedDifficulty, selectedFeedback)
   }
-  
+
   const handleDialectChange = (dialect: string | null) => {
     setSelectedDialect(dialect)
     updateUrl(searchTerm, selectedCategory, dialect, selectedDifficulty, selectedFeedback)
   }
-  
+
   const handleDifficultyChange = (difficulty: string | null) => {
     setSelectedDifficulty(difficulty)
     updateUrl(searchTerm, selectedCategory, selectedDialect, difficulty, selectedFeedback)
   }
-  
+
   const handleFeedbackChange = (feedback: string | null) => {
     setSelectedFeedback(feedback)
     updateUrl(searchTerm, selectedCategory, selectedDialect, selectedDifficulty, feedback)
   }
-  
+
   const clearAllFilters = () => {
     setSelectedCategory(null)
     setSelectedDialect(null)
@@ -214,7 +218,7 @@ export default function WordsPage() {
     updateUrl(searchTerm, null, null, null, null)
     setShowFiltersSheet(false)
   }
-  
+
   const handleAddWord = async (wordData: any) => {
     try {
       const response = await fetch("/api/words", {
@@ -224,9 +228,9 @@ export default function WordsPage() {
         },
         body: JSON.stringify(wordData),
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -250,7 +254,7 @@ export default function WordsPage() {
       })
     }
   }
-  
+
   const handleEditWord = (word: IWord) => {
     if (!session) {
       toast({
@@ -263,10 +267,10 @@ export default function WordsPage() {
     setEditingWord(word)
     setActiveTab("add")
   }
-  
+
   const handleUpdateWord = async (wordData: any) => {
     if (!editingWord) return
-    
+
     try {
       const response = await fetch(`/api/words/${editingWord._id}`, {
         method: "PUT",
@@ -275,9 +279,9 @@ export default function WordsPage() {
         },
         body: JSON.stringify(wordData),
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -302,7 +306,7 @@ export default function WordsPage() {
       })
     }
   }
-  
+
   const confirmDelete = (id: string) => {
     if (!session) {
       toast({
@@ -315,17 +319,17 @@ export default function WordsPage() {
     setWordToDelete(id)
     setDeleteConfirmOpen(true)
   }
-  
+
   const handleDeleteWord = async () => {
     if (!wordToDelete) return
-    
+
     try {
       const response = await fetch(`/api/words/${wordToDelete}`, {
         method: "DELETE",
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -351,11 +355,11 @@ export default function WordsPage() {
       setWordToDelete(null)
     }
   }
-  
+
   const toggleDirection = () => {
     setDirection((prev) => (prev === "balti-to-english" ? "english-to-balti" : "balti-to-english"))
   }
-  
+
   const handleAdvancedSearch = (query: string, filters: any, fuzzy: boolean) => {
     setSearchTerm(query)
     setSelectedCategory(filters.categories?.[0] || null)
@@ -372,7 +376,7 @@ export default function WordsPage() {
       fuzzy,
     )
   }
-  
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">

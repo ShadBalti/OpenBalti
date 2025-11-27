@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Suspense } from "react"
 import { HomePageContent } from "@/components/HomePageContent"
 import { HomeCardsSection } from "@/components/home-cards-section"
@@ -5,6 +6,18 @@ import { HeroSection } from "@/components/hero-section"
 import { FeaturesSection } from "@/components/features-section"
 import { ImpactSection } from "@/components/impact-section"
 import { CTASection } from "@/components/cta-section"
+
+export const metadata: Metadata = {
+  title: "OpenBalti – Free Balti to English Dictionary",
+  description:
+    "Explore the OpenBalti free dictionary for Balti language learning. Search thousands of Balti words, learn pronunciation, and contribute to preserving this Tibetan dialect.",
+  keywords: ["Balti dictionary", "Balti language", "Tibetan dialect", "English Balti translation", "language learning"],
+  openGraph: {
+    title: "OpenBalti – Preserve & Learn the Balti Language",
+    description: "Join our community in preserving the ancient Balti language through an open-source, free dictionary.",
+    type: "website",
+  },
+}
 
 /**
  * Homepage with hero section, features, community impact, and navigation cards.
@@ -24,7 +37,7 @@ export default function Home() {
             <HomeCardsSection />
           </Suspense>
 
-          <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+          <Suspense fallback={<div className="text-center py-8">Loading community content...</div>}>
             <HomePageContent />
           </Suspense>
         </div>

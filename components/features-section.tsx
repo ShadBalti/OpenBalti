@@ -37,7 +37,10 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800">
+    <section
+      className="py-16 md:py-24 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800"
+      aria-label="Features section"
+    >
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Powerful Features</h2>
@@ -55,7 +58,7 @@ export function FeaturesSection() {
                 className="group p-6 bg-gray-800/50 hover:bg-gray-800/80 border border-gray-700 hover:border-blue-500/50 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10"
               >
                 <div className="mb-4 inline-flex p-3 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                  <Icon className="h-6 w-6 text-blue-500" />
+                  <Icon className="h-6 w-6 text-blue-500" aria-hidden="true" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm">{feature.description}</p>
