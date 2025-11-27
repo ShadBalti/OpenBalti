@@ -1,43 +1,38 @@
 import { Suspense } from "react"
+import { HomePageContent } from "@/components/HomePageContent"
 import { HomeCardsSection } from "@/components/home-cards-section"
 import { HeroSection } from "@/components/hero-section"
-import { FeaturesShowcase } from "@/components/features-showcase"
-import { TestimonialsSection } from "@/components/testimonials-section"
+import { FeaturesSection } from "@/components/features-section"
+import { ImpactSection } from "@/components/impact-section"
 import { CTASection } from "@/components/cta-section"
-import { StatsSection } from "@/components/stats-section"
 
+/**
+ * Homepage with hero section, features, community impact, and navigation cards.
+ * Optimized for SEO with semantic structure and proper heading hierarchy.
+ */
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-950">
-      {/* Hero Section */}
-      <Suspense fallback={<div className="py-24" />}>
-        <HeroSection />
-      </Suspense>
+    <>
+      <HeroSection />
 
-      {/* Main Navigation Cards */}
-      <Suspense fallback={<div className="py-16" />}>
-        <HomeCardsSection />
-      </Suspense>
+      <FeaturesSection />
 
-      {/* Features Showcase */}
-      <Suspense fallback={<div className="py-24" />}>
-        <FeaturesShowcase />
-      </Suspense>
+      {/* Main content area with cards and details */}
+      <div className="container py-8 md:py-12">
+        <div className="mx-auto max-w-5xl space-y-8">
+          <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+            <HomeCardsSection />
+          </Suspense>
 
-      {/* Community Stats */}
-      <Suspense fallback={<div className="py-24" />}>
-        <StatsSection />
-      </Suspense>
+          <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
+            <HomePageContent />
+          </Suspense>
+        </div>
+      </div>
 
-      {/* Testimonials */}
-      <Suspense fallback={<div className="py-24" />}>
-        <TestimonialsSection />
-      </Suspense>
+      <ImpactSection />
 
-      {/* Call-to-Action Sections */}
-      <Suspense fallback={<div className="py-24" />}>
-        <CTASection />
-      </Suspense>
-    </div>
+      <CTASection />
+    </>
   )
 }

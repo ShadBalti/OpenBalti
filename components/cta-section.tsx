@@ -1,55 +1,40 @@
 "use client"
 
 import Link from "next/link"
-import { Users, BookOpen } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 
 export function CTASection() {
   return (
-    <section className="px-4 py-16 md:py-24">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Contribute CTA */}
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-600/20 to-cyan-600/20 border border-blue-500/30 p-8 hover:border-blue-400/60 transition-all duration-300">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
-
-            <div className="relative z-10">
-              <div className="w-12 h-12 bg-blue-500/30 rounded-lg flex items-center justify-center mb-4">
-                <Users className="h-6 w-6 text-blue-300" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Help Preserve Balti</h3>
-              <p className="text-gray-300 mb-6 leading-relaxed">
-                Join our community of contributors. Add new words, suggest corrections, and help document this precious
-                language.
-              </p>
-              <Link
-                href="/contribute"
-                className="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105"
-              >
-                Contribute Now
-              </Link>
-            </div>
+    <section className="py-16 md:py-24 bg-gradient-to-r from-blue-600/20 via-transparent to-cyan-600/20 border-y border-blue-500/20">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full">
+            <Sparkles className="h-4 w-4 text-blue-400" />
+            <span className="text-sm text-blue-400 font-medium">Get Started</span>
           </div>
 
-          {/* Learn CTA */}
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-cyan-600/20 to-blue-600/20 border border-cyan-500/30 p-8 hover:border-cyan-400/60 transition-all duration-300">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
+          <h2 className="text-4xl md:text-5xl font-bold">Ready to Preserve Balti?</h2>
 
-            <div className="relative z-10">
-              <div className="w-12 h-12 bg-cyan-500/30 rounded-lg flex items-center justify-center mb-4">
-                <BookOpen className="h-6 w-6 text-cyan-300" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Start Learning</h3>
-              <p className="text-gray-300 mb-6 leading-relaxed">
-                Begin your Balti language journey with our comprehensive learning resources, examples, and community
-                support.
-              </p>
-              <Link
-                href="/learn"
-                className="inline-flex items-center gap-2 px-6 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-105"
-              >
-                Start Learning
-              </Link>
-            </div>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Whether you're a native speaker, student, researcher, or language enthusiast, your contribution matters.
+            Start exploring the dictionary today or submit new words to help us grow.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <Link
+              href="/dictionary"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+            >
+              Browse Dictionary
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <Link
+              href="/contribute"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-full transition-all hover:scale-105 border border-gray-600 hover:border-gray-500"
+            >
+              Contribute Now
+              <ArrowRight className="h-5 w-5" />
+            </Link>
           </div>
         </div>
       </div>
