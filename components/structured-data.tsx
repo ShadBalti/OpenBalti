@@ -117,11 +117,14 @@ export function WebsiteStructuredData() {
  * Generates JSON-LD structured data for a breadcrumb list.
  * This helps search engines understand the navigation hierarchy of the website.
  *
- * @param {string[]} items - An array of breadcrumb items.
+ * @param {object} props - The component props.
+ * @param {string[]} props.path - An array of breadcrumb items.
  * @returns {JSX.Element} A script tag containing the JSON-LD structured data for the breadcrumb list.
  */
-export function BreadcrumbListStructuredData(items: string[]) {
+export function BreadcrumbListStructuredData({ path }: { path: string[] }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+
+  const items = Array.isArray(path) ? path : []
 
   const structuredData = {
     "@context": "https://schema.org",
