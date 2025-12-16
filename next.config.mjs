@@ -15,7 +15,7 @@ const nextConfig = {
     return [
     {
       source: '/:path*',
-      has: [{ type: 'host', value: 'openbalti.vercel.app' }],
+      has: [{ type: 'host', value: 'openbalti.com' }],
       destination: 'https://openbalti.com/:path*',
       permanent: true,
     }, ];

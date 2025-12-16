@@ -473,8 +473,8 @@ export default function TermsPage() {
               <p className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-primary" />
                 <span className="font-medium">Website:</span>
-                <a href="https://openbalti.vercel.app" className="text-primary hover:underline">
-                  openbalti.vercel.app
+                <a href="https://openbalti.com" className="text-primary hover:underline">
+                  openbalti.com
                 </a>
               </p>
             </div>

@@ -159,7 +159,7 @@ empowering communities, learners, and researchers to connect with their linguist
 
 🧑‍💻 Author: Dilshad Hussain
 
-🌐 Website: openbalti.vercel.app
+🌐 Website: openbalti.com
 
 🐦 Twitter/X: @OpenBalti
 

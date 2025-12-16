@@ -36,10 +36,6 @@ export default function Home() {
           <Suspense fallback={<div className="text-center py-8">Loading...</div>}>
             <HomeCardsSection />
           </Suspense>
-
-          <Suspense fallback={<div className="text-center py-8">Loading community content...</div>}>
-            <HomePageContent />
-          </Suspense>
         </div>
       </div>
 

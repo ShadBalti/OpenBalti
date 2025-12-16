@@ -95,7 +95,7 @@ export default function PrivacyPage() {
             </p>
             <p className="text-muted-foreground leading-relaxed">
               This Privacy Policy describes our practices regarding the collection, use, storage, and disclosure of
-              information we receive from users of our website at openbalti.vercel.app (the "Service"). By using our
+              information we receive from users of our website at openbalti.com (the "Service"). By using our
               Service, you consent to the practices described in this policy.
             </p>
             <p className="text-muted-foreground leading-relaxed">
@@ -528,8 +528,8 @@ export default function PrivacyPage() {
               <p className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-primary" />
                 <span className="font-medium">Website:</span>
-                <a href="https://openbalti.vercel.app" className="text-primary hover:underline">
-                  openbalti.vercel.app
+                <a href="https://openbalti.com" className="text-primary hover:underline">
+                  openbalti.com
                 </a>
               </p>
             </div>
