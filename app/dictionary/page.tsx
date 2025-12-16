@@ -60,7 +60,8 @@ async function getCategoriesWithCounts() {
       { $group: { _id: "$categories", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ])
-    return categories.map((cat) => ({
+    const result = Array.isArray(categories) ? categories : []
+    return result.map((cat) => ({
       name: cat._id,
       count: cat.count,
       description: `Explore ${cat.count} words in the ${cat._id} category`,
@@ -80,13 +81,15 @@ async function getDifficultiesWithCounts() {
       { $sort: { _id: 1 } },
     ])
 
+    const result = Array.isArray(difficulties) ? difficulties : []
+
     const descriptions = {
       beginner: "Essential words for language beginners",
       intermediate: "Intermediate vocabulary for learners",
       advanced: "Advanced words for fluent speakers",
     }
 
-    return difficulties.map((diff) => ({
+    return result.map((diff) => ({
       name: diff._id,
       count: diff.count,
       description: descriptions[diff._id as keyof typeof descriptions] || "Words at this difficulty level",
@@ -105,7 +108,8 @@ async function getDialectsWithCounts() {
       { $group: { _id: "$dialect", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ])
-    return dialects.map((dial) => ({
+    const result = Array.isArray(dialects) ? dialects : []
+    return result.map((dial) => ({
       name: dial._id,
       count: dial.count,
       description: `${dial.count} words`,

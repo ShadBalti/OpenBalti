@@ -11,13 +11,22 @@ interface DictionaryCategory {
 }
 
 interface DictionaryQuickLinksProps {
-  categories: DictionaryCategory[]
-  difficulties: DictionaryCategory[]
-  dialects: DictionaryCategory[]
-  totalWords: number
+  categories?: DictionaryCategory[]
+  difficulties?: DictionaryCategory[]
+  dialects?: DictionaryCategory[]
+  totalWords?: number
 }
 
-export function DictionaryQuickLinks({ categories, difficulties, dialects, totalWords }: DictionaryQuickLinksProps) {
+export function DictionaryQuickLinks({
+  categories = [],
+  difficulties = [],
+  dialects = [],
+  totalWords = 0,
+}: DictionaryQuickLinksProps) {
+  const safeCategories = Array.isArray(categories) ? categories : []
+  const safeDifficulties = Array.isArray(difficulties) ? difficulties : []
+  const safeDialects = Array.isArray(dialects) ? dialects : []
+
   return (
     <section className="space-y-8" aria-label="Dictionary navigation and entry points">
       {/* Overview Stats */}
@@ -31,13 +40,13 @@ export function DictionaryQuickLinks({ categories, difficulties, dialects, total
         <Card className="border-emerald-500/20 bg-emerald-500/5">
           <CardHeader>
             <CardTitle className="text-lg text-emerald-400">Categories</CardTitle>
-            <CardDescription className="text-2xl font-bold text-white">{categories.length}</CardDescription>
+            <CardDescription className="text-2xl font-bold text-white">{safeCategories.length}</CardDescription>
           </CardHeader>
         </Card>
         <Card className="border-amber-500/20 bg-amber-500/5">
           <CardHeader>
             <CardTitle className="text-lg text-amber-400">Dialects</CardTitle>
-            <CardDescription className="text-2xl font-bold text-white">{dialects.length}</CardDescription>
+            <CardDescription className="text-2xl font-bold text-white">{safeDialects.length}</CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -46,7 +55,7 @@ export function DictionaryQuickLinks({ categories, difficulties, dialects, total
       <nav aria-label="Browse by difficulty level">
         <h2 className="text-xl font-semibold mb-4">Browse by Difficulty Level</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {difficulties.map((difficulty) => (
+          {safeDifficulties.map((difficulty) => (
             <Link
               key={difficulty.name}
               href={`/dictionary?difficulty=${difficulty.name}`}
@@ -73,7 +82,7 @@ export function DictionaryQuickLinks({ categories, difficulties, dialects, total
       <nav aria-label="Browse by dialect">
         <h2 className="text-xl font-semibold mb-4">Browse by Dialect</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {dialects.map((dialect) => (
+          {safeDialects.map((dialect) => (
             <Link
               key={dialect.name}
               href={`/dictionary?dialect=${dialect.name}`}
@@ -95,7 +104,7 @@ export function DictionaryQuickLinks({ categories, difficulties, dialects, total
       <nav aria-label="Browse by category">
         <h2 className="text-xl font-semibold mb-4">Browse by Category</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {categories.map((category) => (
+          {safeCategories.map((category) => (
             <Link
               key={category.name}
               href={`/dictionary?category=${category.name}`}
