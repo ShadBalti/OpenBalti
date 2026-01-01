@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
-import { HomePageContent } from "@/components/HomePageContent"
 import { HomeCardsSection } from "@/components/home-cards-section"
 import { HeroSection } from "@/components/hero-section"
 import { FeaturesSection } from "@/components/features-section"

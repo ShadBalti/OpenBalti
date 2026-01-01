@@ -27,6 +27,8 @@ export function Header() {
   const navItems = [
     { href: "/dictionary", label: "Dictionary", icon: <BookOpen className="h-4 w-4 mr-2" /> },
     { href: "/learn", label: "Learn", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
+    { href: "/blog", label: "Blog", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
+    { href: "/resources", label: "Resources", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/about", label: "About", icon: <Info className="h-4 w-4 mr-2" /> },
     { href: "/contributors", label: "Contributors", icon: <Users className="h-4 w-4 mr-2" /> },
     { href: "/leaderboard", label: "board", icon: <Medal className="h-4 w-4 mr-2" /> },

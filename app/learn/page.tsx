@@ -1,14 +1,14 @@
-import { generateMetadata } from "@/lib/metadata";
-import { getKeywordsFor } from "@/lib/seoKeywords";
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import FAQSection from "@/components/FAQSection";
+import { generateMetadata } from "@/lib/metadata"
+import { getKeywordsFor } from "@/lib/seoKeywords"
+import Link from "next/link"
+import Image from "next/image"
+import FAQSection from "@/components/FAQSection"
 
 export const metadata = generateMetadata(
   "Learn Balti Language Online | OpenBalti – Balti Script, Grammar & Culture",
-  "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!", { keywords: getKeywordsFor("learn") }
-);
+  "Master the Balti language with OpenBalti. Learn Balti script, grammar, common phrases, and expressions, and explore the rich culture and heritage of Baltistan. Start speaking Balti today!",
+  { keywords: getKeywordsFor("learn") },
+)
 
 /**
  * Renders the main "Learn" page, which serves as a hub for all language learning resources.
@@ -25,12 +25,10 @@ export default function LearnPage() {
         <h1 className="text-4xl sm:text-6xl font-bold mb-4">
           Learn Balti with <span className="text-blue-500">OpenBalti</span>
         </h1>
-        <p className="text-xl text-gray-300 mb-6">
-          Preserving our language through knowledge and technology.
-        </p>
+        <p className="text-xl text-gray-300 mb-6">Preserving our language through knowledge and technology.</p>
         <blockquote className="italic text-gray-400 max-w-2xl mx-auto mb-8">
-          “Start your journey to learn the Balti language — from script and
-          grammar to real expressions deeply rooted in the culture of Baltistan.”
+          “Start your journey to learn the Balti language — from script and grammar to real expressions deeply rooted in
+          the culture of Baltistan.”
         </blockquote>
         <Link
           href="#categories"
@@ -43,35 +41,25 @@ export default function LearnPage() {
       {/* Quote Block */}
       <section className="text-center py-16">
         <blockquote className="max-w-2xl mx-auto border-l-4 border-blue-400 pl-6 italic text-gray-300 text-lg relative">
-          “Every language carries a world within it — to learn Balti is to step
-          into the soul of the mountains.”
-          <span className="block mt-4 text-blue-400 font-semibold">
-            — OpenBalti Community
-          </span>
+          “Every language carries a world within it — to learn Balti is to step into the soul of the mountains.”
+          <span className="block mt-4 text-blue-400 font-semibold">— OpenBalti Community</span>
           <div className="absolute inset-0 rounded-xl border border-blue-500/30 blur-sm" />
         </blockquote>
       </section>
 
       {/* Introduction Section */}
       <section className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <h2 className="text-3xl font-semibold mb-4">
-          The Path to Learning Balti
-        </h2>
+        <h2 className="text-3xl font-semibold mb-4">The Path to Learning Balti</h2>
         <p className="text-gray-300 text-lg leading-relaxed">
-          Balti is one of the oldest surviving forms of the Tibetan language,
-          with its own unique script, sounds, and grammar. Through OpenBalti, we
-          aim to make it easy for learners to explore this heritage — step by
-          step, from alphabets to fluent communication. You’ll not only learn
-          how it’s spoken but also understand the stories and traditions
-          interwoven with each word.
+          Balti is one of the oldest surviving forms of the Tibetan language, with its own unique script, sounds, and
+          grammar. Through OpenBalti, we aim to make it easy for learners to explore this heritage — step by step, from
+          alphabets to fluent communication. You’ll not only learn how it’s spoken but also understand the stories and
+          traditions interwoven with each word.
         </p>
       </section>
 
       {/* Lesson Categories Grid */}
-      <section
-        id="categories"
-        className="max-w-6xl mx-auto px-6 py-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4"
-      >
+      <section id="categories" className="max-w-6xl mx-auto px-6 py-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
         {[
           {
             icon: "✍️",
@@ -81,11 +69,16 @@ export default function LearnPage() {
           },
           {
             icon: "🗣️",
-            title: "Balti Dialectal",
-            desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
-            link: "/learn/dialectal",
+            title: "Pronunciation",
+            desc: "Master the distinctive sounds of Balti with detailed guides on vowels, consonants, and regional variations.",
+            link: "/learn/pronunciation-guide",
           },
-           
+          {
+            icon: "🗺️",
+            title: "Balti Dialects",
+            desc: "Explore the regional variations and unique dialects of Balti spoken across Baltistan — each with its own tone and expression.",
+            link: "/learn/dialects",
+          },
           {
             icon: "🧱",
             title: "Grammar & Structure",
@@ -98,6 +91,12 @@ export default function LearnPage() {
             desc: "Practice common Balti expressions for greetings, travel, and emotions — with English translations.",
             link: "/learn/phrases",
           },
+          {
+            icon: "🏔️",
+            title: "Culture & Heritage",
+            desc: "Discover the traditions, customs, festivals, and cultural practices that shape the Balti people and their language.",
+            link: "/learn/culture",
+          },
         ].map(({ icon, title, desc, link }) => (
           <Link
             href={link}
@@ -105,9 +104,7 @@ export default function LearnPage() {
             className="bg-gray-800 hover:bg-gray-750 rounded-2xl p-6 shadow-lg transition group"
           >
             <div className="text-4xl mb-3">{icon}</div>
-            <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-400">
-              {title}
-            </h3>
+            <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-400">{title}</h3>
             <p className="text-gray-300 text-sm leading-relaxed">{desc}</p>
           </Link>
         ))}
@@ -116,14 +113,10 @@ export default function LearnPage() {
       {/* Featured Lesson Section */}
       <section className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-10 px-6 py-20">
         <div className="flex-1">
-          <h2 className="text-3xl font-semibold mb-4">
-            Featured Lesson — Grammar Basics
-          </h2>
+          <h2 className="text-3xl font-semibold mb-4">Featured Lesson — Grammar Basics</h2>
           <p className="text-gray-300 mb-6">
-            Dive into the structure of Balti sentences — how subjects, verbs,
-            and particles create balance and meaning. This lesson lays the
-            foundation for understanding how Balti reflects thought and
-            identity.
+            Dive into the structure of Balti sentences — how subjects, verbs, and particles create balance and meaning.
+            This lesson lays the foundation for understanding how Balti reflects thought and identity.
           </p>
           <Link
             href="/learn/grammar"
@@ -144,6 +137,43 @@ export default function LearnPage() {
         </div>
       </section>
 
+      {/* Comprehensive Learning Guides Section */}
+      <section className="max-w-6xl mx-auto px-6 py-16 bg-gray-800 rounded-2xl">
+        <h2 className="text-3xl font-semibold mb-8 text-center">Comprehensive Learning Guides</h2>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Link
+            href="/learn/pronunciation-guide"
+            className="bg-gray-750 hover:bg-gray-700 p-6 rounded-lg transition group"
+          >
+            <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400">Pronunciation Master Class</h3>
+            <p className="text-gray-300 text-sm">
+              Deep dive into Balti phonology with audio examples, stress patterns, and regional accent variations from
+              expert linguists.
+            </p>
+            <span className="text-blue-400 text-sm mt-4 inline-block">Learn →</span>
+          </Link>
+          <Link
+            href="/learn/complete-grammar"
+            className="bg-gray-750 hover:bg-gray-700 p-6 rounded-lg transition group"
+          >
+            <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400">Complete Grammar Reference</h3>
+            <p className="text-gray-300 text-sm">
+              Master verb conjugation, word order, cases, and tenses with detailed explanations and practice sentences
+              for every concept.
+            </p>
+            <span className="text-blue-400 text-sm mt-4 inline-block">Learn →</span>
+          </Link>
+          <Link href="/resources" className="bg-gray-750 hover:bg-gray-700 p-6 rounded-lg transition group">
+            <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400">Learning Resources Hub</h3>
+            <p className="text-gray-300 text-sm">
+              Access all learning materials, community guides, FAQs, and connections with native speakers in one
+              organized hub.
+            </p>
+            <span className="text-blue-400 text-sm mt-4 inline-block">Explore →</span>
+          </Link>
+        </div>
+      </section>
+
       {/* Cultural Insight Section */}
       <section className="relative text-center py-20 px-6 bg-gray-950 overflow-hidden">
         <div
@@ -151,23 +181,18 @@ export default function LearnPage() {
           aria-hidden="true"
         />
         <div className="relative max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-4">
-            Language Reflects Culture
-          </h2>
+          <h2 className="text-3xl font-semibold mb-4">Language Reflects Culture</h2>
           <p className="text-gray-300 text-lg leading-relaxed">
-            Every Balti word carries a story — of respect, kinship, and
-            connection to the mountains and the divine. Through learning, we
-            don’t just preserve vocabulary; we sustain a living culture and
-            worldview passed down through generations.
+            Every Balti word carries a story — of respect, kinship, and connection to the mountains and the divine.
+            Through learning, we don’t just preserve vocabulary; we sustain a living culture and worldview passed down
+            through generations.
           </p>
         </div>
       </section>
 
       {/* Get Involved Section */}
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-semibold text-center mb-10">
-          How You Can Learn & Contribute
-        </h2>
+        <h2 className="text-3xl font-semibold text-center mb-10">How You Can Learn & Contribute</h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
@@ -186,10 +211,7 @@ export default function LearnPage() {
               desc: "Share what you learn with others — your words might inspire someone to reconnect with their roots.",
             },
           ].map(({ icon, title, desc }) => (
-            <div
-              key={title}
-              className="bg-gray-800 p-6 rounded-2xl shadow-lg text-center hover:bg-gray-750 transition"
-            >
+            <div key={title} className="bg-gray-800 p-6 rounded-2xl shadow-lg text-center hover:bg-gray-750 transition">
               <div className="text-4xl mb-3">{icon}</div>
               <h3 className="text-xl font-semibold mb-2">{title}</h3>
               <p className="text-gray-300 text-sm leading-relaxed">{desc}</p>
@@ -197,11 +219,11 @@ export default function LearnPage() {
           ))}
         </div>
       </section>
-       
-       {/* FAQ section */}
-        <div className="mt-20">
-          <FAQSection />
-        </div>
-  </main>
-  );
+
+      {/* FAQ section */}
+      <div className="mt-20">
+        <FAQSection />
+      </div>
+    </main>
+  )
 }

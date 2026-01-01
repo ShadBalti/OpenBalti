@@ -26,6 +26,14 @@ export function Footer() {
             </li>
             <li>
               <Link
+                href="/contact"
+                className="text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-primary"
+              >
+                Contact
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/privacy"
                 className="text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-primary"
               >

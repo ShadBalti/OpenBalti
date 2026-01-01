@@ -19,22 +19,28 @@ export const metadata: Metadata = baseMetadata
 
 /**
  * The root layout for the entire application.
- * It sets up the HTML structure, includes global metadata, fonts, and providers like ThemeProvider and SessionProvider.
- *
- * @param {Readonly<{ children: React.ReactNode }>} props - The props for the component.
- * @param {React.ReactNode} props.children - The child components to be rendered within the layout.
- * @returns {JSX.Element} The root layout of the application.
+ * Includes proper metadata, structured data, fonts, and theming for comprehensive SEO.
  */
 export default function RootLayout({
   children,
-}: Readonly < {
+}: Readonly<{
   children: React.ReactNode
-} > ) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5655217642954931"
-     crossorigin="anonymous"></script>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#1f2937" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        {/* Google Analytics */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5655217642954931"
+          crossOrigin="anonymous"
+        ></script>
         <meta name="google-site-verification" content="6qYt2H85MUvuaHNGAZKRY87nANOkZ7hRfCgPcs6EOKY" />
         <GoogleAnalytics />
       </head>
