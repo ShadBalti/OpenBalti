@@ -93,12 +93,14 @@ export function FeaturesSection() {
             return (
               <article
                 key={feature.title}
-                className="group p-6 bg-gray-800/50 hover:bg-gray-800/80 border border-gray-700 hover:border-blue-500/50 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10"
+                className="group p-6 bg-gray-800/50 hover:bg-gray-800/80 border border-gray-700 hover:border-blue-500/50 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-400"
               >
-                <div className="mb-4 inline-flex p-3 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 transition-colors">
+                <div className="mb-4 inline-flex p-3 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 transition-colors duration-200">
                   <Icon className="h-6 w-6 text-blue-500" aria-hidden="true" />
                 </div>
-                <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
+                <h3 className="text-lg font-semibold mb-3 group-hover:text-blue-400 transition-colors">
+                  {feature.title}
+                </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
               </article>
             )
@@ -113,14 +115,14 @@ export function FeaturesSection() {
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="/dictionary"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               <Search className="w-4 h-4" />
               Explore Dictionary
             </a>
             <a
               href="/learn"
-              className="inline-flex items-center gap-2 bg-transparent border border-primary/50 text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary/10 transition-colors"
+              className="inline-flex items-center gap-2 bg-transparent border border-primary/50 text-primary px-6 py-3 rounded-lg font-medium hover:bg-primary/10 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
               <BookMarked className="w-4 h-4" />
               Start Learning

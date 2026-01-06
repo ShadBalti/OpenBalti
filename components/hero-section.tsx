@@ -30,28 +30,30 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <Link
               href="/dictionary"
-              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
+              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              aria-label="Explore the Balti dictionary"
             >
               Explore Dictionary
             </Link>
             <Link
               href="/contribute"
-              className="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-full transition-all hover:scale-105 border border-gray-600 hover:border-gray-500"
+              className="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-full transition-all duration-200 hover:scale-105 border border-gray-600 hover:border-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+              aria-label="Contribute to OpenBalti"
             >
               Contribute Today
             </Link>
           </div>
 
           <div className="pt-8 flex flex-wrap justify-center gap-6 md:gap-12 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-default">
               <Globe className="h-5 w-5 text-blue-500" aria-hidden="true" />
               <span>Open Source</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-default">
               <Users className="h-5 w-5 text-blue-500" aria-hidden="true" />
               <span>Community Driven</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-default">
               <BookOpen className="h-5 w-5 text-blue-500" aria-hidden="true" />
               <span>Free Forever</span>
             </div>

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Loader2, User, LogOut, Settings, BookOpen, Activity } from "lucide-react"
+import { Loader2, User, LogOut, Settings, BookOpen, Activity, Heart, Users } from "lucide-react"
 
 export function UserDropdown() {
   const { data: session, status } = useSession()
@@ -56,14 +56,14 @@ export function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" size="icon" className="rounded-full hover:bg-secondary/50">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user?.name}</p>
@@ -83,6 +83,19 @@ export function UserDropdown() {
             <span>My Contributions</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/favorites">
+            <Heart className="mr-2 h-4 w-4" />
+            <span>Favorites</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/contributors">
+            <Users className="mr-2 h-4 w-4" />
+            <span>Contributors</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/activity">
             <Activity className="mr-2 h-4 w-4" />

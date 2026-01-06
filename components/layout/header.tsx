@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { UserDropdown } from "@/components/auth/user-dropdown"
 import { useSession } from "next-auth/react"
-import { Bookmark, BookOpen, Info, Menu, Users, Medal, X, BookOpenText } from "lucide-react"
+import { BookOpen, Info, Menu, X, BookOpenText } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
@@ -30,45 +30,44 @@ export function Header() {
     { href: "/blog", label: "Blog", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/resources", label: "Resources", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/about", label: "About", icon: <Info className="h-4 w-4 mr-2" /> },
-    { href: "/contributors", label: "Contributors", icon: <Users className="h-4 w-4 mr-2" /> },
-    { href: "/leaderboard", label: "board", icon: <Medal className="h-4 w-4 mr-2" /> },
-    ...(session ? [{ href: "/favorites", label: "Favorites", icon: <Bookmark className="h-4 w-4 mr-2" /> }] : []),
   ]
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <SkipLink />
       <div className="container flex h-16 items-center">
         <div className="flex items-center space-x-4">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
             <Image src="/logo.png" alt="OpenBalti Logo" width={32} height={32} />
             <span className="font-bold hidden md:inline-block">OpenBalti</span>
           </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="mx-6 hidden md:flex md:items-center md:space-x-2 lg:space-x-2">
+        <nav className="mx-6 hidden md:flex md:items-center md:space-x-1 lg:space-x-2">
           {navItems.map((item) => (
             <Button
               key={item.href}
               asChild
               variant="ghost"
               className={cn(
-                "text-sm font-medium transition-colors",
-                pathname === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                "text-sm font-medium transition-colors px-3 py-2",
+                pathname === item.href
+                  ? "text-foreground bg-secondary/50"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/20",
               )}
             >
               <Link href={item.href}>
-                <div className="flex items-center">
+                <div className="flex items-center gap-2">
                   {item.icon}
-                  {item.label}
+                  <span>{item.label}</span>
                 </div>
               </Link>
             </Button>
           ))}
         </nav>
 
-        <div className="flex flex-1 items-center justify-end space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-2">
           <UserDropdown />
           <Button
             variant="outline"
@@ -84,8 +83,8 @@ export function Header() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden">
-          <nav className="container grid gap-y-2 py-4">
+        <div className="md:hidden border-t bg-background/95 backdrop-blur">
+          <nav className="container grid gap-y-1 py-4">
             {navItems.map((item) => (
               <Button
                 key={item.href}
@@ -93,14 +92,16 @@ export function Header() {
                 variant="ghost"
                 className={cn(
                   "justify-start text-sm font-medium transition-colors",
-                  pathname === item.href ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+                  pathname === item.href
+                    ? "text-foreground bg-secondary/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/20",
                 )}
                 onClick={closeMobileMenu}
               >
                 <Link href={item.href}>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2">
                     {item.icon}
-                    {item.label}
+                    <span>{item.label}</span>
                   </div>
                 </Link>
               </Button>

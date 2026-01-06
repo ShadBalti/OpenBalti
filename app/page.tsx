@@ -6,6 +6,7 @@ import { FeaturesSection } from "@/components/features-section"
 import { ImpactSection } from "@/components/impact-section"
 import { CTASection } from "@/components/cta-section"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "OpenBalti – Free Balti to English Dictionary & Language Learning",
@@ -43,6 +44,30 @@ export const metadata: Metadata = {
  * Optimized for SEO with semantic structure, proper heading hierarchy, and rich structured data.
  */
 export default function Home() {
+  const featuredBlogArticles = [
+    {
+      slug: "getting-started-with-balti",
+      title: "Getting Started with Balti",
+      excerpt: "A beginner's guide to Balti pronunciation, script, and essential phrases.",
+      readTime: "8 min read",
+      date: "January 15, 2025",
+    },
+    {
+      slug: "why-balti-language-matters",
+      title: "Why Balti Language Matters",
+      excerpt: "Explore why preserving Balti is crucial for maintaining cultural identity.",
+      readTime: "6 min read",
+      date: "January 10, 2025",
+    },
+    {
+      slug: "balti-dialects-explained",
+      title: "Understanding Balti Dialects",
+      excerpt: "Deep dive into regional variations across Skardu, Khaplu, Kargil, and Nubra.",
+      readTime: "10 min read",
+      date: "January 5, 2025",
+    },
+  ]
+
   return (
     <>
       <HeroSection />
@@ -58,47 +83,62 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-secondary/30">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/5 via-transparent to-primary/10">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Latest from Our Blog</h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl">
-            Discover articles about Balti language learning, cultural preservation, and community stories.
-          </p>
-          <div className="grid gap-6 md:grid-cols-3 mb-8">
-            <Link
-              href="/blog/getting-started-with-balti"
-              className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-lg transition-all"
-            >
-              <h3 className="font-semibold mb-2 hover:text-primary">Getting Started with Balti</h3>
-              <p className="text-sm text-muted-foreground">
-                A beginner's guide to Balti pronunciation, script, and essential phrases.
-              </p>
-            </Link>
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Latest Articles</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl">
+              Dive into our collection of in-depth articles about Balti language preservation, learning guides, cultural
+              traditions, and community stories from experts and native speakers.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3 mb-10">
+            {featuredBlogArticles.map((article) => (
+              <article
+                key={article.slug}
+                className="bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-xl hover:scale-105 transition-all duration-300 flex flex-col"
+              >
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="mb-3 inline-block">
+                    <span className="text-xs font-semibold text-primary/80 uppercase tracking-wider">Featured</span>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex-1">{article.excerpt}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-border/50 text-xs text-muted-foreground">
+                    <time dateTime={article.date}>{article.date}</time>
+                    <span>{article.readTime}</span>
+                  </div>
+                </div>
+                <Link
+                  href={`/blog/${article.slug}`}
+                  className="px-6 py-3 bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary font-medium flex items-center justify-between transition-colors border-t border-border/50"
+                >
+                  <span>Read Article</span>
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/blog"
-              className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-lg transition-all"
+              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
             >
-              <h3 className="font-semibold mb-2 hover:text-primary">Why Balti Language Matters</h3>
-              <p className="text-sm text-muted-foreground">
-                Explore why preserving Balti is crucial for maintaining cultural identity.
-              </p>
+              <span>Explore All Articles</span>
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
             <Link
-              href="/blog"
-              className="bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-lg transition-all"
+              href="/resources"
+              className="inline-flex items-center justify-center px-6 py-3 border border-primary/30 text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
             >
-              <h3 className="font-semibold mb-2 hover:text-primary">Balti Dialects Explained</h3>
-              <p className="text-sm text-muted-foreground">
-                Deep dive into regional variations across Skardu, Khaplu, Kargil, and Nubra.
-              </p>
+              <span>Learning Resources</span>
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </div>
-          <Link
-            href="/blog"
-            className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            Read All Articles
-          </Link>
         </div>
       </section>
 
