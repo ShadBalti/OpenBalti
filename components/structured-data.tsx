@@ -221,3 +221,47 @@ export function DefinedTermStructuredData(term: string, definition: string, url:
     />
   )
 }
+
+export function WordStructuredData({ word }: { word: any }) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    name: word.english,
+    alternateName: word.balti,
+    description: `${word.english} - ${word.balti}. ${word.usageNotes || word.etymology || "Balti language dictionary entry."}`,
+    inLanguage: "Balti",
+    url: `${baseUrl}/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`,
+    pronunciation: word.phonetic
+      ? {
+          "@type": "Thing",
+          name: word.phonetic,
+        }
+      : undefined,
+    isPartOf: {
+      "@type": "Dataset",
+      name: "OpenBalti Dictionary",
+      url: `${baseUrl}/dictionary`,
+    },
+    author: word.createdBy
+      ? {
+          "@type": "Person",
+          name: word.createdBy.name,
+          url: `${baseUrl}/contributors/${word.createdBy._id}`,
+        }
+      : undefined,
+    dateCreated: word.createdAt,
+    dateModified: word.updatedAt,
+    keywords: [...(word.categories || []), word.dialect, word.difficultyLevel].filter(Boolean).join(", "),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}
