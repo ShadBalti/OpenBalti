@@ -5,16 +5,10 @@
  */
 
 /**
- * @typedef { "/" | "learn" | "learn/phrases" | "learn/script" | "learn/dialectal" | "learn/grammar"} PageKey
+ * @typedef { "/" | "learn" | "learn/phrases" | "learn/script" | "learn/dialectal" | "learn/grammar" | "blog"} PageKey
  * @description Represents the unique identifiers for pages that have a dedicated set of SEO keywords.
  */
-export type PageKey =
-  | "/"
-  | "learn"
-  | "learn/phrases"
-  | "learn/script"
-  | "learn/dialectal"
-  | "learn/grammar";
+export type PageKey = "/" | "learn" | "learn/phrases" | "learn/script" | "learn/dialectal" | "learn/grammar" | "blog"
 
 /**
  * @const {Record<PageKey, string[]>} PAGE_KEYWORDS
@@ -58,7 +52,7 @@ export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
     "Balti community portal",
   ],
 
-  "learn": [
+  learn: [
     "learn Balti language online",
     "Balti language lessons for beginners",
     "how to speak Balti fluently",
@@ -122,7 +116,24 @@ export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
     "Balti language structure guide",
     "Balti grammar online lessons",
   ],
-};
+
+  blog: [
+    "Balti language blog",
+    "language learning articles",
+    "cultural preservation resources",
+    "Balti language guides",
+    "language learning tips",
+    "Balti language news",
+    "endangered language preservation",
+    "language learning insights",
+    "Balti community stories",
+    "linguistic research articles",
+    "heritage language learning",
+    "Balti dialect explanations",
+    "language preservation initiatives",
+    "Balti culture articles",
+  ],
+}
 
 /**
  * Retrieves the SEO keywords for a given page.
@@ -131,5 +142,5 @@ export const PAGE_KEYWORDS: Record<PageKey, string[]> = {
  * @returns {string[]} An array of keywords for the specified page. Returns an empty array if the page key is not found.
  */
 export function getKeywordsFor(page: PageKey): string[] {
-  return PAGE_KEYWORDS[page] ?? [];
+  return PAGE_KEYWORDS[page] ?? []
 }

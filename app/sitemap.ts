@@ -4,6 +4,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
   const lastModified = new Date()
 
+  const blogArticles = [
+    "getting-started-with-balti",
+    "why-balti-language-matters",
+    "balti-dialects-explained",
+    "traditional-crafts-balti-culture",
+    "community-spotlight",
+    "learning-balti-with-music",
+  ]
+
   return [
     {
       url: `${baseUrl}/`,
@@ -18,11 +27,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.95,
     },
     {
-      url: `${baseUrl}/dictionary/entries`,
+      url: `${baseUrl}/blog`,
       lastModified,
-      changeFrequency: "daily",
-      priority: 0.95,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
+    ...blogArticles.map((slug) => ({
+      url: `${baseUrl}/blog/${slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    })),
     {
       url: `${baseUrl}/learn`,
       lastModified,
@@ -126,6 +141,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/get-started`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learning-roadmap`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/resources`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/success-stories`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
       url: `${baseUrl}/contact`,
       lastModified,
       changeFrequency: "monthly",
@@ -166,24 +211,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "weekly",
       priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/auth/signin`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/auth/signup`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/auth/error`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.1,
     },
     {
       url: `${baseUrl}/about`,
