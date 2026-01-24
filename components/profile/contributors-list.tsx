@@ -93,11 +93,16 @@ export default function ContributorsList() {
     return wordsAdded + wordsEdited + wordsReviewed
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return "Date unknown"
     try {
-      return format(new Date(dateString), "MMM yyyy")
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        return "Date unknown"
+      }
+      return format(date, "MMM yyyy")
     } catch (error) {
-      return "Unknown date"
+      return "Date unknown"
     }
   }
 

@@ -190,7 +190,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                         aria-label="View word details"
                         className="h-8 w-8 text-muted-foreground hover:text-primary"
                       >
-                        <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} target="_blank">
+                        <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`}>
                           <Eye className="h-4 w-4" />
                         </Link>
                       </Button>

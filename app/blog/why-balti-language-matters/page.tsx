@@ -11,24 +11,27 @@ export default function WhyBaltiMattersPage() {
   return (
     <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <article className="max-w-4xl mx-auto">
-        <header className="mb-12">
-          <Link href="/blog" className="text-primary hover:underline mb-6 inline-block">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-br from-primary/10 via-transparent to-primary/5 rounded-lg p-8 md:p-12 mb-8 border border-primary/20">
+          <Link href="/blog" className="text-primary hover:underline mb-6 inline-block text-sm font-medium">
             ← Back to Blog
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-balance">
             Why the Balti Language Matters: Preserving Cultural Identity
           </h1>
-          <div className="flex items-center gap-4 text-muted-foreground">
-            <span>January 10, 2025</span>
+          <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm md:text-base">
+            <span>📅 January 10, 2025</span>
             <span>•</span>
-            <span>6 min read</span>
+            <span>⏱️ 8 min read</span>
+            <span>•</span>
+            <span>🌍 Language Preservation</span>
           </div>
-        </header>
+        </div>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none space-y-8">
-          <section>
-            <h2>The Crisis of Linguistic Diversity</h2>
-            <p>
+        <div className="prose prose-lg dark:prose-invert max-w-none space-y-8 prose-headings:font-bold prose-headings:text-foreground prose-p:text-foreground/90 prose-a:text-primary">
+          <section className="bg-amber-50 dark:bg-amber-950/20 border-l-4 border-amber-500 p-6 rounded-r-lg my-8">
+            <h2 className="text-2xl font-bold mb-4">🚨 The Crisis of Linguistic Diversity</h2>
+            <p className="text-foreground/85 mb-4">
               Every two weeks, a language dies somewhere in the world. By 2100, linguists estimate that half of the
               world's 7,000 languages will be extinct. The Balti language, spoken by approximately 100,000 people in the
               Baltistan region of the Karakoram, stands at a critical juncture. Yet this language is far more than just
@@ -98,28 +101,29 @@ export default function WhyBaltiMattersPage() {
             </p>
           </section>
 
-          <section>
-            <h2>What Can We Do?</h2>
-            <p>Language preservation requires action at multiple levels:</p>
-            <ul>
-              <li>
-                <strong>Learn and Teach:</strong> If you're Balti, pass the language to your children. If you're not,
-                learn about and support endangered languages.
+          <section className="bg-green-50 dark:bg-green-950/20 border-l-4 border-green-500 p-6 rounded-r-lg my-8">
+            <h2 className="text-2xl font-bold mb-4">💡 What Can We Do?</h2>
+            <p className="text-foreground/85 mb-4 font-medium">Language preservation requires action at multiple levels:</p>
+            <ul className="space-y-3">
+              <li className="flex gap-3">
+                <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                <span><strong>Learn and Teach:</strong> If you're Balti, pass the language to your children. If you're not, learn about and support endangered languages.</span>
               </li>
-              <li>
-                <strong>Support Documentation:</strong> Contribute to projects like OpenBalti that create accessible
-                learning materials.
+              <li className="flex gap-3">
+                <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                <span><strong>Support Documentation:</strong> Contribute to projects like OpenBalti that create accessible learning materials.</span>
               </li>
-              <li>
-                <strong>Advocate for Education:</strong> Support policies that include Balti in school curricula in
-                Baltistan.
+              <li className="flex gap-3">
+                <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                <span><strong>Advocate for Education:</strong> Support policies that include Balti in school curricula in Baltistan.</span>
               </li>
-              <li>
-                <strong>Celebrate Culture:</strong> Participate in cultural events, consume Balti music and media, and
-                share it with others.
+              <li className="flex gap-3">
+                <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                <span><strong>Celebrate Culture:</strong> Participate in cultural events, consume Balti music and media, and share it with others.</span>
               </li>
-              <li>
-                <strong>Fund Research:</strong> Support academic research into Balti linguistics and history.
+              <li className="flex gap-3">
+                <span className="text-green-600 dark:text-green-400 font-bold">✓</span>
+                <span><strong>Fund Research:</strong> Support academic research into Balti linguistics and history.</span>
               </li>
             </ul>
           </section>
@@ -140,7 +144,19 @@ export default function WhyBaltiMattersPage() {
         </div>
 
         <footer className="mt-16 pt-8 border-t border-border">
-          <Link href="/blog" className="text-primary hover:underline">
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-8 mb-8">
+            <h3 className="text-xl font-bold mb-2">Continue Your Balti Learning Journey</h3>
+            <p className="text-muted-foreground mb-4">Interested in learning Balti? Start with our getting started guide or explore the dictionary.</p>
+            <div className="flex flex-wrap gap-4">
+              <Link href="/blog/getting-started-with-balti" className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:opacity-90 transition">
+                Getting Started Guide
+              </Link>
+              <Link href="/dictionary" className="border border-primary text-primary px-4 py-2 rounded-lg hover:bg-primary/10 transition">
+                Browse Dictionary
+              </Link>
+            </div>
+          </div>
+          <Link href="/blog" className="text-primary hover:underline font-medium">
             ← Back to Blog
           </Link>
         </footer>

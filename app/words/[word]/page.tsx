@@ -16,8 +16,10 @@ interface WordPageProps {
 async function getWordByEnglish(englishWord: string) {
   try {
     await dbConnect()
+    // Convert hyphens back to spaces for searching
+    const searchWord = englishWord.replace(/-/g, " ")
     const word = await Word.findOne({
-      english: { $regex: new RegExp(`^${englishWord.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}$`, "i") },
+      english: { $regex: new RegExp(`^${searchWord.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}$`, "i") },
     }).lean()
 
     if (!word) return null
