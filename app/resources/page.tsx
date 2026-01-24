@@ -35,13 +35,12 @@ export default function ResourcesPage() {
               </Link>
             </div>
             <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-2">Word Etymology</h3>
+              <h3 className="text-xl font-semibold mb-2">Word Details & History</h3>
               <p className="text-muted-foreground mb-4">
-                Understand the origins of Balti words and their connections to Tibetan, Sanskrit, and Central Asian
-                languages.
+                Click on any word in the dictionary to view detailed information, pronunciation, examples, contributor credits, and editing history.
               </p>
-              <Link href="/dictionary/entries" className="text-primary hover:underline font-medium">
-                Explore Entries →
+              <Link href="/dictionary" className="text-primary hover:underline font-medium">
+                Browse Dictionary →
               </Link>
             </div>
           </div>

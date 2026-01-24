@@ -1,5 +1,8 @@
 import { generateMetadata } from "@/lib/metadata"
 import Link from "next/link"
+import { Calendar, ArrowRight, BookOpen } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 export const metadata = generateMetadata(
   "Balti Language Blog - Articles, Guides & Cultural Insights",
@@ -82,62 +85,115 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-primary/10 to-transparent">
+      {/* Enhanced Hero Section */}
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/15 via-background to-primary/5">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">OpenBalti Blog</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl">
+          <div className="inline-flex items-center gap-2 mb-6 bg-primary/10 px-3 py-1 rounded-full">
+            <BookOpen className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Blog & Resources</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">OpenBalti Blog</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
             Stories, insights, and guides about preserving the Balti language and celebrating our shared cultural
-            heritage. Learn from experts and community members.
+            heritage. Learn from experts and community members dedicated to keeping this beautiful language alive.
           </p>
         </div>
       </section>
 
       {/* Articles Grid */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
             <article
               key={article.slug}
-              className="group bg-card border border-border rounded-lg p-6 hover:border-primary/50 hover:shadow-lg transition-all"
+              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
             >
-              <div className="inline-block mb-3 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                {article.category}
+              <div
+                className={`h-1 ${
+                  article.category === "Learning"
+                    ? "bg-blue-500"
+                    : article.category === "Culture"
+                      ? "bg-amber-500"
+                      : article.category === "Linguistics"
+                        ? "bg-purple-500"
+                        : "bg-green-500"
+                }`}
+              />
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-3 gap-2">
+                  <Badge
+                    variant="secondary"
+                    className={`${
+                      article.category === "Learning"
+                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                        : article.category === "Culture"
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+                          : article.category === "Linguistics"
+                            ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
+                            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                    }`}
+                  >
+                    {article.category}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{article.readTime}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                  {article.title}
+                </h3>
+                <p className="text-muted-foreground mb-4 line-clamp-3 text-sm leading-relaxed">{article.excerpt}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <time dateTime={article.date} className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {article.date}
+                  </time>
+                  <Link
+                    href={`/blog/${article.slug}`}
+                    className="inline-flex items-center gap-1 text-primary hover:gap-2 transition-all font-medium text-sm"
+                  >
+                    Read <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                {article.title}
-              </h3>
-              <p className="text-muted-foreground mb-4 line-clamp-3 text-sm">{article.excerpt}</p>
-              <div className="flex items-center justify-between pt-4 border-t border-border">
-                <time dateTime={article.date} className="text-sm text-muted-foreground">
-                  {article.date}
-                </time>
-                <span className="text-sm text-muted-foreground">{article.readTime}</span>
-              </div>
-              <Link
-                href={`/blog/${article.slug}`}
-                className="inline-block mt-4 text-primary hover:underline font-medium"
-              >
-                Read Article →
-              </Link>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-secondary/20 max-w-4xl mx-auto rounded-lg my-8">
-        <h2 className="text-2xl font-bold mb-6">Browse by Category</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          {["Learning", "Culture", "Linguistics", "Community"].map((category) => (
-            <Link
-              key={category}
-              href={`/blog?category=${category.toLowerCase()}`}
-              className="p-4 bg-card border border-border rounded hover:border-primary/50 transition-colors"
-            >
-              <h3 className="font-semibold hover:text-primary">{category}</h3>
-              <p className="text-sm text-muted-foreground">Explore {category.toLowerCase()} articles</p>
-            </Link>
-          ))}
+      {/* Category Browse Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-secondary/20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">Browse by Category</h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
+            {[
+              { name: "Learning", color: "blue" },
+              { name: "Culture", color: "amber" },
+              { name: "Linguistics", color: "purple" },
+              { name: "Community", color: "green" },
+            ].map((category) => (
+              <Link
+                key={category.name}
+                href={`/blog?category=${category.name.toLowerCase()}`}
+                className={`p-4 bg-card border border-border rounded-lg hover:border-${category.color}-500/50 transition-colors group`}
+              >
+                <h3 className="font-semibold group-hover:text-primary transition-colors">{category.name}</h3>
+                <p className="text-sm text-muted-foreground">Explore {category.name.toLowerCase()} articles</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-bold mb-3">Want to Contribute?</h2>
+          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+            Have insights or stories about the Balti language? We'd love to hear from you. Share your knowledge with our
+            community.
+          </p>
+          <Button asChild>
+            <Link href="/contribute">Get Started Contributing</Link>
+          </Button>
         </div>
       </section>
     </main>

@@ -2,20 +2,15 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { generateMetadata } from "@/lib/metadata"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import ActivityLogList from "@/components/activity/activity-log-list"
+import { Separator } from "@/components/ui/separator"
 
-export const metadata = generateMetadata("Your Profile", "Manage your OpenBalti account and view your contributions.")
+export const metadata = generateMetadata("Your Profile", "View your account and recent activity")
 
-/**
- * Renders the user's profile page, displaying their account information and contribution stats.
- * This is a server component that fetches the user's session and redirects to the sign-in page
- * if the user is not authenticated.
- *
- * @returns {Promise<JSX.Element>} The rendered profile page.
- */
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions)
 
@@ -34,53 +29,48 @@ export default async function ProfilePage() {
 
   return (
     <div className="container py-8 md:py-12">
-      <div className="mx-auto max-w-3xl space-y-8">
+      <div className="mx-auto max-w-4xl space-y-8">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Your Profile</h1>
-          <p className="text-muted-foreground">Manage your account and view your contributions</p>
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">Your Profile</h1>
+          <p className="text-muted-foreground">Manage your account and view your activity</p>
         </div>
 
-        <Card>
-          <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={user.image || ""} alt={user.name || "User"} />
-              <AvatarFallback className="text-lg">{initials}</AvatarFallback>
-            </Avatar>
-            <div className="space-y-1">
-              <CardTitle>{user.name}</CardTitle>
-              <CardDescription>{user.email}</CardDescription>
-              <div className="flex items-center mt-2">
-                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                  {user.role === "admin" ? "Administrator" : user.role === "contributor" ? "Contributor" : "User"}
-                </span>
+        <Card className="border-primary/20 overflow-hidden">
+          <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 to-primary/0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4 flex-1">
+                <Avatar className="h-16 w-16 border-2 border-primary/20">
+                  <AvatarImage src={user.image || ""} alt={user.name || "User"} />
+                  <AvatarFallback className="text-lg font-semibold">{initials}</AvatarFallback>
+                </Avatar>
+                <div className="space-y-1">
+                  <CardTitle className="text-2xl">{user.name}</CardTitle>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
+                </div>
+              </div>
+              <div className="flex gap-2 flex-col sm:flex-row">
+                <Button asChild variant="outline" size="sm">
+                  <Link href="/settings">Edit Profile</Link>
+                </Button>
+                <Button asChild size="sm">
+                  <Link href={`/users/${user.id}`}>View Public Profile</Link>
+                </Button>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium mb-2">Account Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Name</p>
-                  <p>{user.name}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p>{user.email}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              <Button asChild variant="outline">
-                <Link href="/settings">Edit Profile</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/review">View My Contributions</Link>
-              </Button>
-            </div>
-          </CardContent>
         </Card>
+
+        <Separator className="my-2" />
+
+        <section className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold">Your Recent Activity</h2>
+            <p className="text-muted-foreground">
+              Track your contributions and interactions with the OpenBalti dictionary community
+            </p>
+          </div>
+          <ActivityLogList userId={user.id} limit={15} />
+        </section>
       </div>
     </div>
   )
