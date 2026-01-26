@@ -71,11 +71,14 @@ export async function GET(req: NextRequest) {
       { $limit: limit },
       {
         $project: {
+          _id: 1,
           name: 1,
           image: 1,
           role: 1,
           bio: 1,
           isPublic: 1,
+          isVerified: 1,
+          isFounder: 1,
           contributionStats: 1,
           createdAt: 1,
         },
