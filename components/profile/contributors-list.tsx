@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader2, Search, ChevronLeft, ChevronRight, Lock, AlertTriangle } from "lucide-react"
+import { Loader2, Search, Lock, AlertTriangle } from "lucide-react"
 import { toast } from "react-toastify"
 import Link from "next/link"
 import { format } from "date-fns"
@@ -21,8 +21,8 @@ interface Contributor {
   role: string
   bio?: string
   isPublic: boolean
-  isVerified?: boolean
-  isFounder?: boolean
+  isVerified: boolean
+  isFounder: boolean
   contributionStats: {
     wordsAdded: number
     wordsEdited: number
@@ -39,22 +39,35 @@ export default function ContributorsList() {
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [sortBy, setSortBy] = useState<string>("contributions")
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    fetchContributors()
-  }, [page, sortBy, searchTerm])
+    // Clear existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+    }
 
-  const fetchContributors = async () => {
+    // Set new timer for debounced fetch
+    debounceTimerRef.current = setTimeout(() => {
+      fetchContributors()
+    }, 300)
+
+    // Cleanup on unmount
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [sortBy, searchTerm])
+
+  const fetchContributors = useCallback(async () => {
     try {
       setLoading(true)
       setError(null)
 
-      // Build query parameters
+      // Build query parameters - fetch all contributors without pagination
       const params = new URLSearchParams()
-      params.append("page", page.toString())
-      params.append("limit", "12")
+      params.append("limit", "1000")
       params.append("sortBy", sortBy)
 
       if (searchTerm) {
@@ -69,20 +82,51 @@ export default function ContributorsList() {
 
       const result = await response.json()
 
-      if (result.success) {
-        setContributors(result.data)
-        setTotalPages(result.pagination.pages)
+      if (result.success && result.data && Array.isArray(result.data)) {
+        // Validate and ensure all required fields are present
+        const validatedContributors = result.data.map((contributor: Contributor) => {
+          try {
+            // Safely parse createdAt date
+            const createdAt = contributor.createdAt ? new Date(contributor.createdAt).toISOString() : new Date().toISOString()
+            
+            return {
+              ...contributor,
+              createdAt,
+              isVerified: contributor.isVerified ?? false,
+              isFounder: contributor.isFounder ?? false,
+              contributionStats: contributor.contributionStats || {
+                wordsAdded: 0,
+                wordsEdited: 0,
+                wordsReviewed: 0,
+              },
+            }
+          } catch (dateError) {
+            console.error("[v0] Error validating contributor data:", dateError)
+            return {
+              ...contributor,
+              createdAt: new Date().toISOString(),
+              isVerified: contributor.isVerified ?? false,
+              isFounder: contributor.isFounder ?? false,
+              contributionStats: contributor.contributionStats || {
+                wordsAdded: 0,
+                wordsEdited: 0,
+                wordsReviewed: 0,
+              },
+            }
+          }
+        })
+        setContributors(validatedContributors)
       } else {
         throw new Error(result.error || "Failed to fetch contributors")
       }
     } catch (error) {
-      console.error("Error fetching contributors:", error)
+      console.error("[v0] Error fetching contributors:", error)
       setError(error instanceof Error ? error.message : "An unknown error occurred")
       toast.error("Failed to fetch contributors. Please try again later.")
     } finally {
       setLoading(false)
     }
-  }
+  }, [sortBy, searchTerm])
 
   const getTotalContributions = (contributor: Contributor) => {
     if (contributor.contributionStats?.total !== undefined) {
@@ -93,18 +137,33 @@ export default function ContributorsList() {
     return wordsAdded + wordsEdited + wordsReviewed
   }
 
-  const formatDate = (dateString: string | undefined) => {
-    if (!dateString) return "Date unknown"
+  const formatDate = useCallback((dateString: string | undefined): string => {
+    if (!dateString || dateString.trim() === "") {
+      return "Joined unknown"
+    }
+
     try {
       const date = new Date(dateString)
+      
+      // Check if date is valid
       if (isNaN(date.getTime())) {
-        return "Date unknown"
+        console.warn("[v0] Invalid date value:", dateString)
+        return "Joined unknown"
       }
+
+      // Verify the date is within a reasonable range (between 2000 and 2100)
+      const year = date.getFullYear()
+      if (year < 2000 || year > 2100) {
+        console.warn("[v0] Date out of valid range:", dateString)
+        return "Joined unknown"
+      }
+
       return format(date, "MMM yyyy")
     } catch (error) {
-      return "Date unknown"
+      console.error("[v0] Error formatting date:", error, { dateString })
+      return "Joined unknown"
     }
-  }
+  }, [])
 
   if (error) {
     return (
@@ -194,10 +253,15 @@ export default function ContributorsList() {
                         <AvatarImage src={contributor.image || ""} alt={contributor.name} />
                         <AvatarFallback>{initials}</AvatarFallback>
                       </Avatar>
-                      <div>
-                        <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                           <CardTitle className="text-base sm:text-lg">{contributor.name}</CardTitle>
                           {contributor.isVerified && <VerificationBadge size="sm" />}
+                          {contributor.isFounder && (
+                            <Badge variant="outline" className="text-xs px-1.5 py-0 h-5 bg-amber-100 text-amber-900 border-amber-200">
+                              Founder
+                            </Badge>
+                          )}
                           {!contributor.isPublic && <Lock className="h-3 w-3 text-muted-foreground" />}
                         </div>
                         <div className="flex items-center mt-1 flex-wrap gap-1">
@@ -219,12 +283,12 @@ export default function ContributorsList() {
                           {contributor.bio}
                         </p>
                       )}
-                      <div className="flex justify-between items-center">
-                        <Badge variant="outline" className="bg-primary/10 text-primary text-xs">
-                          {totalContributions} Contributions
+                      <div className="flex flex-col gap-2">
+                        <Badge variant="outline" className="bg-primary/10 text-primary text-xs w-fit">
+                          {totalContributions} {totalContributions === 1 ? "Contribution" : "Contributions"}
                         </Badge>
                         <span className="text-xs text-muted-foreground">
-                          Joined {formatDate(contributor.createdAt)}
+                          {formatDate(contributor.createdAt)}
                         </span>
                       </div>
                     </CardContent>
@@ -233,33 +297,6 @@ export default function ContributorsList() {
               )
             })}
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex justify-center mt-6 sm:mt-8">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                  disabled={page === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">
-                  Page {page} of {totalPages}
-                </span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                  disabled={page === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
         </>
       )}
     </div>
