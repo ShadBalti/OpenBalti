@@ -10,8 +10,7 @@ export async function GET(req: NextRequest) {
 
     // Get query parameters
     const searchParams = req.nextUrl.searchParams
-    const limit = Number.parseInt(searchParams.get("limit") || "20", 10)
-    const page = Number.parseInt(searchParams.get("page") || "1", 10)
+    const limit = Number.parseInt(searchParams.get("limit") || "1000", 10)
     const sortBy = searchParams.get("sortBy") || "contributions"
     const search = searchParams.get("search") || ""
 
@@ -22,17 +21,16 @@ export async function GET(req: NextRequest) {
       query.name = { $regex: search, $options: "i" }
     }
 
-    // Calculate pagination
-    const skip = (page - 1) * limit
-
     // Determine sort order
     let sort: any = {}
     if (sortBy === "contributions") {
-      sort = { "contributionStats.total": -1 }
+      sort = { "contributionStats.total": -1, name: 1 }
     } else if (sortBy === "recent") {
-      sort = { createdAt: -1 }
+      sort = { createdAt: -1, name: 1 }
     } else if (sortBy === "name") {
       sort = { name: 1 }
+    } else {
+      sort = { "contributionStats.total": -1, name: 1 }
     }
 
     // Make sure contributionStats exists for all users
@@ -67,7 +65,6 @@ export async function GET(req: NextRequest) {
         },
       },
       { $sort: sort },
-      { $skip: skip },
       { $limit: limit },
       {
         $project: {
@@ -85,11 +82,8 @@ export async function GET(req: NextRequest) {
       },
     ]
 
-    // Fetch users with pagination using aggregation
+    // Fetch all users using aggregation
     const users = await User.aggregate(pipeline)
-
-    // Get total count for pagination
-    const totalCount = await User.countDocuments(query)
 
     console.log(`📋 API: Successfully fetched ${users.length} users`)
 
@@ -97,10 +91,10 @@ export async function GET(req: NextRequest) {
       success: true,
       data: users,
       pagination: {
-        total: totalCount,
-        page,
-        limit,
-        pages: Math.ceil(totalCount / limit),
+        total: users.length,
+        page: 1,
+        limit: limit,
+        pages: 1,
       },
     })
   } catch (error) {
