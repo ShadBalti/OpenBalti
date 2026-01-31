@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import { calculateFuzzyScore } from "@/lib/fuzzy-search"
+import { searchCache, type CacheKey } from "@/lib/search-cache"
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,6 +13,24 @@ export async function GET(req: NextRequest) {
     const dialects = url.searchParams.getAll("dialects")
     const difficulties = url.searchParams.getAll("difficulties")
     const feedbackFilters = url.searchParams.getAll("feedback")
+
+    // Create cache key
+    const cacheKey: CacheKey = {
+      query: search,
+      filters: {
+        categories,
+        dialects,
+        difficulties,
+        feedbackFilters,
+      },
+      fuzzy,
+    }
+
+    // Check cache first
+    const cachedResults = searchCache.get<any[]>(cacheKey)
+    if (cachedResults) {
+      return NextResponse.json({ success: true, data: cachedResults, cached: true })
+    }
 
     await dbConnect()
 
@@ -55,6 +74,9 @@ export async function GET(req: NextRequest) {
         (word) => word.balti.match(new RegExp(search, "i")) || word.english.match(new RegExp(search, "i")),
       )
     }
+
+    // Cache the results
+    searchCache.set(cacheKey, results)
 
     return NextResponse.json({ success: true, data: results })
   } catch (error) {
