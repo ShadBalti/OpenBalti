@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -16,11 +16,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { getRandomSuggestions, filterSuggestions, popularSearchSuggestions } from "@/lib/search-suggestions"
 
 interface Suggestion {
   _id: string
   balti: string
   english: string
+}
+
+interface PlaceholderSuggestion {
+  text: string
+  category?: string
+  hint?: string
+  icon?: string
 }
 
 interface SearchPreset {
@@ -56,6 +64,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   
   const [searchQuery, setSearchQuery] = useState("")
   const [suggestions, setSuggestions] = useState < Suggestion[] > ([])
+  const [placeholderSuggestions, setPlaceholderSuggestions] = useState < PlaceholderSuggestion[] > ([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [fuzzyEnabled, setFuzzyEnabled] = useState(false)
   const [presets, setPresets] = useState < SearchPreset[] > ([])
@@ -70,11 +79,25 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
+
+  // Initialize placeholder suggestions
+  useEffect(() => {
+    setPlaceholderSuggestions(getRandomSuggestions(4))
+  }, [])
   
   // Fetch autocomplete suggestions
   useEffect(() => {
+    if (searchQuery.length === 0) {
+      // Show placeholder suggestions when input is empty
+      setSuggestions([])
+      setPlaceholderSuggestions(getRandomSuggestions(4))
+      setShowSuggestions(true)
+      return
+    }
+
     if (searchQuery.length < 2) {
       setSuggestions([])
+      setShowSuggestions(false)
       return
     }
     
@@ -126,6 +149,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   
   const handleSuggestionClick = (suggestion: Suggestion) => {
     setSearchQuery(suggestion.balti)
+    setShowSuggestions(false)
+  }
+
+  const handlePlaceholderSuggestionClick = (suggestion: PlaceholderSuggestion) => {
+    setSearchQuery(suggestion.text)
     setShowSuggestions(false)
   }
   
@@ -256,21 +284,58 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
               </button>
             )}
 
-            {showSuggestions && suggestions.length > 0 && (
+            {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
                 ref={suggestionsRef}
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
+                {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
                   <button
                     key={suggestion._id}
                     onClick={() => handleSuggestionClick(suggestion)}
-                    className="w-full text-left px-3 py-2 hover:bg-accent text-sm"
+                    className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
                     <div className="font-medium">{suggestion.balti}</div>
                     <div className="text-xs text-muted-foreground">{suggestion.english}</div>
                   </button>
                 ))}
+
+                {/* Placeholder suggestions when no search results */}
+                {suggestions.length === 0 && placeholderSuggestions.length > 0 && (
+                  <>
+                    {searchQuery.length === 0 && (
+                      <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-accent/50">
+                        <div className="flex items-center gap-1 mb-2">
+                          <Sparkles className="h-3 w-3" />
+                          Popular Searches
+                        </div>
+                      </div>
+                    )}
+                    {placeholderSuggestions.map((suggestion, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handlePlaceholderSuggestionClick(suggestion)}
+                        className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="font-medium flex items-center gap-1">
+                              {suggestion.icon && <span>{suggestion.icon}</span>}
+                              {suggestion.text}
+                            </div>
+                            <div className="text-xs text-muted-foreground">{suggestion.hint}</div>
+                          </div>
+                          {suggestion.category && (
+                            <div className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground whitespace-nowrap">
+                              {suggestion.category}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                )}
               </div>
             )}
           </div>

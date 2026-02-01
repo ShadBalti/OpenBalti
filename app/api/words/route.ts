@@ -4,10 +4,12 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import { logActivity } from "@/lib/activity-logger"
+import { searchCache, type CacheKey } from "@/lib/search-cache"
 
 /**
  * Handles GET requests to fetch dictionary words.
  * It supports filtering by search term, category, dialect, difficulty level, and community feedback.
+ * Results are cached for 5 minutes to optimize repeated searches.
  *
  * @param {NextRequest} req - The incoming Next.js request object.
  * @returns {Promise<NextResponse>} A response containing the list of words or an error message.
@@ -20,6 +22,24 @@ export async function GET(req: NextRequest) {
     const dialect = url.searchParams.get("dialect")
     const difficulty = url.searchParams.get("difficulty")
     const feedbackFilter = url.searchParams.get("feedback")
+
+    // Create cache key
+    const cacheKey: CacheKey = {
+      query: search,
+      filters: {
+        category,
+        dialect,
+        difficulty,
+        feedback: feedbackFilter,
+      },
+      fuzzy: false,
+    }
+
+    // Check cache first
+    const cachedResults = searchCache.get<any[]>(cacheKey)
+    if (cachedResults) {
+      return NextResponse.json({ success: true, data: cachedResults, cached: true })
+    }
 
     await dbConnect()
 
@@ -51,6 +71,9 @@ export async function GET(req: NextRequest) {
     }
 
     const words = await Word.find(query).sort({ createdAt: -1 })
+
+    // Cache the results
+    searchCache.set(cacheKey, words)
 
     return NextResponse.json({ success: true, data: words })
   } catch (error) {
@@ -119,6 +142,9 @@ export async function POST(req: NextRequest) {
       wordEnglish: newWord.english,
       details: `Created new word: ${balti} (${english})`,
     })
+
+    // Invalidate all related cache entries
+    searchCache.clear()
 
     return NextResponse.json({
       success: true,
