@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { SkipLink } from "@/components/layout/skip-link"
+import { Breadcrumb } from "@/components/layout/breadcrumb"
+import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav"
 import { baseMetadata } from "@/lib/metadata"
 import { OrganizationStructuredData } from "@/components/structured-data"
 import { Toaster } from "@/components/ui/toaster"
@@ -44,7 +46,7 @@ export default function RootLayout({
         <meta name="google-site-verification" content="6qYt2H85MUvuaHNGAZKRY87nANOkZ7hRfCgPcs6EOKY" />
         <GoogleAnalytics />
       </head>
-      <body className={`${inter.className} min-h-screen flex flex-col`}>
+      <body className={`${inter.className} min-h-screen flex flex-col pb-16 md:pb-0`}>
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark" disableTransitionOnChange>
             <SkipLink />
@@ -52,10 +54,12 @@ export default function RootLayout({
               <Suspense fallback={<div className="h-16 border-b"></div>}>
                 <Header />
               </Suspense>
+              <Breadcrumb />
               <main id="main-content" className="flex-1" tabIndex={-1}>
                 {children}
               </main>
               <Footer />
+              <MobileBottomNav />
             </div>
             <Toaster />
             <OrganizationStructuredData />

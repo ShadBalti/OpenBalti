@@ -56,6 +56,45 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* High-contrast focus indicators for accessibility */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Enhanced keyboard navigation visible on focus */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Screen reader only text - hidden visually but accessible to screen readers */
+  .sr-only {
+    @apply absolute w-1 h-1 p-0 -m-1 overflow-hidden clip-path-[inset(50%)];
+    white-space: nowrap;
+  }
+
+  /* Reduced motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      @apply !transition-none !animate-none;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: more) {
+    :root {
+      --primary: 217.2 91.2% 40%;
+      --border: 217.2 32.6% 30%;
+    }
+  }
 }
 
 /* Custom animations */
