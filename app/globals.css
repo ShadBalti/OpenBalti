@@ -75,7 +75,8 @@
 @layer utilities {
   /* Screen reader only text - hidden visually but accessible to screen readers */
   .sr-only {
-    @apply absolute w-1 h-1 p-0 -m-1 overflow-hidden clip-path-[inset(50%)];
+    @apply absolute w-1 h-1 p-0 -m-1 overflow-hidden;
+    clip-path: inset(50%);
     white-space: nowrap;
   }
 
