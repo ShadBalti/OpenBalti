@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Bookmark, BookmarkCheck, Lightbulb, GraduationCap, BookOpen, Scroll } from "lucide-react"
+import { Bookmark, BookmarkCheck, Lightbulb, GraduationCap, BookOpen, Scroll, Share2 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import { ShareArticle } from "@/components/share-article"
 
 interface WordDetailViewProps {
   word: any // IWord with populated fields
@@ -125,14 +126,22 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-0 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="border-0 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900">{word.balti}</h1>
-              {word.phonetic && <p className="text-lg text-gray-600 mt-1">/{word.phonetic}/</p>}
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-foreground">{word.balti}</h1>
+              {word.phonetic && <p className="text-lg text-gray-600 dark:text-muted-foreground mt-1">/{word.phonetic}/</p>}
             </div>
             <div className="flex gap-2">
+              <ShareArticle
+                title={`${word.english} - ${word.balti}`}
+                url={typeof window !== "undefined" ? window.location.href : ""}
+                description={`Learn the Balti word "${word.balti}" (${word.english}) on OpenBalti`}
+                variant="outline"
+                size="sm"
+                showLabel={false}
+              />
               {session && (
                 <Button
                   variant="outline"
@@ -146,7 +155,7 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
               )}
             </div>
           </div>
-          <p className="text-xl text-gray-700 mt-3">{word.english}</p>
+          <p className="text-xl text-gray-700 dark:text-foreground mt-3">{word.english}</p>
         </CardHeader>
       </Card>
 

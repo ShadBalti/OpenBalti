@@ -141,16 +141,20 @@ export default function BlogPage() {
                   {article.title}
                 </h3>
                 <p className="text-muted-foreground mb-4 line-clamp-3 text-sm leading-relaxed">{article.excerpt}</p>
-                <div className="flex items-center justify-between pt-4 border-t border-border">
-                  <time dateTime={article.date} className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {article.date}
-                  </time>
+                <div className="flex items-center justify-between pt-4 border-t border-border gap-2">
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {article.date}
+                    </span>
+                    <span>•</span>
+                    <span>{article.readTime}</span>
+                  </div>
                   <Link
                     href={`/blog/${article.slug}`}
-                    className="inline-flex items-center gap-1 text-primary hover:gap-2 transition-all font-medium text-sm"
+                    className="inline-flex items-center gap-1 text-primary hover:gap-2 transition-all font-medium text-sm group"
                   >
-                    Read <ArrowRight className="h-4 w-4" />
+                    Read <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
               </div>
