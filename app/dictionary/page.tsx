@@ -9,7 +9,6 @@ import {
   WebsiteStructuredData,
 } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
-import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 
 export const metadata: Metadata = generatePageMetadata(
@@ -41,7 +40,7 @@ async function getInitialWords() {
 
 export default async function DictionaryPage() {
   const initialWords = await getInitialWords()
-
+  
   return (
     <>
       <div className="container py-8 md:py-12">
@@ -55,13 +54,14 @@ export default async function DictionaryPage() {
             </p>
           </div>
 
+          
           <Suspense fallback={<WordsPageSkeleton />}>
             <WordsPage initialWords={initialWords} />
           </Suspense>
         </div>
       </div>
 
-      <DictionaryStructuredData url="/dictionary" wordCount={totalWords} />
+      <DictionaryStructuredData url="/dictionary" />
       <BreadcrumbListStructuredData path={["Home", "Dictionary"]} />
       <CourseStructuredData />
       <WebsiteStructuredData />
