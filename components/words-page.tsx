@@ -52,6 +52,15 @@ interface WordsPageProps {
   initialWords?: IWord[]
 }
 
+/**
+ * Page component that provides the full dictionary UI for browsing, searching, filtering, adding, editing, and deleting words.
+ *
+ * Renders search and advanced search, filter controls, direction toggle, word list, add/edit form, and delete confirmation.
+ * Add, edit and delete operations require the user to be authenticated; the component shows appropriate UI when not signed in.
+ *
+ * @param initialWords - Optional initial list of words used to populate the dictionary on first render. Defaults to an empty array.
+ * @returns The rendered WordsPage UI containing browsing and management interfaces for dictionary words.
+ */
 export default function WordsPage({ initialWords = [] }: WordsPageProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -64,6 +73,7 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
   const [editingWord, setEditingWord] = useState<IWord | null>(null)
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false)
   const [wordToDelete, setWordToDelete] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [direction, setDirection] = useState<"balti-to-english" | "english-to-balti">("balti-to-english")
   const [activeTab, setActiveTab] = useState<"browse" | "add">("browse")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -221,6 +231,7 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
 
   const handleAddWord = async (wordData: any) => {
     try {
+      setIsSubmitting(true)
       const response = await fetch("/api/words", {
         method: "POST",
         headers: {
@@ -252,6 +263,8 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
         description: "Failed to add word",
         variant: "destructive",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -272,6 +285,7 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
     if (!editingWord) return
 
     try {
+      setIsSubmitting(true)
       const response = await fetch(`/api/words/${editingWord._id}`, {
         method: "PUT",
         headers: {
@@ -304,6 +318,8 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
         description: "Failed to update word",
         variant: "destructive",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -577,6 +593,7 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
             <WordForm
               initialData={editingWord}
               onSubmit={editingWord ? handleUpdateWord : handleAddWord}
+              isSubmitting={isSubmitting}
               onCancel={() => {
                 setEditingWord(null)
                 setActiveTab("browse")
