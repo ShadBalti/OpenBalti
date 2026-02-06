@@ -43,6 +43,7 @@
     "@radix-ui/react-tooltip": "latest",
     "@simplewebauthn/browser": "latest",
     "@simplewebauthn/server": "latest",
+    "@vercel/analytics": "^1.6.1",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "latest",
     "class-variance-authority": "^0.7.1",

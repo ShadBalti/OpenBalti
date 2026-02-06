@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { SessionProvider } from "@/components/auth/session-provider"
 import { GoogleAnalytics } from "@/components/analytics"
 import { Suspense } from "react"
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" })
 
@@ -65,6 +66,7 @@ export default function RootLayout({
             <OrganizationStructuredData />
           </ThemeProvider>
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   )
