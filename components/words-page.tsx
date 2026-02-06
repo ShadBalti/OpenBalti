@@ -52,6 +52,15 @@ interface WordsPageProps {
   initialWords?: IWord[]
 }
 
+/**
+ * Page component that provides the full dictionary UI for browsing, searching, filtering, adding, editing, and deleting words.
+ *
+ * Renders search and advanced search, filter controls, direction toggle, word list, add/edit form, and delete confirmation.
+ * Add, edit and delete operations require the user to be authenticated; the component shows appropriate UI when not signed in.
+ *
+ * @param initialWords - Optional initial list of words used to populate the dictionary on first render. Defaults to an empty array.
+ * @returns The rendered WordsPage UI containing browsing and management interfaces for dictionary words.
+ */
 export default function WordsPage({ initialWords = [] }: WordsPageProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
