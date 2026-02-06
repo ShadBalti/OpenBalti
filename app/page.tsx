@@ -141,7 +141,6 @@ export default function Home() {
       {/* Statistics Section */}
       <Stats stats={statsData} title="Our Impact" subtitle="Growing community dedicated to language preservation" />
 
-      <FeaturesSection />
 
       {/* Main content area with cards and details */}
       <div className="container py-8 md:py-12">
@@ -212,6 +211,7 @@ export default function Home() {
       </section>
 
       <ImpactSection />
+      <FeaturesSection />
 
       <CTASection />
     </>
