@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Save, X } from "lucide-react"
+import { Plus, Save, X, Loader2 } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -15,6 +15,7 @@ import type { IWord } from "@/models/Word"
 
 interface WordFormProps {
   initialData: IWord | null
+  isSubmitting?: boolean
   onSubmit: (data: {
     balti: string
     english: string
@@ -38,11 +39,12 @@ interface WordFormProps {
  *
  * @param {WordFormProps} props - The component props.
  * @param {IWord | null} props.initialData - The initial data for the form, used for editing an existing word. If null, the form is in 'add' mode.
+ * @param {boolean} [props.isSubmitting=false] - A flag to indicate if the form is currently being submitted, disabling the submit button and showing a loader.
  * @param {Function} props.onSubmit - The callback function to execute when the form is submitted with valid data.
  * @param {Function} [props.onCancel] - An optional callback function to handle form cancellation.
  * @returns {JSX.Element} The rendered word form component.
  */
-export default function WordForm({ initialData, onSubmit, onCancel }: WordFormProps) {
+export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting = false }: WordFormProps) {
   const [balti, setBalti] = useState("")
   const [english, setEnglish] = useState("")
   const [phonetic, setPhonetic] = useState("")
@@ -280,6 +282,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
                       type="button"
                       onClick={() => removeCategory(category)}
                       className="ml-1 rounded-full hover:bg-muted p-0.5"
+                      aria-label={`Remove category: ${category}`}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -321,11 +324,13 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
                 value={exampleBaltiInput}
                 onChange={(e) => setExampleBaltiInput(e.target.value)}
                 placeholder="Example in Balti"
+                aria-label="Example in Balti"
               />
               <Input
                 value={exampleEnglishInput}
                 onChange={(e) => setExampleEnglishInput(e.target.value)}
                 placeholder="English translation of example"
+                aria-label="English translation of example"
               />
               <Button type="button" onClick={addExample} variant="outline" size="sm">
                 Add Example
@@ -343,6 +348,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
                       variant="ghost"
                       size="sm"
                       className="mt-2"
+                      aria-label={`Remove example ${index + 1}`}
                     >
                       <X className="h-3 w-3 mr-1" />
                       Remove
@@ -404,6 +410,7 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
                       type="button"
                       onClick={() => removeRelatedWord(word)}
                       className="ml-1 rounded-full hover:bg-muted p-0.5"
+                      aria-label={`Remove related word: ${word}`}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -440,8 +447,13 @@ export default function WordForm({ initialData, onSubmit, onCancel }: WordFormPr
           ) : (
             <div></div>
           )}
-          <Button type="submit">
-            {initialData ? (
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {initialData ? "Updating..." : "Adding..."}
+              </>
+            ) : initialData ? (
               <>
                 <Save className="mr-2 h-4 w-4" />
                 Update Word
