@@ -28,6 +28,19 @@ export const metadata: Metadata = generatePageMetadata(
   },
 )
 
+async function getInitialWords() {
+  try {
+    await dbConnect()
+    const words = await Word.find({}).sort({ createdAt: -1 }).limit(50).lean()
+    return words || []
+  } catch (error) {
+    console.error("Error fetching initial words:", error)
+    return []
+  }
+}
+
+export default async function DictionaryPage() {
+  const initialWords = await getInitialWords()
 
   return (
     <>
