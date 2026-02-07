@@ -51,6 +51,14 @@ export function HomeCardsSection() {
           ctaText="Learn Our Story"
           ariaLabel="Learn more about the OpenBalti project"
         />
+        {/* About Card */}
+        <HomeCard
+          href="/contribute"
+          icon={<Info className="h-7 w-7" />}
+          title="Contribute to OpenBalti"
+          subtitle="Help preserve and document the Balti language by contributing to the OpenBalti dictionary project."
+          ariaLabel="learn how to Contribute to OpenBalti "
+        />
       </div>
     </section>
   )
