@@ -78,6 +78,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const searchInputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -265,20 +266,24 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={searchInputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-label="Search dictionary words"
             />
             {searchQuery && (
               <button
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  searchInputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search query"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -375,6 +380,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label="Delete search preset"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +398,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +410,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +422,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +434,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1 rounded-full hover:bg-muted p-0.5"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
