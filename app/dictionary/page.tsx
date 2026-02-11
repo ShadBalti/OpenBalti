@@ -10,6 +10,7 @@ import {
 } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 import Word from "@/models/Word"
+import dbConnect from "@/lib/mongodb"
 
 export const metadata: Metadata = generatePageMetadata(
   "Dictionary | OpenBalti",
