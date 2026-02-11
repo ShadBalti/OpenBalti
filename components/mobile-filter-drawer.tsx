@@ -139,6 +139,7 @@ export default function MobileFilterDrawer({
           {filterGroups.map((group) => (
             <div key={group.key} className="border rounded-lg overflow-hidden">
               <button
+                type="button"
                 onClick={() => toggleGroup(group.key)}
                 className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 transition-colors"
                 aria-expanded={expandedGroups.has(group.key)}
@@ -165,6 +166,7 @@ export default function MobileFilterDrawer({
                     const isSelected = localFilters[group.key] === option.value
                     return (
                       <button
+                        type="button"
                         key={option.value}
                         onClick={() => handleFilterSelect(group.key, option.value)}
                         className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
