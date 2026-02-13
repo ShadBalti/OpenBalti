@@ -78,7 +78,23 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
+  const searchContainerRef = useRef < HTMLDivElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
   // Initialize placeholder suggestions
   useEffect(() => {
@@ -150,11 +166,13 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   const handleSuggestionClick = (suggestion: Suggestion) => {
     setSearchQuery(suggestion.balti)
     setShowSuggestions(false)
+    onSearch(suggestion.balti, selectedFilters, fuzzyEnabled)
   }
 
   const handlePlaceholderSuggestionClick = (suggestion: PlaceholderSuggestion) => {
     setSearchQuery(suggestion.text)
     setShowSuggestions(false)
+    onSearch(suggestion.text, selectedFilters, fuzzyEnabled)
   }
   
   const handleSavePreset = async () => {
@@ -262,23 +280,33 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     <div className="space-y-4">
       <div className="relative">
         <div className="flex gap-2">
-          <div className="relative flex-1">
+          <div ref={searchContainerRef} className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={() => setShowSuggestions(true)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-label="Search words"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              role="combobox"
+              aria-controls="search-suggestions"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -286,13 +314,16 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
 
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
+                id="search-suggestions"
                 ref={suggestionsRef}
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
+                role="listbox"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
                   <button
                     key={suggestion._id}
+                    role="option"
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
@@ -315,6 +346,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     {placeholderSuggestions.map((suggestion, idx) => (
                       <button
                         key={idx}
+                        role="option"
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
                       >
