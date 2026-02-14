@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { Search, X } from "lucide-react"
 
@@ -23,6 +23,7 @@ interface SearchBarProps {
 export default function SearchBar({ searchTerm, setSearchTerm }: SearchBarProps) {
   const [inputValue, setInputValue] = useState(searchTerm)
   const [debouncedValue, setDebouncedValue] = useState(searchTerm)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // Update input value when searchTerm prop changes
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function SearchBar({ searchTerm, setSearchTerm }: SearchBarProps)
   const clearSearch = () => {
     setInputValue("")
     setSearchTerm("")
+    inputRef.current?.focus()
   }
 
   return (
@@ -60,6 +62,7 @@ export default function SearchBar({ searchTerm, setSearchTerm }: SearchBarProps)
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
+          ref={inputRef}
           type="text"
           placeholder="Search words..."
           value={inputValue}
