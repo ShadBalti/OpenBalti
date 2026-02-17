@@ -78,7 +78,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
+
+  useEffect(() => {
+    const clickOut = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setShowSuggestions(false)
+    }
+    document.addEventListener("mousedown", clickOut)
+    return () => document.removeEventListener("mousedown", clickOut)
+  }, [])
 
   // Initialize placeholder suggestions
   useEffect(() => {
@@ -259,26 +269,32 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   }
   
   return (
-    <div className="space-y-4">
+    <div ref={containerRef} className="space-y-4">
       <div className="relative">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0)}
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -287,12 +303,16 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
                 ref={suggestionsRef}
+                role="listbox"
+                aria-label="Search suggestions"
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
                   <button
                     key={suggestion._id}
+                    role="option"
+                    aria-selected={false}
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
@@ -315,6 +335,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     {placeholderSuggestions.map((suggestion, idx) => (
                       <button
                         key={idx}
+                        role="option"
+                        aria-selected={false}
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
                       >
@@ -373,8 +395,10 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         {preset.name}
                       </DropdownMenuItem>
                       <button
+                        type="button"
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label="Delete preset"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +416,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button type="button" onClick={() => toggleFilter("categories", cat)} className="ml-1" aria-label={`Remove category filter: ${cat}`}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +424,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button type="button" onClick={() => toggleFilter("dialects", dial)} className="ml-1" aria-label={`Remove dialect filter: ${dial}`}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +432,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button type="button" onClick={() => toggleFilter("difficulties", diff)} className="ml-1" aria-label={`Remove difficulty filter: ${diff}`}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +440,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button type="button" onClick={() => toggleFilter("feedback", fb)} className="ml-1" aria-label={`Remove feedback filter: ${fb}`}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>
