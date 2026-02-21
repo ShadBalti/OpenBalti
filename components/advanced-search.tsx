@@ -1,9 +1,9 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -70,6 +70,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   const [presets, setPresets] = useState < SearchPreset[] > ([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [presetName, setPresetName] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [] as string[],
     dialects: [] as string[],
@@ -78,6 +79,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -122,14 +124,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     }
   }, [searchQuery])
   
-  // Fetch user's saved presets
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchPresets()
-    }
-  }, [session])
-  
-  const fetchPresets = async () => {
+  const fetchPresets = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`)
       const result = await response.json()
@@ -140,7 +135,14 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     } catch (error) {
       console.error("Error fetching presets:", error)
     }
-  }
+  }, [session?.user?.id])
+
+  // Fetch user's saved presets
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchPresets()
+    }
+  }, [session?.user?.id, fetchPresets])
   
   const handleSearch = () => {
     onSearch(searchQuery, selectedFilters, fuzzyEnabled)
@@ -168,6 +170,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     }
     
     try {
+      setIsSaving(true)
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -201,6 +204,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         description: "Failed to save preset",
         variant: "destructive",
       })
+    } finally {
+      setIsSaving(false)
     }
   }
   
@@ -265,20 +270,27 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              aria-haspopup="listbox"
             />
             {searchQuery && (
               <button
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
+                type="button"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -288,6 +300,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
               <div
                 ref={suggestionsRef}
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
+                role="listbox"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
@@ -295,6 +308,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     key={suggestion._id}
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
+                    role="option"
+                    aria-selected={searchQuery === suggestion.balti}
                   >
                     <div className="font-medium">{suggestion.balti}</div>
                     <div className="text-xs text-muted-foreground">{suggestion.english}</div>
@@ -317,6 +332,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         key={idx}
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
+                        role="option"
+                        aria-selected={false}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -375,6 +392,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +410,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +422,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +434,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +446,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -436,10 +470,19 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             onChange={(e) => setPresetName(e.target.value)}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
+            <Button variant="outline" onClick={() => setShowPresetDialog(false)} disabled={isSaving}>
               Cancel
             </Button>
-            <Button onClick={handleSavePreset}>Save Preset</Button>
+            <Button onClick={handleSavePreset} disabled={isSaving}>
+              {isSaving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Preset"
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
