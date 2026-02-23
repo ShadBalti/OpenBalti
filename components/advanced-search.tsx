@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
@@ -16,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { getRandomSuggestions, filterSuggestions, popularSearchSuggestions } from "@/lib/search-suggestions"
+import { getRandomSuggestions } from "@/lib/search-suggestions"
 
 interface Suggestion {
   _id: string
@@ -32,20 +33,20 @@ interface PlaceholderSuggestion {
 }
 
 interface SearchPreset {
-  _id ? : string
+  _id?: string
   name: string
   query: string
   filters: {
-    category ? : string
-    dialect ? : string
-    difficulty ? : string
-    feedback ? : string
+    category?: string
+    dialect?: string
+    difficulty?: string
+    feedback?: string
   }
 }
 
 interface AdvancedSearchProps {
   onSearch: (query: string, filters: any, fuzzy: boolean) => void
-  isLoading ? : boolean
+  isLoading?: boolean
 }
 
 /**
@@ -61,13 +62,13 @@ interface AdvancedSearchProps {
 export default function AdvancedSearch({ onSearch, isLoading = false }: AdvancedSearchProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
-  
+
   const [searchQuery, setSearchQuery] = useState("")
-  const [suggestions, setSuggestions] = useState < Suggestion[] > ([])
-  const [placeholderSuggestions, setPlaceholderSuggestions] = useState < PlaceholderSuggestion[] > ([])
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  const [placeholderSuggestions, setPlaceholderSuggestions] = useState<PlaceholderSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [fuzzyEnabled, setFuzzyEnabled] = useState(false)
-  const [presets, setPresets] = useState < SearchPreset[] > ([])
+  const [presets, setPresets] = useState<SearchPreset[]>([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [presetName, setPresetName] = useState("")
   const [selectedFilters, setSelectedFilters] = useState({
@@ -76,15 +77,16 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     difficulties: [] as string[],
     feedback: [] as string[],
   })
-  
-  const suggestionsRef = useRef < HTMLDivElement > (null)
-  const debounceTimer = useRef < NodeJS.Timeout > ()
+
+  const suggestionsRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const debounceTimer = useRef<NodeJS.Timeout>()
 
   // Initialize placeholder suggestions
   useEffect(() => {
     setPlaceholderSuggestions(getRandomSuggestions(4))
   }, [])
-  
+
   // Fetch autocomplete suggestions
   useEffect(() => {
     if (searchQuery.length === 0) {
@@ -100,14 +102,14 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       setShowSuggestions(false)
       return
     }
-    
+
     if (debounceTimer.current) clearTimeout(debounceTimer.current)
-    
+
     debounceTimer.current = setTimeout(async () => {
       try {
         const response = await fetch(`/api/words/search/autocomplete?q=${encodeURIComponent(searchQuery)}&limit=8`)
         const result = await response.json()
-        
+
         if (result.success) {
           setSuggestions(result.data)
           setShowSuggestions(true)
@@ -116,37 +118,36 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         console.error("Error fetching suggestions:", error)
       }
     }, 300)
-    
+
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current)
     }
   }, [searchQuery])
-  
-  // Fetch user's saved presets
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchPresets()
-    }
-  }, [session])
-  
-  const fetchPresets = async () => {
+
+  const fetchPresets = useCallback(async () => {
+    if (!session?.user?.id) return
     try {
-      const response = await fetch(`/api/users/${session?.user?.id}/search-presets`)
+      const response = await fetch(`/api/users/${session.user.id}/search-presets`)
       const result = await response.json()
-      
+
       if (result.success) {
         setPresets(result.data)
       }
     } catch (error) {
       console.error("Error fetching presets:", error)
     }
-  }
-  
+  }, [session?.user?.id])
+
+  // Fetch user's saved presets
+  useEffect(() => {
+    fetchPresets()
+  }, [fetchPresets])
+
   const handleSearch = () => {
     onSearch(searchQuery, selectedFilters, fuzzyEnabled)
     setShowSuggestions(false)
   }
-  
+
   const handleSuggestionClick = (suggestion: Suggestion) => {
     setSearchQuery(suggestion.balti)
     setShowSuggestions(false)
@@ -156,7 +157,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     setSearchQuery(suggestion.text)
     setShowSuggestions(false)
   }
-  
+
   const handleSavePreset = async () => {
     if (!presetName.trim()) {
       toast({
@@ -166,7 +167,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
       return
     }
-    
+
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`, {
         method: "POST",
@@ -182,9 +183,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           },
         }),
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -203,7 +204,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
     }
   }
-  
+
   const handleLoadPreset = (preset: SearchPreset) => {
     setSearchQuery(preset.query)
     setSelectedFilters({
@@ -213,17 +214,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       feedback: preset.filters.feedback ? [preset.filters.feedback] : [],
     })
   }
-  
+
   const handleDeletePreset = async (presetId: string | undefined) => {
     if (!presetId) return
-    
+
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets?presetId=${presetId}`, {
         method: "DELETE",
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -240,7 +241,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
     }
   }
-  
+
   const toggleFilter = (filterType: keyof typeof selectedFilters, value: string) => {
     setSelectedFilters((prev) => {
       const current = prev[filterType]
@@ -257,7 +258,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       }
     })
   }
-  
+
   return (
     <div className="space-y-4">
       <div className="relative">
@@ -265,20 +266,28 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0)}
+              aria-controls="search-suggestions"
+              aria-label="Search Balti or English words"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -287,12 +296,16 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
                 ref={suggestionsRef}
+                id="search-suggestions"
+                role="listbox"
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
                   <button
                     key={suggestion._id}
+                    role="option"
+                    aria-selected="false"
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
@@ -315,6 +328,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     {placeholderSuggestions.map((suggestion, idx) => (
                       <button
                         key={idx}
+                        role="option"
+                        aria-selected="false"
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
                       >
@@ -373,8 +388,10 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         {preset.name}
                       </DropdownMenuItem>
                       <button
+                        type="button"
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete search preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +409,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +422,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +435,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +448,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -430,11 +467,15 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             <DialogTitle>Save Search Preset</DialogTitle>
             <DialogDescription>Give this search a name to save it for later use</DialogDescription>
           </DialogHeader>
-          <Input
-            placeholder="e.g., Common Verbs, Advanced Words"
-            value={presetName}
-            onChange={(e) => setPresetName(e.target.value)}
-          />
+          <div className="space-y-2">
+            <Label htmlFor="preset-name">Preset Name</Label>
+            <Input
+              id="preset-name"
+              placeholder="e.g., Common Verbs, Advanced Words"
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+            />
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
               Cancel
