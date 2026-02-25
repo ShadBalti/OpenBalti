@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
@@ -78,6 +79,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -271,14 +273,22 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-label="Search Balti or English words"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              aria-controls="search-suggestions"
+              ref={inputRef}
             />
             {searchQuery && (
               <button
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
+                type="button"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -286,8 +296,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
 
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
+                id="search-suggestions"
                 ref={suggestionsRef}
-                className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
+                className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50 overflow-hidden"
+                role="listbox"
+                aria-label="Search suggestions"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
@@ -295,6 +308,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     key={suggestion._id}
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
+                    role="option"
+                    aria-selected={false}
                   >
                     <div className="font-medium">{suggestion.balti}</div>
                     <div className="text-xs text-muted-foreground">{suggestion.english}</div>
@@ -317,6 +332,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         key={idx}
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
+                        role="option"
+                        aria-selected={false}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -374,7 +391,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       </DropdownMenuItem>
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
-                        className="p-1 hover:bg-destructive/20 rounded"
+                        className="p-1 hover:bg-destructive/20 rounded transition-colors"
+                        aria-label={`Delete preset: ${preset.name}`}
+                        type="button"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +411,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1 hover:text-destructive transition-colors"
+                aria-label={`Remove category filter: ${cat}`}
+                type="button"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +424,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1 hover:text-destructive transition-colors"
+                aria-label={`Remove dialect filter: ${dial}`}
+                type="button"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +437,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1 hover:text-destructive transition-colors"
+                aria-label={`Remove difficulty filter: ${diff}`}
+                type="button"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +450,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1 hover:text-destructive transition-colors"
+                aria-label={`Remove feedback filter: ${fb}`}
+                type="button"
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -430,11 +469,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             <DialogTitle>Save Search Preset</DialogTitle>
             <DialogDescription>Give this search a name to save it for later use</DialogDescription>
           </DialogHeader>
-          <Input
-            placeholder="e.g., Common Verbs, Advanced Words"
-            value={presetName}
-            onChange={(e) => setPresetName(e.target.value)}
-          />
+          <div className="space-y-2 py-2">
+            <Label htmlFor="preset-name" className="text-sm font-medium">
+              Preset Name
+            </Label>
+            <Input
+              id="preset-name"
+              placeholder="e.g., Common Verbs, Advanced Words"
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+            />
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
               Cancel
