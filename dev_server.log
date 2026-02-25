@@ -1,0 +1,80 @@
+
+> my-v0-project@0.1.0 dev /app
+> next dev
+
+   ▲ Next.js 15.2.8
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.3s
+ ○ Compiling / ...
+ ✓ Compiled / in 6.5s (1218 modules)
+ GET / 200 in 7473ms
+ ✓ Compiled in 1409ms (542 modules)
+ ✓ Compiled in 386ms (542 modules)
+ ✓ Compiled in 419ms (542 modules)
+ ○ Compiling /dictionary ...
+ ✓ Compiled /dictionary in 5s (1406 modules)
+Error fetching initial words: ReferenceError: dbConnect is not defined
+    at getInitialWords (app/dictionary/page.tsx:32:4)
+    at DictionaryPage (app/dictionary/page.tsx:42:29)
+  30 | async function getInitialWords() {
+  31 |   try {
+> 32 |     await dbConnect()
+     |    ^
+  33 |     const words = await Word.find({}).sort({ createdAt: -1 }).limit(50).lean()
+  34 |     return words || []
+  35 |   } catch (error) {
+ ✓ Compiled in 1483ms (631 modules)
+ GET /dictionary 200 in 6978ms
+ ✓ Compiled in 640ms (631 modules)
+ ✓ Compiled in 504ms (631 modules)
+ ✓ Compiled in 349ms (631 modules)
+ ✓ Compiled in 335ms (631 modules)
+ ✓ Compiled in 364ms (631 modules)
+ ✓ Compiled in 345ms (631 modules)
+ ✓ Compiled in 408ms (631 modules)
+ ✓ Compiled in 372ms (631 modules)
+ ✓ Compiled in 380ms (631 modules)
+ ✓ Compiled in 342ms (631 modules)
+ ✓ Compiled in 398ms (631 modules)
+ ✓ Compiled in 345ms (631 modules)
+ ✓ Compiled in 395ms (631 modules)
+ ✓ Compiled in 397ms (631 modules)
+ ✓ Compiled in 365ms (631 modules)
+ ✓ Compiled in 346ms (631 modules)
+ ✓ Compiled in 332ms (631 modules)
+ ✓ Compiled in 334ms (631 modules)
+ ✓ Compiled in 331ms (631 modules)
+ ✓ Compiled in 327ms (631 modules)
+ ✓ Compiled in 317ms (631 modules)
+ ✓ Compiled in 318ms (631 modules)
+ ✓ Compiled in 315ms (631 modules)
+ ✓ Compiled in 314ms (631 modules)
+ ✓ Compiled in 308ms (631 modules)
+ ✓ Compiled in 315ms (631 modules)
+ ✓ Compiled in 306ms (631 modules)
+ ✓ Compiled in 335ms (631 modules)
+ ✓ Compiled in 322ms (631 modules)
+ ✓ Compiled in 324ms (631 modules)
+ ✓ Compiled in 356ms (631 modules)
+ ✓ Compiled in 329ms (631 modules)
+ ✓ Compiled in 327ms (631 modules)
+ ✓ Compiled in 355ms (631 modules)
+ ✓ Compiled in 587ms (631 modules)
+ ✓ Compiled in 508ms (631 modules)
+ ✓ Compiled in 406ms (631 modules)
+ ✓ Compiled in 340ms (631 modules)
+ ✓ Compiled in 316ms (631 modules)
+ ✓ Compiled in 312ms (631 modules)
+ ✓ Compiled in 320ms (631 modules)
+ ✓ Compiled in 337ms (631 modules)
+ ✓ Compiled in 321ms (631 modules)
+ ✓ Compiled in 312ms (631 modules)
+ ✓ Compiled in 316ms (631 modules)
+ ✓ Compiled in 303ms (631 modules)
+ ✓ Compiled in 305ms (631 modules)
+ ✓ Compiled in 299ms (631 modules)
+ ✓ Compiled in 326ms (631 modules)
+ ✓ Compiled in 345ms (631 modules)
