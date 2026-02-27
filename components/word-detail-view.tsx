@@ -149,6 +149,7 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
                   onClick={toggleFavorite}
                   disabled={isLoading}
                   className="rounded-full bg-transparent"
+                  aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 >
                   {isFavorite ? <BookmarkCheck className="h-5 w-5 text-blue-600" /> : <Bookmark className="h-5 w-5" />}
                 </Button>
