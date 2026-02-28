@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -78,6 +78,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -265,11 +266,17 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0)}
+              aria-controls="search-suggestions"
               className="pl-10 pr-10"
             />
             {searchQuery && (
@@ -277,8 +284,10 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-sm"
+                aria-label="Clear search"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -286,7 +295,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
 
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
+                id="search-suggestions"
                 ref={suggestionsRef}
+                role="listbox"
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
                 {/* Database suggestions */}
@@ -294,6 +305,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                   <button
                     key={suggestion._id}
                     onClick={() => handleSuggestionClick(suggestion)}
+                    role="option"
+                    aria-selected="false"
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
                     <div className="font-medium">{suggestion.balti}</div>
@@ -316,6 +329,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         key={idx}
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
+                        role="option"
+                        aria-selected="false"
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
                       >
                         <div className="flex items-start justify-between gap-2">
@@ -340,8 +355,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             )}
           </div>
 
-          <Button onClick={handleSearch} disabled={isLoading}>
-            Search
+          <Button onClick={handleSearch} disabled={isLoading} className="min-w-[80px]">
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
           </Button>
         </div>
       </div>
@@ -375,6 +390,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +408,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1 hover:bg-muted p-0.5 rounded-full"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +420,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1 hover:bg-muted p-0.5 rounded-full"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +432,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1 hover:bg-muted p-0.5 rounded-full"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +444,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1 hover:bg-muted p-0.5 rounded-full"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
