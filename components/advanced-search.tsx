@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
@@ -78,6 +78,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -122,14 +123,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     }
   }, [searchQuery])
   
-  // Fetch user's saved presets
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchPresets()
-    }
-  }, [session])
-  
-  const fetchPresets = async () => {
+  const fetchPresets = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`)
       const result = await response.json()
@@ -140,7 +134,14 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     } catch (error) {
       console.error("Error fetching presets:", error)
     }
-  }
+  }, [session?.user?.id])
+
+  // Fetch user's saved presets
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchPresets()
+    }
+  }, [session?.user?.id, fetchPresets])
   
   const handleSearch = () => {
     onSearch(searchQuery, selectedFilters, fuzzyEnabled)
@@ -265,20 +266,27 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-autocomplete="list"
+              aria-controls="search-suggestions"
+              aria-expanded={showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0)}
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -287,12 +295,16 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
                 ref={suggestionsRef}
+                id="search-suggestions"
+                role="listbox"
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
                 {/* Database suggestions */}
                 {suggestions.map((suggestion) => (
                   <button
                     key={suggestion._id}
+                    role="option"
+                    aria-selected="false"
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
                   >
@@ -315,6 +327,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     {placeholderSuggestions.map((suggestion, idx) => (
                       <button
                         key={idx}
+                        role="option"
+                        aria-selected="false"
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
                       >
