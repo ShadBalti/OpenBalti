@@ -105,7 +105,7 @@ export default function DialectBrowser() {
       <CardContent>
         <div className="grid gap-2">
           {dialects.map((dialect) => (
-            <Link key={dialect.name} href={`/?category=${encodeURIComponent(dialect.name)}`} className="block">
+            <Link key={dialect.name} href={`/?dialect=${encodeURIComponent(dialect.name)}`} className="block">
               <Button variant="outline" className="w-full justify-between">
                 <div className="flex items-center">
                   <MapPin className="mr-2 h-4 w-4 text-primary" />
