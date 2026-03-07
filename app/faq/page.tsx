@@ -129,8 +129,51 @@ export default function FAQPage() {
           ))}
         </div>
 
+        {/* Related Resources */}
+        <section className="mt-16 mb-12">
+          <h2 className="text-2xl font-bold mb-8">Explore More</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Get Started</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Begin your Balti learning journey with our comprehensive guide.
+              </p>
+              <a href="/get-started" className="text-primary hover:underline text-sm font-medium">
+                Start Learning →
+              </a>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Learning Roadmap</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Follow a structured path from beginner to advanced.
+              </p>
+              <a href="/learning-roadmap" className="text-primary hover:underline text-sm font-medium">
+                View Roadmap →
+              </a>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Resources</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Curated books, videos, and learning materials.
+              </p>
+              <a href="/resources" className="text-primary hover:underline text-sm font-medium">
+                Browse Resources →
+              </a>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Success Stories</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Read inspiring stories from other learners.
+              </p>
+              <a href="/success-stories" className="text-primary hover:underline text-sm font-medium">
+                Read Stories →
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
-        <section className="mt-16 bg-primary/10 border border-primary/20 rounded-lg p-8 text-center">
+        <section className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Still have questions?</h2>
           <p className="text-muted-foreground mb-6">
             We're here to help! Reach out to our community or contact us directly.
