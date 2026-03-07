@@ -206,7 +206,7 @@ export default function FAQSection() {
           OpenBalti platform.
         </p>
         <a
-          href="mailto:shadbalti2@gmail.com"
+          href="mailto:info@openbalti.com"
           className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
         >
           Contact Us

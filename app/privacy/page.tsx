@@ -432,8 +432,8 @@ export default function PrivacyPage() {
 
             <p className="text-muted-foreground leading-relaxed mt-4">
               To exercise any of these rights, please contact us at{" "}
-              <a href="mailto:shadbalti2@gmail.com" className="text-primary hover:underline">
-                shadbalti2@gmail.com
+              <a href="mailto:info@openbalti.com" className="text-primary hover:underline">
+                info@openbalti.com
               </a>
               . We will respond to your request within 30 days.
             </p>
@@ -521,8 +521,8 @@ export default function PrivacyPage() {
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
                 <span className="font-medium">Email:</span>
-                <a href="mailto:shadbalti2@gmail.com" className="text-primary hover:underline">
-                  shadbalti2@gmail.com
+                <a href="mailto:info@openbalti.com" className="text-primary hover:underline">
+                  info@openbalti.com
                 </a>
               </p>
               <p className="flex items-center gap-2">

@@ -72,7 +72,7 @@ export function OrganizationStructuredData() {
     name: "OpenBalti Project",
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
-    sameAs: ["https://twitter.com/openbalti", "https://github.com/ShadBalti/openbalti"],
+    sameAs: ["https://twitter.com/openbalti", "https://github.com/ShadBalti/OpenBalti"],
     description: "A community-driven project dedicated to preserving and documenting the Balti language",
   }
 

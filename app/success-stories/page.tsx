@@ -116,8 +116,51 @@ export default function SuccessStoriesPage() {
           ))}
         </div>
 
+        {/* Related Resources */}
+        <section className="mt-16 mb-12">
+          <h2 className="text-2xl font-bold mb-8">Start Your Journey</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Get Started</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                New to Balti? Begin with our beginner's guide.
+              </p>
+              <Link href="/get-started" className="text-primary hover:underline text-sm font-medium">
+                Start Here →
+              </Link>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Learning Roadmap</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Follow a structured path to fluency.
+              </p>
+              <Link href="/learning-roadmap" className="text-primary hover:underline text-sm font-medium">
+                View Roadmap →
+              </Link>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">Contribute</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Share your knowledge and help preserve Balti.
+              </p>
+              <Link href="/contribute" className="text-primary hover:underline text-sm font-medium">
+                Get Involved →
+              </Link>
+            </div>
+            <div className="bg-card border border-border rounded-lg p-6">
+              <h3 className="font-semibold mb-2">FAQ</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Find answers to common questions.
+              </p>
+              <Link href="/faq" className="text-primary hover:underline text-sm font-medium">
+                Ask Questions →
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
-        <section className="mt-16 bg-primary/10 border border-primary/20 rounded-lg p-8 text-center">
+        <section className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center">
           <h2 className="text-2xl font-bold mb-4">Ready to Write Your Own Success Story?</h2>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             Join thousands of learners preserving the Balti language. Start your journey today and become part of a

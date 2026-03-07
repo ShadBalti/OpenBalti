@@ -290,7 +290,7 @@ export default function ContributePage() {
               </CardContent>
               <CardFooter>
                 <Button asChild variant="outline" className="w-full group-hover:shadow-md transition-shadow">
-                  <Link href="https://github.com/openbalti/dictionary" target="_blank" rel="noopener noreferrer" className="gap-2">
+                  <Link href="https://github.com/ShadBalti/OpenBalti" target="_blank" rel="noopener noreferrer" className="gap-2">
                     <Github className="h-4 w-4" aria-hidden="true" />
                     <span>View on GitHub</span>
                   </Link>
@@ -359,59 +359,23 @@ export default function ContributePage() {
         </div>
       </section>
 
-   {/* Contributor Spotlight */}
+      {/* Contributor Spotlight */}
       <section className="container py-12 md:py-16 bg-secondary/30">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Contributors</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Community</h2>
             <p className="text-lg text-muted-foreground">
-              Real people making a real difference
+              See all the real contributors making a difference in preserving Balti
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                name: "Amina K.",
-                role: "Native Speaker",
-                contribution: "Added 500+ words",
-                image: "/images/contribute/contributor-1.jpg",
-                quote: "Preserving my language for future generations gives me purpose."
-              },
-              {
-                name: "Dr. Rahman S.",
-                role: "Linguist",
-                contribution: "Reviewed 1,000+ entries",
-                image: "/images/contribute/contributor-2.jpg",
-                quote: "Every correction helps maintain the integrity of this precious resource."
-              },
-              {
-                name: "Sarah M.",
-                role: "Developer",
-                contribution: "Built search features",
-                image: "/images/contribute/contributor-3.jpg",
-                quote: "Using my skills to support language preservation is incredibly rewarding."
-              },
-            ].map((contributor, idx) => (
-              <Card key={idx} className="border-primary/20 text-center hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="relative w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden">
-                    <Image
-                      src={contributor.image}
-                      alt={`${contributor.name}, ${contributor.role}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <h3 className="font-bold text-lg mb-1">{contributor.name}</h3>
-                  <p className="text-sm text-primary mb-2">{contributor.role}</p>
-                  <p className="text-xs text-muted-foreground mb-3">{contributor.contribution}</p>
-                  <blockquote className="text-sm italic text-muted-foreground">
-                    "{contributor.quote}"
-                  </blockquote>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="text-center">
+            <Button asChild size="lg" className="gap-2">
+              <Link href="/contributors">
+                <Users className="h-4 w-4" aria-hidden="true" />
+                View All Contributors
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -495,7 +459,7 @@ export default function ContributePage() {
                     <Mail className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                     <div>
                       <h4 className="font-semibold text-sm mb-1">Email Us</h4>
-                      <p className="text-sm text-muted-foreground">contact@openbalti.org</p>
+                      <p className="text-sm text-muted-foreground">info@openbalti.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 p-4 rounded-lg bg-background border border-border">
@@ -509,7 +473,7 @@ export default function ContributePage() {
 
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                   <Button asChild size="lg">
-                    <Link href="mailto:contact@openbalti.org" className="gap-2">
+                    <Link href="mailto:info@openbalti.com" className="gap-2">
                       <Mail className="h-4 w-4" aria-hidden="true" />
                       Send Us an Email
                     </Link>
