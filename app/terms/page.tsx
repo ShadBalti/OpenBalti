@@ -466,8 +466,8 @@ export default function TermsPage() {
               <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-primary" />
                 <span className="font-medium">Email:</span>
-                <a href="mailto:shadbalti2@gmail.com" className="text-primary hover:underline">
-                  shadbalti2@gmail.com
+                <a href="mailto:info@openbalti.com" className="text-primary hover:underline">
+                  info@openbalti.com
                 </a>
               </p>
               <p className="flex items-center gap-2">

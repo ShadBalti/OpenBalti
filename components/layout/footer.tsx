@@ -16,7 +16,7 @@ export function Footer() {
           <ul className="flex gap-4">
             <li>
               <Link
-                href="https://github.com/openbalti/dictionary"
+                href="https://github.com/ShadBalti/OpenBalti"
                 target="_blank"
                 rel="noreferrer"
                 className="text-sm font-medium text-muted-foreground underline underline-offset-4 hover:text-primary"

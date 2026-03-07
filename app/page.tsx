@@ -9,6 +9,23 @@ import { ExpertiseBadges } from "@/components/expertise-badges"
 import { Stats } from "@/components/social-proof"
 import Link from "next/link"
 import { ArrowRight, Users, BookOpen, Globe, Award } from "lucide-react"
+import dbConnect from "@/lib/mongodb"
+import Word from "@/models/Word"
+import User from "@/models/User"
+
+async function getStats() {
+  try {
+    await dbConnect()
+    const [totalWords, totalUsers] = await Promise.all([
+      Word.countDocuments(),
+      User.countDocuments(),
+    ])
+    return { totalWords, totalUsers }
+  } catch (error) {
+    console.error("Error fetching stats:", error)
+    return { totalWords: 0, totalUsers: 0 }
+  }
+}
 
 export const metadata: Metadata = {
   title: "OpenBalti – Free Balti to English Dictionary & Language Learning Platform",
@@ -48,7 +65,7 @@ export const metadata: Metadata = {
  * Homepage with hero section, features, community impact, and navigation cards.
  * Optimized for SEO with semantic structure, proper heading hierarchy, and rich structured data.
  */
-export default function Home() {
+export default async function Home() {
   const expertiseBadges = [
     {
       icon: 'expert' as const,
@@ -72,27 +89,29 @@ export default function Home() {
     },
   ]
 
+  const { totalWords, totalUsers } = await getStats()
+
   const statsData = [
     {
       label: 'Dictionary Entries',
-      value: '5,000+',
+      value: `${totalWords}`,
       icon: <BookOpen className="w-6 h-6" />,
       description: 'Verified and peer-reviewed',
     },
     {
-      label: 'Active Learners',
-      value: '50,000+',
+      label: 'Active Community Members',
+      value: `${totalUsers}`,
       icon: <Users className="w-6 h-6" />,
-      description: 'From 30+ countries',
+      description: 'Contributing to language preservation',
     },
     {
-      label: 'Global Community',
-      value: '1,200+',
+      label: 'Open Source',
+      value: 'MIT',
       icon: <Globe className="w-6 h-6" />,
-      description: 'Contributors & experts',
+      description: 'Fully open and community-driven',
     },
     {
-      label: 'Expert Team',
+      label: 'Linguistic Experts',
       value: '4+',
       icon: <Award className="w-6 h-6" />,
       description: 'PhD-level linguists',

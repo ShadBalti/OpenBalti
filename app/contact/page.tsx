@@ -29,7 +29,7 @@ export default function ContactPage() {
             <h3 className="text-xl font-semibold mb-2">Email</h3>
             <p className="text-gray-300 mb-4">Send us your questions, suggestions, or feedback directly.</p>
             <Link
-              href="mailto:info@openbalti.org"
+              href="mailto:info@openbalti.com"
               className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-medium transition"
             >
               Send Email
@@ -42,7 +42,7 @@ export default function ContactPage() {
             <h3 className="text-xl font-semibold mb-2">GitHub</h3>
             <p className="text-gray-300 mb-4">Contribute to OpenBalti on GitHub or report issues with the project.</p>
             <Link
-              href="https://github.com/openbalti/dictionary"
+              href="https://github.com/ShadBalti/OpenBalti"
               target="_blank"
               rel="noreferrer"
               className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg font-medium transition"
