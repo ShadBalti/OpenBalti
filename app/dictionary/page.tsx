@@ -10,6 +10,7 @@ import {
 } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 import Word from "@/models/Word"
+import dbConnect from "@/lib/mongodb"
 
 export const metadata: Metadata = generatePageMetadata(
   "Dictionary | OpenBalti",
@@ -31,7 +32,7 @@ async function getInitialWords() {
   try {
     await dbConnect()
     const words = await Word.find({}).sort({ createdAt: -1 }).limit(50).lean()
-    return words || []
+    return words ? words.map(word => JSON.parse(JSON.stringify(word))) : []
   } catch (error) {
     console.error("Error fetching initial words:", error)
     return []
@@ -54,7 +55,21 @@ export default async function DictionaryPage() {
             </p>
           </div>
 
-          
+          {/* Server-rendered word list for SEO - visible without JavaScript */}
+          {initialWords.length > 0 && (
+            <section className="sr-only" aria-labelledby="seo-word-list">
+              <h2 id="seo-word-list">Dictionary Words</h2>
+              <ul>
+                {initialWords.map((word) => (
+                  <li key={word._id?.toString()}>
+                    {word.balti} - {word.english}
+                    {word.phonetic && ` (${word.phonetic})`}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <Suspense fallback={<WordsPageSkeleton />}>
             <WordsPage initialWords={initialWords} />
           </Suspense>
@@ -65,6 +80,29 @@ export default async function DictionaryPage() {
       <BreadcrumbListStructuredData path={["Home", "Dictionary"]} />
       <CourseStructuredData />
       <WebsiteStructuredData />
+      
+      {/* Structured data for initial words */}
+      <script 
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "OpenBalti Dictionary",
+            description: "Browse and search the OpenBalti dictionary for Balti-English translations",
+            url: "https://openbalti.com/dictionary",
+            mainEntity: {
+              "@type": "DefinedTermSet",
+              hasPart: initialWords.slice(0, 20).map((word) => ({
+                "@type": "DefinedTerm",
+                name: word.balti,
+                description: word.english,
+                ...(word.phonetic && { pronunciation: word.phonetic }),
+              })),
+            },
+          }),
+        }}
+      />
     </>
   )
 }
