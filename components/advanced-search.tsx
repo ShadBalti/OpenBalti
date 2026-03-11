@@ -78,6 +78,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -263,24 +264,32 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       <div className="relative">
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-label="Search Balti or English words"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
 
@@ -354,7 +363,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         {session && (
           <>
             <Button variant="outline" size="sm" onClick={() => setShowPresetDialog(true)}>
-              <Save className="h-4 w-4 mr-1" />
+              <Save className="h-4 w-4 mr-1" aria-hidden="true" />
               Save Search
             </Button>
 
@@ -362,7 +371,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm">
-                    <ChevronDown className="h-4 w-4 mr-1" />
+                    <ChevronDown className="h-4 w-4 mr-1" aria-hidden="true" />
                     Presets ({presets.length})
                   </Button>
                 </DropdownMenuTrigger>
@@ -373,10 +382,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         {preset.name}
                       </DropdownMenuItem>
                       <button
+                        type="button"
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete search preset: ${preset.name}`}
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-3 w-3" aria-hidden="true" />
                       </button>
                     </div>
                   ))}
@@ -392,32 +403,52 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
-                <X className="h-3 w-3" />
+              <button
+                type="button"
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${cat} category filter`}
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           ))}
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
-                <X className="h-3 w-3" />
+              <button
+                type="button"
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${dial} dialect filter`}
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           ))}
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
-                <X className="h-3 w-3" />
+              <button
+                type="button"
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${diff} difficulty filter`}
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           ))}
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
-                <X className="h-3 w-3" />
+              <button
+                type="button"
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${fb} feedback filter`}
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
               </button>
             </Badge>
           ))}
