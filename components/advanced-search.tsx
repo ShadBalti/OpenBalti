@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useId, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
@@ -61,13 +61,14 @@ interface AdvancedSearchProps {
 export default function AdvancedSearch({ onSearch, isLoading = false }: AdvancedSearchProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
+  const suggestionsId = useId()
   
   const [searchQuery, setSearchQuery] = useState("")
-  const [suggestions, setSuggestions] = useState < Suggestion[] > ([])
-  const [placeholderSuggestions, setPlaceholderSuggestions] = useState < PlaceholderSuggestion[] > ([])
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  const [placeholderSuggestions, setPlaceholderSuggestions] = useState<PlaceholderSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [fuzzyEnabled, setFuzzyEnabled] = useState(false)
-  const [presets, setPresets] = useState < SearchPreset[] > ([])
+  const [presets, setPresets] = useState<SearchPreset[]>([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [presetName, setPresetName] = useState("")
   const [selectedFilters, setSelectedFilters] = useState({
@@ -77,8 +78,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     feedback: [] as string[],
   })
   
-  const suggestionsRef = useRef < HTMLDivElement > (null)
-  const debounceTimer = useRef < NodeJS.Timeout > ()
+  const suggestionsRef = useRef<HTMLDivElement>(null)
+  const debounceTimer = useRef<NodeJS.Timeout>()
 
   // Initialize placeholder suggestions
   useEffect(() => {
@@ -122,14 +123,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     }
   }, [searchQuery])
   
-  // Fetch user's saved presets
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchPresets()
-    }
-  }, [session])
-  
-  const fetchPresets = async () => {
+  const fetchPresets = useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`)
       const result = await response.json()
@@ -140,7 +134,14 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
     } catch (error) {
       console.error("Error fetching presets:", error)
     }
-  }
+  }, [session?.user?.id])
+
+  // Fetch user's saved presets
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchPresets()
+    }
+  }, [session?.user?.id, fetchPresets])
   
   const handleSearch = () => {
     onSearch(searchQuery, selectedFilters, fuzzyEnabled)
@@ -271,6 +272,10 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              aria-controls={suggestionsId}
             />
             {searchQuery && (
               <button
@@ -279,6 +284,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                   setSuggestions([])
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search query"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -287,6 +293,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             {showSuggestions && (suggestions.length > 0 || placeholderSuggestions.length > 0) && (
               <div
                 ref={suggestionsRef}
+                id={suggestionsId}
+                role="listbox"
                 className="absolute top-full left-0 right-0 mt-1 bg-background border rounded-md shadow-lg z-50"
               >
                 {/* Database suggestions */}
@@ -295,6 +303,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                     key={suggestion._id}
                     onClick={() => handleSuggestionClick(suggestion)}
                     className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0"
+                    role="option"
+                    aria-selected="false"
                   >
                     <div className="font-medium">{suggestion.balti}</div>
                     <div className="text-xs text-muted-foreground">{suggestion.english}</div>
@@ -317,6 +327,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         key={idx}
                         onClick={() => handlePlaceholderSuggestionClick(suggestion)}
                         className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
+                        role="option"
+                        aria-selected="false"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -375,6 +387,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete search preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
