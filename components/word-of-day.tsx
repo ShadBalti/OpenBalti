@@ -125,6 +125,7 @@ export default function WordOfDay({ compact = false }: WordOfDayProps) {
               size="icon"
               onClick={() => handleSpeak(word.balti)}
               title="Pronounce word"
+              aria-label="Pronounce word"
               className="h-8 w-8"
             >
               <Volume2 className="h-4 w-4" />
@@ -180,6 +181,7 @@ export default function WordOfDay({ compact = false }: WordOfDayProps) {
                 size="sm"
                 onClick={() => handleSpeak(word.balti)}
                 className="ml-auto"
+                aria-label="Pronounce word"
               >
                 <Volume2 className="h-4 w-4 mr-2" />
                 Pronounce
