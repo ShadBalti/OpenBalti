@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -69,6 +69,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   const [fuzzyEnabled, setFuzzyEnabled] = useState(false)
   const [presets, setPresets] = useState < SearchPreset[] > ([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
+  const [isSavingPreset, setIsSavingPreset] = useState(false)
   const [presetName, setPresetName] = useState("")
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [] as string[],
@@ -166,8 +167,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
       return
     }
-    
+
     try {
+      setIsSavingPreset(true)
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -182,9 +184,9 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           },
         }),
       })
-      
+
       const result = await response.json()
-      
+
       if (result.success) {
         toast({
           title: "Success",
@@ -193,6 +195,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         setPresetName("")
         setShowPresetDialog(false)
         fetchPresets()
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "Failed to save preset",
+          variant: "destructive",
+        })
       }
     } catch (error) {
       console.error("Error saving preset:", error)
@@ -201,6 +209,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         description: "Failed to save preset",
         variant: "destructive",
       })
+    } finally {
+      setIsSavingPreset(false)
     }
   }
   
@@ -274,11 +284,13 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search query"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -341,7 +353,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           </div>
 
           <Button onClick={handleSearch} disabled={isLoading}>
-            Search
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
           </Button>
         </div>
       </div>
@@ -373,8 +385,10 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                         {preset.name}
                       </DropdownMenuItem>
                       <button
+                        type="button"
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete search preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +406,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +419,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +432,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +445,12 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                type="button"
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -436,10 +470,19 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             onChange={(e) => setPresetName(e.target.value)}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
+            <Button variant="outline" onClick={() => setShowPresetDialog(false)} disabled={isSavingPreset}>
               Cancel
             </Button>
-            <Button onClick={handleSavePreset}>Save Preset</Button>
+            <Button onClick={handleSavePreset} disabled={isSavingPreset}>
+              {isSavingPreset ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Preset"
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
