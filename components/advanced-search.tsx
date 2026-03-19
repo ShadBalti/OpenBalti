@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown, Sparkles, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Label } from "@/components/ui/label"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   Dialog,
@@ -70,6 +71,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   const [presets, setPresets] = useState < SearchPreset[] > ([])
   const [showPresetDialog, setShowPresetDialog] = useState(false)
   const [presetName, setPresetName] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [] as string[],
     dialects: [] as string[],
@@ -78,6 +80,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
+  const inputRef = useRef < HTMLInputElement > (null)
   const debounceTimer = useRef < NodeJS.Timeout > ()
 
   // Initialize placeholder suggestions
@@ -166,6 +169,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
       })
       return
     }
+
+    setIsSaving(true)
     
     try {
       const response = await fetch(`/api/users/${session?.user?.id}/search-presets`, {
@@ -201,6 +206,8 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
         description: "Failed to save preset",
         variant: "destructive",
       })
+    } finally {
+      setIsSaving(false)
     }
   }
   
@@ -265,20 +272,24 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
+              ref={inputRef}
               type="text"
               placeholder="Search words..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="pl-10 pr-10"
+              aria-label="Search words"
             />
             {searchQuery && (
               <button
                 onClick={() => {
                   setSearchQuery("")
                   setSuggestions([])
+                  inputRef.current?.focus()
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search query"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -375,6 +386,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                       <button
                         onClick={() => handleDeletePreset(preset._id)}
                         className="p-1 hover:bg-destructive/20 rounded"
+                        aria-label={`Delete search preset: ${preset.name}`}
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -392,7 +404,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.categories.map((cat) => (
             <Badge key={cat} variant="secondary">
               {cat}
-              <button onClick={() => toggleFilter("categories", cat)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("categories", cat)}
+                className="ml-1"
+                aria-label={`Remove category filter: ${cat}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -400,7 +416,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.dialects.map((dial) => (
             <Badge key={dial} variant="secondary">
               {dial}
-              <button onClick={() => toggleFilter("dialects", dial)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("dialects", dial)}
+                className="ml-1"
+                aria-label={`Remove dialect filter: ${dial}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -408,7 +428,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.difficulties.map((diff) => (
             <Badge key={diff} variant="secondary">
               {diff}
-              <button onClick={() => toggleFilter("difficulties", diff)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("difficulties", diff)}
+                className="ml-1"
+                aria-label={`Remove difficulty filter: ${diff}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -416,7 +440,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
           {selectedFilters.feedback.map((fb) => (
             <Badge key={fb} variant="secondary">
               {fb}
-              <button onClick={() => toggleFilter("feedback", fb)} className="ml-1">
+              <button
+                onClick={() => toggleFilter("feedback", fb)}
+                className="ml-1"
+                aria-label={`Remove feedback filter: ${fb}`}
+              >
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -430,16 +458,29 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
             <DialogTitle>Save Search Preset</DialogTitle>
             <DialogDescription>Give this search a name to save it for later use</DialogDescription>
           </DialogHeader>
-          <Input
-            placeholder="e.g., Common Verbs, Advanced Words"
-            value={presetName}
-            onChange={(e) => setPresetName(e.target.value)}
-          />
+          <div className="space-y-2">
+            <Label htmlFor="preset-name">Preset Name</Label>
+            <Input
+              id="preset-name"
+              placeholder="e.g., Common Verbs, Advanced Words"
+              value={presetName}
+              onChange={(e) => setPresetName(e.target.value)}
+            />
+          </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPresetDialog(false)}>
+            <Button variant="outline" onClick={() => setShowPresetDialog(false)} disabled={isSaving}>
               Cancel
             </Button>
-            <Button onClick={handleSavePreset}>Save Preset</Button>
+            <Button onClick={handleSavePreset} disabled={isSaving}>
+              {isSaving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save Preset"
+              )}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
