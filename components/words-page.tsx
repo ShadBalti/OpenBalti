@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
@@ -12,7 +12,10 @@ import DialectBrowser from "@/components/dialect-browser"
 import DifficultyBrowser from "@/components/difficulty-browser"
 import FeedbackFilter from "@/components/feedback-filter"
 import AdvancedSearch from "@/components/advanced-search"
+import { Pagination } from "@/components/pagination"
 import type { IWord } from "@/models/Word"
+
+const WORDS_PER_PAGE = 100
 
 import { Button } from "@/components/ui/button"
 import {
@@ -50,6 +53,7 @@ import { Card } from "@/components/ui/card"
  */
 interface WordsPageProps {
   initialWords?: IWord[]
+  totalWords?: number
 }
 
 /**
@@ -61,7 +65,7 @@ interface WordsPageProps {
  * @param initialWords - Optional initial list of words used to populate the dictionary on first render. Defaults to an empty array.
  * @returns The rendered WordsPage UI containing browsing and management interfaces for dictionary words.
  */
-export default function WordsPage({ initialWords = [] }: WordsPageProps) {
+export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPageProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
   const router = useRouter()
@@ -83,6 +87,15 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
   const [showFiltersSheet, setShowFiltersSheet] = useState(false)
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
   const [fuzzySearch, setFuzzySearch] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  // Calculate pagination
+  const totalPages = Math.ceil(words.length / WORDS_PER_PAGE)
+  const paginatedWords = useMemo(() => {
+    const startIdx = (currentPage - 1) * WORDS_PER_PAGE
+    const endIdx = startIdx + WORDS_PER_PAGE
+    return words.slice(startIdx, endIdx)
+  }, [words, currentPage])
 
   // Initialize state from URL parameters
   useEffect(() => {
@@ -561,13 +574,25 @@ export default function WordsPage({ initialWords = [] }: WordsPageProps) {
               </div>
             </div>
           ) : words.length > 0 ? (
-            <WordList
-              words={words}
-              direction={direction}
-              onEdit={handleEditWord}
-              onDelete={confirmDelete}
-              showActions={!!session}
-            />
+            <>
+              <div className="mb-4 text-sm text-muted-foreground">
+                Showing {((currentPage - 1) * WORDS_PER_PAGE) + 1} to {Math.min(currentPage * WORDS_PER_PAGE, words.length)} of {words.length} words
+              </div>
+              <WordList
+                words={paginatedWords}
+                direction={direction}
+                onEdit={handleEditWord}
+                onDelete={confirmDelete}
+                showActions={!!session}
+              />
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              )}
+            </>
           ) : (
             <Card className="p-8 text-center">
               <div className="flex flex-col items-center justify-center gap-4">
