@@ -1,8 +1,26 @@
 import type { MetadataRoute } from "next"
+import dbConnect from "@/lib/mongodb"
+import Word from "@/models/Word"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
   const lastModified = new Date()
+
+  // Fetch all words for sitemap
+  let wordUrls: MetadataRoute.Sitemap = []
+  try {
+    await dbConnect()
+    const words = await Word.find({}, { english: 1, updatedAt: 1 }).lean()
+    wordUrls = words.map((word) => ({
+      url: `${baseUrl}/words/${(word.english as string).toLowerCase().replace(/\s+/g, '-')}`,
+      lastModified: (word.updatedAt as Date) || lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
+  } catch (error) {
+    console.error("Error fetching words for sitemap:", error)
+    // Gracefully continue without word URLs if database fails
+  }
 
   const blogArticles = [
     "getting-started-with-balti",
@@ -26,6 +44,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 0.95,
     },
+    // Include all individual word pages
+    ...wordUrls,
     {
       url: `${baseUrl}/blog`,
       lastModified,

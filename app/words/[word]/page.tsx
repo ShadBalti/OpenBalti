@@ -8,6 +8,7 @@ import { generateMetadata as generatePageMetadata } from "@/lib/metadata"
 import WordDetailView from "@/components/word-detail-view"
 import { WordStructuredData, BreadcrumbListStructuredData } from "@/components/structured-data"
 import { Suspense } from "react"
+import { serializeObject, serializeArray } from "@/lib/serialize"
 
 interface WordPageProps {
   params: { word: string }
@@ -30,11 +31,12 @@ async function getWordByEnglish(englishWord: string) {
       ? await User.findById(word.updatedBy).select("name image bio isVerified isFounder").lean()
       : null
 
-    return {
+    // Serialize before returning to avoid MongoDB object issues
+    return serializeObject({
       ...word,
       createdBy: creator,
       updatedBy: editor,
-    }
+    })
   } catch (error) {
     console.error("Error fetching word:", error)
     return null
@@ -57,7 +59,8 @@ async function getWordHistory(wordId: string) {
       }),
     )
 
-    return enrichedHistory
+    // Serialize before returning to avoid MongoDB object issues
+    return serializeArray(enrichedHistory)
   } catch (error) {
     console.error("Error fetching word history:", error)
     return []
@@ -65,7 +68,8 @@ async function getWordHistory(wordId: string) {
 }
 
 export async function generateMetadata({ params }: WordPageProps): Promise<Metadata> {
-  const word = await getWordByEnglish(params.word)
+  const resolvedParams = await params
+  const word = await getWordByEnglish(resolvedParams.word)
 
   if (!word) {
     return generatePageMetadata(
@@ -105,7 +109,8 @@ export async function generateMetadata({ params }: WordPageProps): Promise<Metad
 }
 
 export default async function WordPage({ params }: WordPageProps) {
-  const word = await getWordByEnglish(params.word)
+  const resolvedParams = await params
+  const word = await getWordByEnglish(resolvedParams.word)
 
   if (!word) {
     notFound()
