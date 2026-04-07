@@ -78,6 +78,8 @@ export const authOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // Trust the host when behind a proxy (fixes NEXTAUTH_URL warning in development)
+  trustHost: true,
 }
 
 const handler = NextAuth(authOptions)
