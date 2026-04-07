@@ -78,6 +78,27 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: words })
   } catch (error) {
     console.error("Error fetching words:", error)
+    
+    // Determine error type and provide appropriate response
+    if (error instanceof Error) {
+      if (error.message.includes("MongoDB") || error.message.includes("connection")) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: "Database service is temporarily unavailable. Please try again in a moment."
+          },
+          { status: 503 }
+        )
+      }
+    }
+    
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: "Failed to fetch words. Please try again later."
+      },
+      { status: 500 }
+    )
     return NextResponse.json({ success: false, error: "Failed to fetch words" }, { status: 500 })
   }
 }

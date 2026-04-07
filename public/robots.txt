@@ -1,0 +1,60 @@
+# OpenBalti Dictionary - Search Engine Robots Configuration
+# This file helps search engines crawl the site efficiently
+
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+# Specific rules for faster crawling
+Allow: /api/
+Allow: /dictionary/
+Allow: /words/
+Allow: /blog/
+Allow: /learn/
+
+# Disallow private/protected routes
+Disallow: /api/auth/
+Disallow: /admin/
+Disallow: /api/admin/
+Disallow: /dashboard/
+Disallow: /settings/
+
+# Disallow duplicate/filtered content to avoid crawl waste
+Disallow: /dictionary?*
+Disallow: /search?*
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+Disallow: *?__next=
+
+# Crawl delay for respectful crawling (optional, adjust as needed)
+# Crawl-delay: 1
+
+# Sitemap location - CRITICAL FOR SEO
+Sitemap: https://openbalti.com/sitemap.xml
+
+# Specific rules for major search engines (optional)
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Archive.org
+User-agent: ia_archiver
+Allow: /
