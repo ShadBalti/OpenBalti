@@ -34,8 +34,8 @@ export default function LearnContinue({
             href={link.href}
             className={`px-6 py-3 rounded-xl transition text-white ${
               link.variant === "secondary"
-                ? "bg-gray-800 hover:bg-gray-700"
-                : "bg-blue-600 hover:bg-blue-500"
+                ? "bg-secondary hover:bg-secondary/80"
+                : "bg-primary hover:bg-primary/90"
             }`}
           >
             {link.label}
