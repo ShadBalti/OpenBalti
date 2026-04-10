@@ -16,6 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { VerificationBadge } from "@/components/ui/verification-badge"
 import { FounderBadge } from "@/components/ui/founder-badge"
 import { BadgeGrid } from "@/components/badge-display"
+import { calculateUserBadges, calculateBadgeProgress } from "@/lib/badge-calculator"
 
 interface UserProfileProps {
   userId: string
@@ -93,7 +94,11 @@ export default function UserProfile({ userId }: UserProfileProps) {
       const result = await response.json()
 
       if (result.success) {
-        setUser(result.data)
+        const userData = result.data
+        // Automatically calculate badges based on user contributions
+        const earnedBadges = calculateUserBadges(userData)
+        userData.badges = earnedBadges
+        setUser(userData)
       } else {
         setError(result.error || "Failed to load profile")
       }

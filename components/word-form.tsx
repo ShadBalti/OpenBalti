@@ -58,6 +58,21 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
   const [etymology, setEtymology] = useState("")
   const [culturalNotes, setCulturalNotes] = useState("")
   const [errors, setErrors] = useState({ balti: "", english: "" })
+  const [formCompletion, setFormCompletion] = useState(0)
+
+  // Calculate form completion percentage
+  useEffect(() => {
+    const requiredFields = [balti, english]
+    const recommendedFields = [phonetic, dialect, usageNotes, etymology]
+    const allOptionalFields = [...recommendedFields, categoryInput, relatedWordInput, exampleBaltiInput]
+    
+    const requiredFilled = requiredFields.filter(f => f.trim()).length
+    const recommendedFilled = recommendedFields.filter(f => f.trim()).length
+    const totalFilled = requiredFilled + recommendedFilled
+    
+    const completion = Math.round((totalFilled / (requiredFields.length + recommendedFields.length)) * 100)
+    setFormCompletion(Math.min(completion, 100))
+  }, [balti, english, phonetic, dialect, usageNotes, etymology, categoryInput, relatedWordInput, exampleBaltiInput])
 
   useEffect(() => {
     if (initialData) {

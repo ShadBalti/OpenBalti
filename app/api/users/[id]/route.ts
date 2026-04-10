@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/mongodb"
 import User from "@/models/User"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth-options"
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   try {

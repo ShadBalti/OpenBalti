@@ -9,23 +9,7 @@ import { ExpertiseBadges } from "@/components/expertise-badges"
 import { Stats } from "@/components/social-proof"
 import Link from "next/link"
 import { ArrowRight, Users, BookOpen, Globe, Award } from "lucide-react"
-import dbConnect from "@/lib/mongodb"
-import Word from "@/models/Word"
-import User from "@/models/User"
-
-async function getStats() {
-  try {
-    await dbConnect()
-    const [totalWords, totalUsers] = await Promise.all([
-      Word.countDocuments(),
-      User.countDocuments(),
-    ])
-    return { totalWords, totalUsers }
-  } catch (error) {
-    console.error("Error fetching stats:", error)
-    return { totalWords: 0, totalUsers: 0 }
-  }
-}
+import { getSiteStats } from "@/lib/getSiteStats"
 
 export const metadata: Metadata = {
   title: "OpenBalti – Free Balti to English Dictionary & Language Learning Platform",
@@ -66,6 +50,8 @@ export const metadata: Metadata = {
  * Optimized for SEO with semantic structure, proper heading hierarchy, and rich structured data.
  */
 export default async function Home() {
+  const stats = await getSiteStats()
+  
   const expertiseBadges = [
     {
       icon: 'expert' as const,
@@ -89,18 +75,16 @@ export default async function Home() {
     },
   ]
 
-  const { totalWords, totalUsers } = await getStats()
-
   const statsData = [
     {
       label: 'Dictionary Entries',
-      value: `${totalWords}`,
+      value: `${stats.totalWords}`,
       icon: <BookOpen className="w-6 h-6" />,
       description: 'Verified and peer-reviewed',
     },
     {
       label: 'Active Community Members',
-      value: `${totalUsers}`,
+      value: `${stats.totalContributors}`,
       icon: <Users className="w-6 h-6" />,
       description: 'Contributing to language preservation',
     },

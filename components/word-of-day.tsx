@@ -79,10 +79,10 @@ export default function WordOfDay({ compact = false }: WordOfDayProps) {
 
   if (isLoading) {
     return (
-      <Card className="p-6 md:p-8 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
-        </div>
+      <Card className="h-full bg-gradient-to-br from-primary/5 via-background to-background border-primary/20">
+        <CardContent className="flex items-center justify-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" aria-hidden="true" />
+        </CardContent>
       </Card>
     )
   }

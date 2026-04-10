@@ -14,7 +14,8 @@ import WordComments from "@/components/word-comments"
 
 interface WordDetailProps {
   word: IWord
-  onClose ? : () => void
+  onClose?: () => void
+  showFullDetails?: boolean
 }
 
 /**
@@ -28,11 +29,12 @@ interface WordDetailProps {
  * @param {() => void} [props.onClose] - An optional callback function to close the detail view.
  * @returns {JSX.Element} The rendered word detail component.
  */
-export default function WordDetail({ word, onClose }: WordDetailProps) {
+export default function WordDetail({ word, onClose, showFullDetails = false }: WordDetailProps) {
   const { data: session } = useSession()
   const { toast } = useToast()
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState<"overview" | "examples" | "etymology" | "related">("overview")
   
   useEffect(() => {
     // Check if this word is in user's favorites

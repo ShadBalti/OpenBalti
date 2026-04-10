@@ -20,13 +20,18 @@ import {
   Pencil
 } from "lucide-react"
 import { generateMetadata } from "@/lib/metadata"
+import { getSiteStats, getTopContributors } from "@/lib/getSiteStats"
 
 export const metadata = generateMetadata(
   "Contribute to OpenBalti",
   "Help preserve and document the Balti language by contributing to the OpenBalti dictionary project.",
 )
 
-export default function ContributePage() {
+export default async function ContributePage() {
+  const [stats, topContributors] = await Promise.all([
+    getSiteStats(),
+    getTopContributors(3),
+  ])
   return (
     <main className="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background">
       {/* Hero Section */}
@@ -89,8 +94,8 @@ export default function ContributePage() {
         <div className="mx-auto max-w-4xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { value: "5,000+", label: "Words Documented", icon: BookOpen },
-              { value: "150+", label: "Contributors", icon: Users },
+              { value: stats.totalWords.toLocaleString(), label: "Words Documented", icon: BookOpen },
+              { value: stats.totalContributors.toLocaleString(), label: "Contributors", icon: Users },
               { value: "20+", label: "Languages Helped", icon: Globe },
               { value: "100%", label: "Open Source", icon: Heart },
             ].map((stat, idx) => (
@@ -363,11 +368,32 @@ export default function ContributePage() {
       <section className="container py-12 md:py-16 bg-secondary/30">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Community</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Top Contributors</h2>
             <p className="text-lg text-muted-foreground">
-              See all the real contributors making a difference in preserving Balti
+              Thank you to our community members making a real difference in preserving Balti
             </p>
           </div>
+
+          {topContributors && topContributors.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {topContributors.map((contributor, idx) => (
+                <Card key={idx} className="text-center border-primary/20 hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="mb-4">
+                      <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                        <Users className="h-8 w-8 text-primary" aria-hidden="true" />
+                      </div>
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">{contributor.username}</h3>
+                    <p className="text-2xl font-bold text-primary mb-1">{contributor.entryCount}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {contributor.entryCount === 1 ? "Entry Contributed" : "Entries Contributed"}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : null}
 
           <div className="text-center">
             <Button asChild size="lg" className="gap-2">
