@@ -101,7 +101,7 @@ export default function ContributorsList() {
               },
             }
           } catch (dateError) {
-            console.error("[v0] Error validating contributor data:", dateError)
+            // Silently handle validation errors - use defaults
             return {
               ...contributor,
               createdAt: new Date().toISOString(),
@@ -120,7 +120,6 @@ export default function ContributorsList() {
         throw new Error(result.error || "Failed to fetch contributors")
       }
     } catch (error) {
-      console.error("[v0] Error fetching contributors:", error)
       setError(error instanceof Error ? error.message : "An unknown error occurred")
       toast.error("Failed to fetch contributors. Please try again later.")
     } finally {
@@ -147,20 +146,17 @@ export default function ContributorsList() {
       
       // Check if date is valid
       if (isNaN(date.getTime())) {
-        console.warn("[v0] Invalid date value:", dateString)
         return "Joined unknown"
       }
 
       // Verify the date is within a reasonable range (between 2000 and 2100)
       const year = date.getFullYear()
       if (year < 2000 || year > 2100) {
-        console.warn("[v0] Date out of valid range:", dateString)
         return "Joined unknown"
       }
 
       return format(date, "MMM yyyy")
     } catch (error) {
-      console.error("[v0] Error formatting date:", error, { dateString })
       return "Joined unknown"
     }
   }, [])

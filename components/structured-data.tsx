@@ -265,3 +265,208 @@ export function WordStructuredData({ word }: { word: any }) {
     />
   )
 }
+
+/**
+ * Generates JSON-LD structured data for a contributor/person.
+ * This helps search engines understand contributor profiles and their role in the project.
+ */
+export function ContributorStructuredData({ 
+  name, 
+  image, 
+  bio, 
+  url 
+}: { 
+  name: string
+  image?: string
+  bio?: string
+  url: string
+}) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: name,
+    ...(image && { image: image }),
+    ...(bio && { description: bio }),
+    url: url,
+    affiliation: {
+      "@type": "Organization",
+      name: "OpenBalti Project",
+      url: baseUrl,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}
+
+/**
+ * Generates JSON-LD structured data for a comment.
+ * This helps search engines understand user-generated content like comments and reviews.
+ */
+export function CommentStructuredData({
+  text,
+  author,
+  dateCreated,
+  url,
+}: {
+  text: string
+  author: string
+  dateCreated: string
+  url: string
+}) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Comment",
+    text: text,
+    author: {
+      "@type": "Person",
+      name: author,
+    },
+    dateCreated: dateCreated,
+    url: url,
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}
+
+/**
+ * Generates JSON-LD structured data for a leaderboard/ranking table.
+ * This helps search engines understand ranking and competitive content.
+ */
+export function RankingTableStructuredData({
+  name,
+  description,
+  url,
+  itemCount,
+}: {
+  name: string
+  description: string
+  url: string
+  itemCount: number
+}) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Table",
+    about: {
+      "@type": "Thing",
+      name: name,
+      description: description,
+    },
+    url: url,
+    numberOfRows: itemCount,
+    audience: {
+      "@type": "Audience",
+      audienceType: "language learners, linguists, community members",
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}
+
+/**
+ * Generates JSON-LD structured data for a FAQ page.
+ * This enables rich snippets in search results with expandable Q&A.
+ */
+export function FAQStructuredData({
+  questions,
+}: {
+  questions: Array<{ question: string; answer: string }>
+}) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: questions.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}
+
+/**
+ * Generates JSON-LD structured data for an article/blog post.
+ * This helps search engines understand article metadata and improve ranking.
+ */
+export function ArticleStructuredData({
+  title,
+  description,
+  author,
+  datePublished,
+  dateModified,
+  image,
+  url,
+}: {
+  title: string
+  description: string
+  author: string
+  datePublished: string
+  dateModified: string
+  image?: string
+  url: string
+}) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: description,
+    author: {
+      "@type": "Organization",
+      name: author,
+      url: baseUrl,
+    },
+    datePublished: datePublished,
+    dateModified: dateModified,
+    ...(image && { image: image }),
+    url: url,
+    publisher: {
+      "@type": "Organization",
+      name: "OpenBalti Project",
+      url: baseUrl,
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
+}

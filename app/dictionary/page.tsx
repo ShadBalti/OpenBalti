@@ -69,11 +69,15 @@ export const metadata: Metadata = generatePageMetadata(
   },
 )
 
-async function getAllWords() {
+async function getInitialWords() {
   try {
     await dbConnect()
-    // Fetch ALL words for pagination and SEO
-    const words = await Word.find({}).sort({ createdAt: -1 }).lean()
+    // Fetch only first page of words (50 words) instead of all
+    // The client-side component will handle pagination and additional word fetching
+    const words = await Word.find({})
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean()
     return words ? words.map(word => JSON.parse(JSON.stringify(word))) : []
   } catch (error) {
     console.error("Error fetching words:", error)
@@ -81,8 +85,23 @@ async function getAllWords() {
   }
 }
 
+async function getTotalWordCount() {
+  try {
+    await dbConnect()
+    // Get total count separately for pagination metadata
+    const count = await Word.countDocuments({})
+    return count
+  } catch (error) {
+    console.error("Error counting words:", error)
+    return 0
+  }
+}
+
 export default async function DictionaryPage() {
-  const allWords = await getAllWords()
+  const [initialWords, totalWords] = await Promise.all([
+    getInitialWords(),
+    getTotalWordCount(),
+  ])
   
   return (
     <>
@@ -93,16 +112,16 @@ export default async function DictionaryPage() {
               <span className="text-blue-500">OpenBalti </span>Dictionary
             </h1>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-lg">
-              Comprehensive Balti-English dictionary with {allWords.length.toLocaleString()} words. Search, filter, and explore the language.
+              Comprehensive Balti-English dictionary with {totalWords.toLocaleString()} words. Search, filter, and explore the language.
             </p>
           </div>
 
           {/* Server-rendered word list for SEO - crawlable without JavaScript */}
-          {allWords.length > 0 && (
+          {initialWords.length > 0 && (
             <section className="sr-only" aria-labelledby="seo-word-list">
-              <h2 id="seo-word-list">All Dictionary Words</h2>
+              <h2 id="seo-word-list">Featured Dictionary Words</h2>
               <ul>
-                {allWords.map((word) => (
+                {initialWords.map((word) => (
                   <li key={word._id?.toString()}>
                     <a href={`/words/${word.english.toLowerCase().replace(/\s+/g, '-')}`}>
                       {word.balti} - {word.english}
@@ -115,17 +134,17 @@ export default async function DictionaryPage() {
           )}
 
           <Suspense fallback={<WordsPageSkeleton />}>
-            <WordsPage initialWords={allWords} totalWords={allWords.length} />
+            <WordsPage initialWords={initialWords} totalWords={totalWords} />
           </Suspense>
         </div>
       </div>
 
-      <DictionaryStructuredData url="/dictionary" wordCount={allWords.length} />
+      <DictionaryStructuredData url="/dictionary" wordCount={totalWords} />
       <BreadcrumbListStructuredData path={["Home", "Dictionary"]} />
       <CourseStructuredData />
       <WebsiteStructuredData />
       
-      {/* Structured data for all words - organized by samples for better SEO coverage */}
+      {/* Structured data for featured words - organized by samples for better SEO coverage */}
       <script 
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -133,16 +152,15 @@ export default async function DictionaryPage() {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             name: "OpenBalti Dictionary - Comprehensive Balti-English Translation",
-            description: `Comprehensive Balti-English dictionary with ${allWords.length} verified words and translations. Search, filter, and explore the Balti language.`,
+            description: `Comprehensive Balti-English dictionary with ${totalWords} verified words and translations. Search, filter, and explore the Balti language.`,
             url: "https://openbalti.com/dictionary",
-            numberOfItems: allWords.length,
+            numberOfItems: totalWords,
             inLanguage: ["en", "bal"],
             mainEntity: {
               "@type": "DefinedTermSet",
-              numberOfTerms: allWords.length,
-              terms: allWords.length,
-              // Include diverse samples across alphabet for better SEO coverage
-              hasPart: allWords.slice(0, 150).map((word) => ({
+              numberOfTerms: totalWords,
+              // Include featured words for better SEO coverage
+              hasPart: initialWords.map((word) => ({
                 "@type": "DefinedTerm",
                 name: word.balti,
                 description: word.english,

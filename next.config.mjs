@@ -7,7 +7,16 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
+    domains: [
+      'openbalti.com',
+      'localhost',
+      'vercel.app',
+      // Add other image CDN domains as needed
+    ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   
   // Optional: additional 301 redirect safety inside Next.js (won’t conflict with Vercel)

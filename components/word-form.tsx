@@ -208,7 +208,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="balti" className={errors.balti ? "text-destructive" : ""}>
-                Balti Word
+                Balti Word <span className="text-destructive" aria-label="required">*</span>
               </Label>
               <Input
                 id="balti"
@@ -221,13 +221,16 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
                 }}
                 placeholder="Enter Balti word"
                 className={errors.balti ? "border-destructive" : ""}
+                required
+                aria-required="true"
+                aria-describedby={errors.balti ? "balti-error" : undefined}
               />
-              {errors.balti && <p className="text-xs text-destructive mt-1">{errors.balti}</p>}
+              {errors.balti && <p id="balti-error" className="text-xs text-destructive mt-1" role="alert">{errors.balti}</p>}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="english" className={errors.english ? "text-destructive" : ""}>
-                English Translation
+                English Translation <span className="text-destructive" aria-label="required">*</span>
               </Label>
               <Input
                 id="english"
@@ -240,8 +243,11 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
                 }}
                 placeholder="Enter English translation"
                 className={errors.english ? "border-destructive" : ""}
+                required
+                aria-required="true"
+                aria-describedby={errors.english ? "english-error" : undefined}
               />
-              {errors.english && <p className="text-xs text-destructive mt-1">{errors.english}</p>}
+              {errors.english && <p id="english-error" className="text-xs text-destructive mt-1" role="alert">{errors.english}</p>}
             </div>
           </div>
 

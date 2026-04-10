@@ -36,10 +36,12 @@ export async function GET(req: NextRequest) {
     // Use day-based modulo to select a consistent word for the day
     const index = dayOfYear % totalWords
 
-    // Get the word at the calculated index
+    // Get the word at the calculated index with populated user data
     const word = await Word.findOne({})
       .sort({ _id: 1 })
       .skip(index)
+      .populate("createdBy", "name image bio isVerified isFounder")
+      .populate("updatedBy", "name image bio isVerified isFounder")
       .lean()
 
     if (!word) {

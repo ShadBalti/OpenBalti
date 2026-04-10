@@ -19,24 +19,19 @@ async function getWordByEnglish(englishWord: string) {
     await dbConnect()
     // Convert hyphens back to spaces for searching
     const searchWord = englishWord.replace(/-/g, " ")
+    
+    // Use populate to fetch creator and editor in a single query - fixes N+1 issue
     const word = await Word.findOne({
       english: { $regex: new RegExp(`^${searchWord.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}$`, "i") },
-    }).lean()
+    })
+      .populate("createdBy", "name image bio isVerified isFounder")
+      .populate("updatedBy", "name image bio isVerified isFounder")
+      .lean()
 
     if (!word) return null
 
-    // Populate creator and last editor info
-    const creator = await User.findById(word.createdBy).select("name image bio isVerified isFounder").lean()
-    const editor = word.updatedBy
-      ? await User.findById(word.updatedBy).select("name image bio isVerified isFounder").lean()
-      : null
-
     // Serialize before returning to avoid MongoDB object issues
-    return serializeObject({
-      ...word,
-      createdBy: creator,
-      updatedBy: editor,
-    })
+    return serializeObject(word)
   } catch (error) {
     console.error("Error fetching word:", error)
     return null
@@ -46,21 +41,25 @@ async function getWordByEnglish(englishWord: string) {
 async function getWordHistory(wordId: string) {
   try {
     await dbConnect()
-    const history = await WordHistory.find({ wordId }).sort({ createdAt: -1 }).lean()
-
-    // Enrich history with user info
-    const enrichedHistory = await Promise.all(
-      history.map(async (entry) => {
-        const user = await User.findById(entry.userId).select("name image bio isVerified isFounder").lean()
-        return {
-          ...entry,
-          user,
-        }
-      }),
-    )
+    
+    // Use aggregation pipeline to populate user data in a single query - fixes N+1 issue
+    const history = await WordHistory.aggregate([
+      { $match: { wordId: new (require('mongoose')).Types.ObjectId(wordId) } },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+          pipeline: [{ $project: { name: 1, image: 1, bio: 1, isVerified: 1, isFounder: 1 } }],
+        },
+      },
+      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+    ])
 
     // Serialize before returning to avoid MongoDB object issues
-    return serializeArray(enrichedHistory)
+    return serializeArray(history)
   } catch (error) {
     console.error("Error fetching word history:", error)
     return []
@@ -137,7 +136,7 @@ export default async function WordPage({ params }: WordPageProps) {
 export async function generateStaticParams() {
   try {
     await dbConnect()
-    const words = await Word.find({}).select("english").lean().limit(100)
+    const words = await Word.find({}).select("english").lean().limit(1000)
     return words.map((word) => ({
       word: word.english.toLowerCase().replace(/\s+/g, "-"),
     }))
