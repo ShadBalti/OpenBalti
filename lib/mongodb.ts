@@ -27,7 +27,9 @@ if (!cached) {
  */
 async function dbConnect() {
   if (cached.conn) {
-    console.log("✅ Using existing MongoDB connection")
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ Using existing MongoDB connection")
+    }
     return cached.conn
   }
 
@@ -40,16 +42,20 @@ async function dbConnect() {
       family: 4, // Use IPv4, skip trying IPv6
     }
 
-    console.log("🔄 Connecting to MongoDB...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("🔄 Connecting to MongoDB...")
+    }
 
     cached.promise = mongoose
       .connect(MONGODB_URI!, opts)
       .then((mongoose) => {
-        console.log("✅ MongoDB connected successfully!")
+        if (process.env.NODE_ENV === "development") {
+          console.log("✅ MongoDB connected successfully!")
+        }
         return mongoose
       })
       .catch((error) => {
-        console.error("❌ MongoDB connection error:", error)
+        console.error("[MongoDB] Connection failed:", error instanceof Error ? error.message : "Unknown error")
         throw error
       })
   }
@@ -72,23 +78,33 @@ if (!global.mongooseListenersAdded) {
   
   // Add an event listener for connection errors
   mongoose.connection.on("error", (err) => {
-    console.error("❌ MongoDB connection error:", err)
+    console.error("[MongoDB] Connection error:", err instanceof Error ? err.message : "Unknown error")
   })
 
   // Add an event listener for when the connection is disconnected
   mongoose.connection.on("disconnected", () => {
-    console.log("⚠️ MongoDB disconnected")
+    if (process.env.NODE_ENV === "development") {
+      console.log("⚠️ MongoDB disconnected")
+    }
   })
 
   // Add an event listener for when the connection is reconnected
   mongoose.connection.on("reconnected", () => {
-    console.log("✅ MongoDB reconnected")
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ MongoDB reconnected")
+    }
   })
 
   // Handle process termination
   process.on("SIGINT", async () => {
-    await mongoose.connection.close()
-    console.log("MongoDB connection closed due to app termination")
+    try {
+      await mongoose.connection.close()
+      if (process.env.NODE_ENV === "development") {
+        console.log("MongoDB connection closed")
+      }
+    } catch (error) {
+      console.error("[MongoDB] Error closing connection:", error instanceof Error ? error.message : "Unknown error")
+    }
     process.exit(0)
   })
   

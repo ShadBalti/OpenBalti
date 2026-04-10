@@ -21,7 +21,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log("🚀 Initializing database indexes...")
+    if (process.env.NODE_ENV === "development") {
+      console.log("🚀 Initializing database indexes...")
+    }
     const result = await initializeDatabaseIndexes()
 
     return NextResponse.json(
@@ -33,7 +35,7 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     )
   } catch (error) {
-    console.error("Error setting up indexes:", error)
+    console.error("[Admin] Index setup failed:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json(
       {
         success: false,
@@ -68,7 +70,7 @@ export async function GET(request: NextRequest) {
       { status: 200 },
     )
   } catch (error) {
-    console.error("Error checking indexes:", error)
+    console.error("[Admin] Index check failed:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json(
       {
         success: false,

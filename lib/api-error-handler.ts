@@ -161,23 +161,28 @@ function logError(error: ApiError, details?: unknown) {
   const timestamp = new Date().toISOString()
   const logMessage = `[${timestamp}] ${error.code}: ${error.message}`
 
-  switch (error.severity) {
-    case ErrorSeverity.CRITICAL:
-      console.error(`🚨 ${logMessage}`, details || "")
-      // In production, send to error tracking service (e.g., Sentry)
-      if (process.env.NODE_ENV === "production") {
-        // TODO: Integrate with error tracking service
-      }
-      break
-    case ErrorSeverity.ERROR:
-      console.error(`❌ ${logMessage}`, details || "")
-      break
-    case ErrorSeverity.WARNING:
-      console.warn(`⚠️  ${logMessage}`, details || "")
-      break
-    case ErrorSeverity.INFO:
-      console.log(`ℹ️  ${logMessage}`, details || "")
-      break
+  // Only log in development to avoid leaking sensitive information
+  if (process.env.NODE_ENV !== "production") {
+    switch (error.severity) {
+      case ErrorSeverity.CRITICAL:
+        console.error(`🚨 ${logMessage}`, details || "")
+        break
+      case ErrorSeverity.ERROR:
+        console.error(`❌ ${logMessage}`, details || "")
+        break
+      case ErrorSeverity.WARNING:
+        console.warn(`⚠️  ${logMessage}`, details || "")
+        break
+      case ErrorSeverity.INFO:
+        console.log(`ℹ️  ${logMessage}`, details || "")
+        break
+    }
+  } else {
+    // In production, log only errors and critical issues without details
+    if (error.severity === ErrorSeverity.CRITICAL || error.severity === ErrorSeverity.ERROR) {
+      console.error(logMessage)
+    }
+    // TODO: Integrate with error tracking service (e.g., Sentry, DataDog)
   }
 }
 

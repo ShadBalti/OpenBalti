@@ -86,14 +86,14 @@ export class CacheService {
           // const value = await redis.get(fullKey)
           // if (value) return JSON.parse(value)
         } catch (error) {
-          console.warn("Redis error:", error)
+          // Silently fall back to memory cache on Redis error
         }
       }
 
       // Fall back to memory cache
       return memoryCache.get(fullKey)
     } catch (error) {
-      console.error("Cache get error:", error)
+      // Return null on cache error - caller will fetch fresh data
       return null
     }
   }
@@ -114,11 +114,11 @@ export class CacheService {
           // Placeholder for Redis client
           // await redis.setex(fullKey, ttl, JSON.stringify(value))
         } catch (error) {
-          console.warn("Redis set error:", error)
+          // Silently handle Redis errors - memory cache is sufficient
         }
       }
     } catch (error) {
-      console.error("Cache set error:", error)
+      // Silently handle cache errors - system continues without caching
     }
   }
 
@@ -138,11 +138,11 @@ export class CacheService {
           // Placeholder for Redis client
           // await redis.del(fullKey)
         } catch (error) {
-          console.warn("Redis delete error:", error)
+          // Silently handle Redis errors
         }
       }
     } catch (error) {
-      console.error("Cache delete error:", error)
+      // Silently handle cache errors
     }
   }
 
@@ -162,11 +162,11 @@ export class CacheService {
           // Placeholder for Redis pattern deletion
           // await redis.del(await redis.keys(fullPattern + '*'))
         } catch (error) {
-          console.warn("Redis pattern clear error:", error)
+          // Silently handle Redis errors
         }
       }
     } catch (error) {
-      console.error("Cache clear error:", error)
+      // Silently handle cache errors
     }
   }
 
