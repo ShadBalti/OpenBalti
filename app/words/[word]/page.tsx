@@ -14,6 +14,50 @@ interface WordPageProps {
   params: { word: string }
 }
 
+export async function generateMetadata({
+  params,
+}: WordPageProps): Promise<Metadata> {
+  const word = await getWordByEnglish(params.word)
+  
+  if (!word) {
+    return {
+      title: "Word Not Found | OpenBalti Dictionary",
+      description: "The word you're looking for is not in the OpenBalti dictionary yet. Help us by adding it!",
+      robots: { index: false, follow: true },
+    }
+  }
+
+  const title = `${word.balti} (${word.english}) | OpenBalti Dictionary`
+  const description = `${word.english} - ${word.balti}. ${word.usageNotes || word.etymology || "Learn Balti words with pronunciations and examples."}${word.dialects ? ` Dialects: ${Array.isArray(word.dialects) ? word.dialects.join(", ") : word.dialects}.` : ""}`
+  
+  return {
+    title,
+    description,
+    keywords: [
+      word.english,
+      word.balti,
+      "Balti translation",
+      "Balti dictionary",
+      ...(word.dialects ? (Array.isArray(word.dialects) ? word.dialects : [word.dialects]) : []),
+    ],
+    robots: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://openbalti.com/words/${params.word}`,
+    },
+    alternates: {
+      canonical: `https://openbalti.com/words/${params.word}`,
+    },
+  }
+}
+
 async function getWordByEnglish(englishWord: string) {
   try {
     await dbConnect()
