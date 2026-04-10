@@ -17,9 +17,10 @@ export interface BadgeProgress {
 }
 
 /**
- * Calculates which badges a user has earned based on their contributions.
- * Includes milestone badges (entries added), specialty badges (areas of expertise),
- * and achievement badges (community recognition).
+ * Determine which badges a user has earned based on contribution counts and profile flags.
+ *
+ * @param user - The user whose contributionStats, creation date, and flags (`isVerified`, `isFounder`) are evaluated
+ * @returns An array of `Badge` objects representing earned milestone, specialty, and achievement badges
  */
 export function calculateUserBadges(user: IUser): Badge[] {
   const badges: Badge[] = []
@@ -130,7 +131,15 @@ export function calculateUserBadges(user: IUser): Badge[] {
 }
 
 /**
- * Calculates progress towards the next badge for each category.
+ * Build milestone progress entries from a user's added-word count.
+ *
+ * For each configured milestone, returns a BadgeProgress whose `badge` describes
+ * the next milestone target, `progress` is capped at that target, `maxProgress`
+ * equals the target, and `isUnlocked` is `true` when the user's words added
+ * meet the milestone's threshold.
+ *
+ * @param user - The user whose `contributionStats.wordsAdded` is used to compute progress
+ * @returns An array of BadgeProgress objects representing progress toward each milestone
  */
 export function calculateBadgeProgress(user: IUser): BadgeProgress[] {
   const milestones = [

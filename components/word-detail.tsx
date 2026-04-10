@@ -19,15 +19,12 @@ interface WordDetailProps {
 }
 
 /**
- * Renders a detailed view of a single dictionary word.
- * It displays the word's translations, phonetic spelling, categories, usage notes, and other metadata.
- * Authenticated users can add or remove the word from their favorites.
- * The component also integrates `WordFeedback` and `WordComments` to show community interactions.
+ * Render a detailed view for a single dictionary word, showing translations, phonetic spelling, metadata, and community interactions.
  *
- * @param {WordDetailProps} props - The component props.
- * @param {IWord} props.word - The word object to display.
- * @param {() => void} [props.onClose] - An optional callback function to close the detail view.
- * @returns {JSX.Element} The rendered word detail component.
+ * @param word - The word object to display (forms, translations, examples, metadata).
+ * @param onClose - Optional callback invoked to close the detail view.
+ * @param showFullDetails - When true, display extended details for the word.
+ * @returns The rendered word detail component.
  */
 export default function WordDetail({ word, onClose, showFullDetails = false }: WordDetailProps) {
   const { data: session } = useSession()

@@ -27,6 +27,17 @@ interface ModerationQueueProps {
   statusFilter?: "pending" | "all"
 }
 
+/**
+ * Render a moderation UI for moderators and admins to review and act on queued submissions.
+ *
+ * The component fetches submissions filtered by `statusFilter` (limited by `limit`), displays submission
+ * details and content, provides a per-submission feedback textarea, and exposes Approve/Reject actions
+ * that remove the submission from the list on success.
+ *
+ * @param limit - Maximum number of submissions to fetch and display. Defaults to `10`.
+ * @param statusFilter - Submission status to filter the queue by. Defaults to `"pending"`.
+ * @returns The moderation queue UI when the current user is a moderator or admin; `null` otherwise.
+ */
 export default function ModerationQueue({ limit = 10, statusFilter = "pending" }: ModerationQueueProps) {
   const { data: session } = useSession()
   const [submissions, setSubmissions] = useState<SubmissionToReview[]>([])

@@ -27,6 +27,13 @@ export const metadata = generateMetadata(
   "Help preserve and document the Balti language by contributing to the OpenBalti dictionary project.",
 )
 
+/**
+ * Render the Contribute to OpenBalti landing page populated with site statistics and top contributors.
+ *
+ * Renders the full contribution landing page (hero, impact stats, ways to contribute, contributor spotlight, getting started, contact, and footer CTA) and populates dynamic sections using server-fetched statistics and an optional top contributors list.
+ *
+ * @returns The root `<main>` JSX element for the contribution landing page, including dynamic stats and a top contributors grid when available.
+ */
 export default async function ContributePage() {
   const [stats, topContributors] = await Promise.all([
     getSiteStats(),

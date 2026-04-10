@@ -11,6 +11,14 @@ interface ProfileStatsDashboardProps {
   user: IUser
 }
 
+/**
+ * Renders a user profile statistics dashboard showing contribution counts, per-category progress bars, badge achievement progress, and a contribution breakdown.
+ *
+ * Uses `user.contributionStats` when available; otherwise treats all counts as zero. Badge progress is derived from `calculateBadgeProgress(user)`.
+ *
+ * @param user - The user whose contribution and badge statistics will be displayed.
+ * @returns A React element containing the profile statistics dashboard.
+ */
 export default function ProfileStatsDashboard({ user }: ProfileStatsDashboardProps) {
   const stats = user.contributionStats || {
     wordsAdded: 0,

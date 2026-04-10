@@ -14,6 +14,15 @@ interface WordPageProps {
   params: { word: string }
 }
 
+/**
+ * Builds page metadata for a dictionary word page.
+ *
+ * Fetches the word by the provided route param and returns metadata tailored to the word.
+ * If the word is not found, returns a "Word Not Found" metadata object with indexing disabled.
+ *
+ * @param params - Route parameters object containing `word` (the English word/slug to look up)
+ * @returns Metadata for the page. If the word exists, includes title, description, keywords, robots, Open Graph data, and canonical alternate; otherwise returns a not-found metadata object with `robots.index` set to `false`.
+ */
 export async function generateMetadata({
   params,
 }: WordPageProps): Promise<Metadata> {
@@ -58,6 +67,12 @@ export async function generateMetadata({
   }
 }
 
+/**
+ * Fetches a word record matching the provided English spelling and returns it as a serialized plain object.
+ *
+ * @param englishWord - The English word or URL slug to search for (hyphens allowed, e.g., "many-words")
+ * @returns The serialized word document matching `english` or `null` if not found or on error
+ */
 async function getWordByEnglish(englishWord: string) {
   try {
     await dbConnect()

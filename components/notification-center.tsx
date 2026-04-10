@@ -33,6 +33,16 @@ const typeConfig = {
   mention: { icon: MessageSquare, color: "bg-pink-500/10 text-pink-700", label: "Mention" },
 }
 
+/**
+ * Render a user's notification center UI, either a compact list or a full card with actions.
+ *
+ * Fetches notifications for the authenticated session user, tracks loading and unread counts,
+ * and provides controls to mark notifications as read and to delete them.
+ *
+ * @param compact - If `true`, render the compact (summary + truncated list) layout.
+ * @param limit - Maximum number of notifications to show when `compact` is `true`. Defaults to 5.
+ * @returns The notification center UI element, or `null` when no authenticated session is available.
+ */
 export default function NotificationCenter({ compact = false, limit = 5 }: NotificationCenterProps) {
   const { data: session } = useSession()
   const [notifications, setNotifications] = useState<Notification[]>([])

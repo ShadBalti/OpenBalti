@@ -50,6 +50,14 @@ interface UserData {
   createdAt: string
 }
 
+/**
+ * Renders a user profile page for the given userId, including identity details, contribution statistics, calculated achievements, and a "Recent Activity" tab.
+ *
+ * Fetches profile data from the users API, computes earned badges, and displays appropriate loading, error, and permission-aware views (e.g., email visible to the owner or admins and edit controls for the owner).
+ *
+ * @param userId - The ID of the user whose profile should be displayed
+ * @returns The rendered user profile UI containing avatar, metadata, contribution cards, achievements, and recent activity
+ */
 export default function UserProfile({ userId }: UserProfileProps) {
   const { data: session, status } = useSession()
   const router = useRouter()
