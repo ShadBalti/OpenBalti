@@ -4,7 +4,7 @@ import Word from "@/models/Word"
 import WordComment from "@/models/WordComment"
 import WordFeedback from "@/models/WordFeedback"
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth-options"
 import { logActivity } from "@/lib/activity-logger"
 import { isValidObjectId } from "mongoose"
 
