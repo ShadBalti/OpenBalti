@@ -111,16 +111,42 @@ export default async function DictionaryPage() {
   
   return (
     <>
-      <div className="container py-8 md:py-12">
-        <div className="mx-auto max-w-5xl space-y-8">
-          <div className="space-y-2 text-center">
-            <h1 className="text-4xl sm:text-6xl font-bold mb-4">
-              <span className="text-blue-500">OpenBalti </span>Dictionary
-            </h1>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-lg">
-              Comprehensive Balti-English dictionary with {totalWords.toLocaleString()} words. Search, filter, and explore the language.
-            </p>
-          </div>
+      <div className="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background">
+        <div className="container py-8 md:py-16">
+          <div className="mx-auto max-w-5xl space-y-8">
+            {/* Enhanced Header Section */}
+            <div className="space-y-4 text-center">
+              <div className="inline-block mb-4">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary border border-primary/20">
+                  Explore the Balti Language
+                </span>
+              </div>
+              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight mb-4">
+                <span className="bg-gradient-to-r from-primary via-primary to-blue-500 bg-clip-text text-transparent">
+                  OpenBalti Dictionary
+                </span>
+              </h1>
+              <p className="mx-auto max-w-2xl text-lg text-muted-foreground leading-relaxed">
+                Discover {totalWords.toLocaleString()} carefully documented Balti words with English translations, 
+                pronunciations, and cultural context. Search by dialect, difficulty, and category to find exactly what you need.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6 pt-4 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">{totalWords.toLocaleString()}</span>
+                  <span className="text-muted-foreground">Words</span>
+                </div>
+                <div className="h-5 w-px bg-border"></div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">Community Driven</span>
+                  <span className="text-muted-foreground">Preservation</span>
+                </div>
+                <div className="h-5 w-px bg-border"></div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-foreground">Always Free</span>
+                  <span className="text-muted-foreground">Open Source</span>
+                </div>
+              </div>
+            </div>
 
           {/* Server-rendered word list for SEO - crawlable without JavaScript */}
           {initialWords.length > 0 && (
@@ -144,6 +170,7 @@ export default async function DictionaryPage() {
           </Suspense>
         </div>
       </div>
+    </div>
 
       <DictionaryStructuredData url="/dictionary" wordCount={totalWords} />
       <BreadcrumbListStructuredData path={["Home", "Dictionary"]} />

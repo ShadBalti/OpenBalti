@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
-import { Search, X, Save, Trash2, ChevronDown, Sparkles } from "lucide-react"
+import { Search, X, Save, Trash2, ChevronDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -301,40 +301,11 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
                   </button>
                 ))}
 
-                {/* Placeholder suggestions when no search results */}
-                {suggestions.length === 0 && placeholderSuggestions.length > 0 && (
-                  <>
-                    {searchQuery.length === 0 && (
-                      <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-accent/50">
-                        <div className="flex items-center gap-1 mb-2">
-                          <Sparkles className="h-3 w-3" />
-                          Popular Searches
-                        </div>
-                      </div>
-                    )}
-                    {placeholderSuggestions.map((suggestion, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => handlePlaceholderSuggestionClick(suggestion)}
-                        className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b last:border-b-0 transition-colors"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <div className="font-medium flex items-center gap-1">
-                              {suggestion.icon && <span>{suggestion.icon}</span>}
-                              {suggestion.text}
-                            </div>
-                            <div className="text-xs text-muted-foreground">{suggestion.hint}</div>
-                          </div>
-                          {suggestion.category && (
-                            <div className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground whitespace-nowrap">
-                              {suggestion.category}
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-                  </>
+                {/* Show help text when empty and no suggestions */}
+                {suggestions.length === 0 && placeholderSuggestions.length === 0 && searchQuery.length === 0 && (
+                  <div className="px-3 py-4 text-center text-sm text-muted-foreground">
+                    <p>Start typing to search for Balti words</p>
+                  </div>
                 )}
               </div>
             )}
