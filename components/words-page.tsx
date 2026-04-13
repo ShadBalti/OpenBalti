@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
-import { Loader2, RotateCw, ArrowLeftRight, Filter, Plus, X } from "lucide-react"
+import { Loader2, RotateCw, ArrowLeftRight, Filter, Plus, X, Search } from "lucide-react"
 import WordList from "@/components/word-list"
 import WordForm from "@/components/word-form"
 import DialectBrowser from "@/components/dialect-browser"
@@ -408,20 +408,25 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
-        <h1 className="text-2xl font-bold tracking-tight sr-only">Balti Dictionary</h1>
-        <div className="flex-1 w-full md:w-auto">
+      <h1 className="text-2xl font-bold tracking-tight sr-only">Balti Dictionary</h1>
+      
+      {/* Search Section */}
+      <div className="space-y-4">
+        <div className="flex-1 w-full">
           <AdvancedSearch onSearch={handleAdvancedSearch} isLoading={isLoading} />
         </div>
 
-        <div className="flex flex-wrap gap-2 w-full md:w-auto">
+        <div className="flex flex-wrap gap-2 w-full">
           <Sheet open={showFiltersSheet} onOpenChange={setShowFiltersSheet}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="flex gap-2 bg-transparent">
+              <Button 
+                variant={activeFiltersCount > 0 ? "default" : "outline"} 
+                className="flex gap-2"
+              >
                 <Filter className="h-4 w-4" />
                 <span>Filters</span>
                 {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-1">
+                  <Badge variant="secondary" className="ml-1 bg-white/20 text-white hover:bg-white/30">
                     {activeFiltersCount}
                   </Badge>
                 )}
@@ -483,8 +488,8 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
       </div>
 
       {activeFiltersCount > 0 && (
-        <div className="flex flex-wrap gap-2 items-center">
-          <span className="text-sm text-muted-foreground">Active filters:</span>
+        <div className="flex flex-wrap gap-2 items-center p-4 bg-primary/5 rounded-lg border border-primary/10">
+          <span className="text-sm font-medium text-foreground">Active filters:</span>
           {selectedCategory && (
             <Badge variant="outline" className="flex items-center gap-1">
               Category: {selectedCategory}
@@ -554,12 +559,12 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
       )}
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "browse" | "add")} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6">
-          <TabsTrigger value="browse">Browse Dictionary</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted p-1 rounded-lg">
+          <TabsTrigger value="browse" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">Browse Dictionary</TabsTrigger>
           {session ? (
-            <TabsTrigger value="add">{editingWord ? "Edit Word" : "Add New Word"}</TabsTrigger>
+            <TabsTrigger value="add" className="rounded-md data-[state=active]:bg-background data-[state=active]:shadow-sm">{editingWord ? "Edit Word" : "Add New Word"}</TabsTrigger>
           ) : (
-            <TabsTrigger value="add" disabled>
+            <TabsTrigger value="add" disabled className="rounded-md">
               Add New Word (Login Required)
             </TabsTrigger>
           )}
@@ -575,8 +580,15 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
             </div>
           ) : words.length > 0 ? (
             <>
-              <div className="mb-4 text-sm text-muted-foreground">
-                Showing {((currentPage - 1) * WORDS_PER_PAGE) + 1} to {Math.min(currentPage * WORDS_PER_PAGE, words.length)} of {words.length} words
+              <div className="mb-6 flex items-center justify-between p-3 rounded-lg bg-secondary/30 border border-secondary/50">
+                <span className="text-sm font-medium text-foreground">
+                  Showing {((currentPage - 1) * WORDS_PER_PAGE) + 1} to {Math.min(currentPage * WORDS_PER_PAGE, words.length)} of {words.length} {words.length === 1 ? 'word' : 'words'}
+                </span>
+                {totalPages > 1 && (
+                  <span className="text-xs text-muted-foreground">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                )}
               </div>
               <WordList
                 words={paginatedWords}
@@ -594,9 +606,15 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
               )}
             </>
           ) : (
-            <Card className="p-8 text-center">
+            <Card className="p-12 text-center border-dashed bg-background/50">
               <div className="flex flex-col items-center justify-center gap-4">
-                <p className="text-muted-foreground">No words found</p>
+                <div className="rounded-full bg-primary/10 p-3">
+                  <Search className="h-6 w-6 text-primary/60" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-1">No words found</h3>
+                  <p className="text-sm text-muted-foreground">Try adjusting your search terms or filters</p>
+                </div>
                 {searchTerm || activeFiltersCount > 0 ? (
                   <Button variant="outline" onClick={clearAllFilters}>
                     Clear all filters
