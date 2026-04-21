@@ -52,6 +52,16 @@ export default function BlogPage() {
       keywords: "Balti dialects, regional variations, Skardu, Khaplu, Kargil, Nubra",
     },
     {
+      slug: "balti-language-guide-2026",
+      title: "Balti Language Guide: Words, Grammar & Cultural Depth (2026)",
+      category: "Learning",
+      date: "January 1, 2026",
+      excerpt:
+        "A comprehensive 2026 guide to Balti vocabulary, grammar, honorifics, numbers, verbs, colors, and real conversations. Perfect for learners and OpenBalti contributors exploring this ancient Tibetic language.",
+      readTime: "14 min read",
+      keywords: "Balti language guide, Balti vocabulary, Balti grammar, Tibetic language, learn Balti 2026",
+    },
+    {
       slug: "traditional-crafts-balti-culture",
       title: "Traditional Crafts: The Living Art of Baltistan",
       category: "Culture",
