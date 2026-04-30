@@ -2,20 +2,16 @@
 
 import { useState } from "react"
 import type { IWord } from "@/models/Word"
-import { Button } from "@/components/ui/button"
-import { Edit, Trash2, ChevronDown, ChevronUp, History, Eye, GraduationCap } from "lucide-react"
+import { ChevronDown, ChevronUp, GraduationCap } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import WordDetail from "@/components/word-detail"
-import FeedbackBadges from "@/components/feedback-badges"
-
 interface WordListProps {
   words: IWord[]
   direction: "balti-to-english" | "english-to-balti"
-  onEdit: (word: IWord) => void
-  onDelete: (id: string) => void
+  onEdit?: (word: IWord) => void
+  onDelete?: (id: string) => void
   showActions?: boolean
 }
 
@@ -35,7 +31,6 @@ interface WordListProps {
 export default function WordList({ words, direction, onEdit, onDelete, showActions = true }: WordListProps) {
   const [sortField, setSortField] = useState<"balti" | "english">("balti")
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
-  const [selectedWord, setSelectedWord] = useState<IWord | null>(null)
 
   const handleSort = (field: "balti" | "english") => {
     if (sortField === field) {
@@ -80,16 +75,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
     )
   }
 
-  if (selectedWord) {
-    return (
-      <div className="space-y-4">
-        <Button variant="outline" onClick={() => setSelectedWord(null)} className="mb-2">
-          Back to word list
-        </Button>
-        <WordDetail word={selectedWord} />
-      </div>
-    )
-  }
+
 
   const isBaltiToEnglish = direction === "balti-to-english"
   const firstColumnHeader = isBaltiToEnglish ? "Balti" : "English"
@@ -115,7 +101,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[35%]" onClick={() => handleSort(firstColumnField as "balti" | "english")}>
+                <TableHead className="w-[45%]" onClick={() => handleSort(firstColumnField as "balti" | "english")}>
                   <div className="flex items-center cursor-pointer hover:text-primary transition-colors">
                     {firstColumnHeader}
                     {sortField === firstColumnField &&
@@ -126,7 +112,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                       ))}
                   </div>
                 </TableHead>
-                <TableHead className="w-[35%]" onClick={() => handleSort(secondColumnField as "balti" | "english")}>
+                <TableHead className="w-[45%]" onClick={() => handleSort(secondColumnField as "balti" | "english")}>
                   <div className="flex items-center cursor-pointer hover:text-primary transition-colors">
                     {secondColumnHeader}
                     {sortField === secondColumnField &&
@@ -137,97 +123,43 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                       ))}
                   </div>
                 </TableHead>
-                <TableHead className="w-[15%]">Categories</TableHead>
-                <TableHead className="w-[15%]">Feedback</TableHead>
-                <TableHead className="w-[15%] text-right">Actions</TableHead>
+                <TableHead className="w-[10%] text-center">Difficulty</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedWords.map((word) => (
-                <TableRow key={word._id} className="group">
+                <TableRow 
+                  key={word._id} 
+                  className="cursor-pointer hover:bg-accent/50 transition-colors"
+                  onClick={() => {
+                    const link = document.querySelector(`a[data-word-id="${word._id}"]`) as HTMLAnchorElement
+                    if (link) link.click()
+                  }}
+                >
                   <TableCell className="font-medium">
-                    <div>
-                      {isBaltiToEnglish ? word.balti : word.english}
-                      {word.phonetic && isBaltiToEnglish && (
-                        <div className="text-xs text-muted-foreground">/{word.phonetic}/</div>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>{isBaltiToEnglish ? word.english : word.balti}</TableCell>
-                  <TableCell>
-                    {word.categories && word.categories.length > 0 ? (
-                      <div className="flex flex-wrap gap-1">
-                        {word.categories.slice(0, 2).map((category, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
-                            {category}
-                          </Badge>
-                        ))}
-                        {word.categories.length > 2 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{word.categories.length - 2}
-                          </Badge>
+                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                      <div>
+                        {isBaltiToEnglish ? word.balti : word.english}
+                        {word.phonetic && isBaltiToEnglish && (
+                          <div className="text-xs text-muted-foreground">/{word.phonetic}/</div>
                         )}
                       </div>
-                    ) : (
-                      <span className="text-muted-foreground text-xs">None</span>
-                    )}
+                    </Link>
                   </TableCell>
                   <TableCell>
-                    <FeedbackBadges feedbackStats={word.feedbackStats} size="sm" />
+                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                      {isBaltiToEnglish ? word.english : word.balti}
+                    </Link>
                   </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                  <TableCell className="text-center">
+                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       {word.difficultyLevel && (
-                        <span className="flex items-center mr-2">
-                          <GraduationCap className="h-4 w-4 text-muted-foreground mr-1" />
+                        <div className="flex items-center justify-center gap-1">
+                          <GraduationCap className="h-4 w-4 text-muted-foreground" />
                           <span className="text-xs text-muted-foreground capitalize">{word.difficultyLevel}</span>
-                        </span>
+                        </div>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        asChild
-                        aria-label="View word details"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary"
-                      >
-                        <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        asChild
-                        aria-label="View word history"
-                        className="h-8 w-8 text-muted-foreground hover:text-primary"
-                      >
-                        <Link href={`/words/${word._id}/history`}>
-                          <History className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      {showActions && (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onEdit(word)}
-                            aria-label="Edit word"
-                            className="h-8 w-8 text-muted-foreground hover:text-primary"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => onDelete(word._id)}
-                            aria-label="Delete word"
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}
