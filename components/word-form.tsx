@@ -150,8 +150,8 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setCulturalNotes("")
       setExpandAdvanced(false)
 
-      // Hide success message after 1 minutes
-      setTimeout(() => setSuccessMessage(false), 10000)
+      // Hide success message after 5 seconds
+      setTimeout(() => setSuccessMessage(false), 5000)
     }
   }
 
