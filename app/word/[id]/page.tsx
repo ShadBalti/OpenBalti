@@ -30,7 +30,8 @@ async function getWord(id: string) {
 export async function generateMetadata({
   params,
 }: WordPageProps): Promise<Metadata> {
-  const word = await getWord(params.id)
+  const resolvedParams = await params
+  const word = await getWord(resolvedParams.id)
   
   if (!word) {
     return {
@@ -54,7 +55,8 @@ export async function generateMetadata({
 }
 
 export default async function WordPage({ params }: WordPageProps) {
-  const word = await getWord(params.id)
+  const resolvedParams = await params
+  const word = await getWord(resolvedParams.id)
 
   if (!word) {
     notFound()
