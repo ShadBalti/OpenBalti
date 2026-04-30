@@ -27,17 +27,30 @@ export async function GET(req: NextRequest) {
     
     // Build query
     const query: any = {}
-    if (userId) query.user = userId
+    
+    // Determine which user's logs to fetch
+    let targetUserId = session.user.id
+    
+    // If userId is provided and user is admin or viewing their own logs, use that
+    if (userId) {
+      if (session.user.role === "admin" || userId === session.user.id) {
+        targetUserId = userId
+      } else {
+        // User is trying to view someone else's logs without permission
+        return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 })
+      }
+    }
+    
+    query.user = targetUserId
     if (wordId) query.wordId = wordId
     if (action) query.action = action
     
-    // Only admins can see all logs, regular users can only see their own
-    if (session.user.role !== "admin") {
-      query.user = session.user.id
-    }
+    console.log(`📝 API: Fetching activity logs for user: ${targetUserId}, filters:`, query)
     
     // Calculate pagination
     const skip = (page - 1) * limit
+    
+    console.log(`🔍 API: Querying with filter:`, JSON.stringify(query))
     
     // Fetch logs with pagination
     const logs = await ActivityLog.find(query)
@@ -50,7 +63,10 @@ export async function GET(req: NextRequest) {
     // Get total count for pagination
     const totalCount = await ActivityLog.countDocuments(query)
     
-    console.log(`📋 API: Successfully fetched ${logs.length} activity logs`)
+    console.log(`📋 API: Successfully fetched ${logs.length} activity logs out of ${totalCount} total`)
+    if (logs.length === 0) {
+      console.log(`⚠️ API: No logs found for query:`, query)
+    }
     
     return NextResponse.json({
       success: true,

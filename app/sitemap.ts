@@ -2,114 +2,259 @@ import type { MetadataRoute } from "next"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 
-/**
- * Safe slug generator for URLs
- */
-function slugify(text: string) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/['"]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-}
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+  const lastModified = new Date()
 
-export default async function sitemap(): Promise < MetadataRoute.Sitemap > {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://openbalti.com"
-  const now = new Date()
-  
+  // Fetch all words for sitemap
   let wordUrls: MetadataRoute.Sitemap = []
-  
   try {
     await dbConnect()
-    
-    const words = await Word.find({}, { english: 1, updatedAt: 1 })
-      .lean()
-      .exec()
-    
-    wordUrls = words
-      .filter((w) => w?.english)
-      .map((word) => {
-        const slug = slugify(word.english as string)
-        
-        return {
-          url: `${baseUrl}/words/${slug}`,
-          lastModified: word.updatedAt ? new Date(word.updatedAt) : now,
-          changeFrequency: "monthly"
-          as
-          const,
-          priority: 0.7,
-        }
-      })
+    const words = await Word.find({}, { english: 1, updatedAt: 1 }).lean()
+    wordUrls = words.map((word) => ({
+      url: `${baseUrl}/words/${(word.english as string).toLowerCase().replace(/\s+/g, '-')}`,
+      lastModified: (word.updatedAt as Date) || lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
   } catch (error) {
-    console.error("Sitemap word fetch failed:", error)
+    console.error("Error fetching words for sitemap:", error)
+    // Gracefully continue without word URLs if database fails
   }
-  
+
   const blogArticles = [
     "getting-started-with-balti",
     "why-balti-language-matters",
     "balti-dialects-explained",
-    "balti-language-guide-2026",
     "traditional-crafts-balti-culture",
     "community-spotlight",
     "learning-balti-with-music",
   ]
-  
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}/`, lastModified: now, changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/dictionary`, lastModified: now, changeFrequency: "daily", priority: 0.95 },
-    
-    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+
+  return [
+    {
+      url: `${baseUrl}/`,
+      lastModified,
+      changeFrequency: "daily",
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/dictionary`,
+      lastModified,
+      changeFrequency: "daily",
+      priority: 0.95,
+    },
+    // Include all individual word pages
+    ...wordUrls,
+    {
+      url: `${baseUrl}/blog`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     ...blogArticles.map((slug) => ({
       url: `${baseUrl}/blog/${slug}`,
-      lastModified: now,
-      changeFrequency: "monthly"
-      as
-      const,
+      lastModified,
+      changeFrequency: "monthly" as const,
       priority: 0.85,
     })),
-    
-    { url: `${baseUrl}/learn`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${baseUrl}/learn/phrases`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/learn/script`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/learn/dialectal`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/learn/grammar`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    
-    { url: `${baseUrl}/learn/dialects/khaplu`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/dialects/skardu`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/dialects/chorbat-nubra`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/dialects/kargil`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    
-    { url: `${baseUrl}/learn/phrases/greetings`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/phrases/shopping`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/phrases/emotions`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    
-    { url: `${baseUrl}/learn/culture`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${baseUrl}/learn/culture/balti-cap`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/culture/traditional-foods`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/culture/festivals`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learn/culture/family-customs`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    
-    { url: `${baseUrl}/get-started`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
-    { url: `${baseUrl}/learning-roadmap`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/resources`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    
-    { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${baseUrl}/success-stories`, lastModified: now, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/contribute`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/leaderboard`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/review`, lastModified: now, changeFrequency: "weekly", priority: 0.3 },
-    { url: `${baseUrl}/contributors`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/favorites`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${baseUrl}/activity`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    
-    { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/license`, lastModified: now, changeFrequency: "yearly", priority: 0.5 },
-    { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.5 },
- ''   { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.5 },
+    {
+      url: `${baseUrl}/learn`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/learn/phrases`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/learn/script`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/learn/dialectal`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/learn/grammar`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/learn/dialects/khaplu`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/dialects/skardu`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/dialects/chorbat-nubra`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/dialects/kargil`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/phrases/greetings`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/phrases/shopping`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/phrases/emotions`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/culture`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/learn/culture/balti-cap`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/culture/traditional-foods`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/culture/festivals`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learn/culture/family-customs`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/get-started`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/learning-roadmap`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/resources`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/success-stories`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contribute`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/leaderboard`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/review`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/contributors`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/favorites`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/activity`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/license`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
   ]
-  
-  return [...staticRoutes, ...wordUrls]
 }

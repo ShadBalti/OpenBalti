@@ -52,8 +52,10 @@ export async function logActivity({
   try {
     await dbConnect()
 
+    console.log(`[v0] Logging activity - User: ${actualUserId}, Action: ${action}, Word: ${wordBalti}`)
+
     // Log to activity log
-    await ActivityLog.create({
+    const activityLog = await ActivityLog.create({
       user: actualUserId,
       action,
       wordId,
@@ -62,7 +64,7 @@ export async function logActivity({
       details,
     })
 
-    console.log(`✅ Activity logged: ${action} by user ${actualUserId}`)
+    console.log(`✅ Activity logged: ${action} by user ${actualUserId}, ActivityLog ID: ${activityLog._id}`)
 
     // Update user statistics based on the action
     if (action === "create") {

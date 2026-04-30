@@ -62,10 +62,14 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
       params.append("page", page.toString())
       params.append("limit", limit.toString())
       
-      if (userId) params.append("userId", userId)
+      if (userId) {
+        params.append("userId", userId)
+        console.log("[v0] Fetching activity logs for userId:", userId)
+      }
       if (wordId) params.append("wordId", wordId)
       if (actionFilter !== "all") params.append("action", actionFilter)
       
+      console.log("[v0] Fetching activity logs with params:", params.toString())
       const response = await fetch(`/api/activity?${params.toString()}`)
       
       if (!response.ok) {
@@ -80,10 +84,14 @@ export default function ActivityLogList({ userId, wordId, limit = 10 }: Activity
       
       const result = await response.json()
       
+      console.log("[v0] Activity logs response:", result)
+      
       if (result.success) {
+        console.log(`[v0] Fetched ${result.data.length} activity logs`)
         setLogs(result.data)
         setTotalPages(result.pagination.pages)
       } else {
+        console.error("[v0] Activity log fetch failed:", result.error)
         toast.error(result.error || "Failed to fetch activity logs")
       }
     } catch (error) {
