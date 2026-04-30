@@ -15,29 +15,29 @@ import type { IWord } from "@/models/Word"
 
 interface WordFormProps {
   initialData: IWord | null
-  isSubmitting?: boolean
+  isSubmitting ? : boolean
   onSubmit: (data: {
     balti: string
     english: string
-    phonetic?: string
-    categories?: string[]
-    dialect?: string
-    usageNotes?: string
-    relatedWords?: string[]
-    difficultyLevel?: "beginner" | "intermediate" | "advanced"
-    examples?: Array<{ balti: string; english: string }>
-    etymology?: string
-    culturalNotes?: string
+    phonetic ? : string
+    categories ? : string[]
+    dialect ? : string
+    usageNotes ? : string
+    relatedWords ? : string[]
+    difficultyLevel ? : "beginner" | "intermediate" | "advanced"
+    examples ? : Array < { balti: string;english: string } >
+      etymology ? : string
+    culturalNotes ? : string
   }) => void
-  onCancel?: () => void
+  onCancel ? : () => void
 }
 
 const DIALECT_OPTIONS = [
+  { value: "all", label: "All Dialects" },
   { value: "eastern", label: "Eastern Dialect (Chorbat, Nubra Valley)" },
   { value: "central", label: "Central Dialect (Khaplu Valley)" },
   { value: "western", label: "Western Dialects (Skardu, Shigar, Rondu – prestige dialect: Skardu)" },
   { value: "southern", label: "Southern Dialect (Upper Kharmang, Kargil)" },
-  { value: "all", label: "All Dialects" },
 ]
 
 export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting = false }: WordFormProps) {
@@ -45,21 +45,21 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
   const [english, setEnglish] = useState("")
   const [phonetic, setPhonetic] = useState("")
   const [categoryInput, setCategoryInput] = useState("")
-  const [categories, setCategories] = useState<string[]>([])
+  const [categories, setCategories] = useState < string[] > ([])
   const [dialect, setDialect] = useState("")
   const [usageNotes, setUsageNotes] = useState("")
   const [relatedWordInput, setRelatedWordInput] = useState("")
-  const [relatedWords, setRelatedWords] = useState<string[]>([])
-  const [difficultyLevel, setDifficultyLevel] = useState<"beginner" | "intermediate" | "advanced">("intermediate")
+  const [relatedWords, setRelatedWords] = useState < string[] > ([])
+  const [difficultyLevel, setDifficultyLevel] = useState < "beginner" | "intermediate" | "advanced" > ("intermediate")
   const [exampleBaltiInput, setExampleBaltiInput] = useState("")
   const [exampleEnglishInput, setExampleEnglishInput] = useState("")
-  const [examples, setExamples] = useState<Array<{ balti: string; english: string }>>([])
+  const [examples, setExamples] = useState < Array < { balti: string;english: string } >> ([])
   const [etymology, setEtymology] = useState("")
   const [culturalNotes, setCulturalNotes] = useState("")
   const [errors, setErrors] = useState({ balti: "", english: "" })
   const [expandAdvanced, setExpandAdvanced] = useState(false)
   const [successMessage, setSuccessMessage] = useState(false)
-
+  
   useEffect(() => {
     if (initialData) {
       setBalti(initialData.balti)
@@ -92,32 +92,32 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
     }
     setSuccessMessage(false)
   }, [initialData])
-
+  
   const validate = () => {
     const newErrors = { balti: "", english: "" }
     let isValid = true
-
+    
     if (!balti.trim()) {
       newErrors.balti = "Balti word is required"
       isValid = false
     }
-
+    
     if (!english.trim()) {
       newErrors.english = "English translation is required"
       isValid = false
     }
-
+    
     setErrors(newErrors)
     return isValid
   }
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-
+    
     if (!validate()) {
       return
     }
-
+    
     onSubmit({
       balti: balti.trim(),
       english: english.trim(),
@@ -131,7 +131,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       etymology: etymology.trim() || undefined,
       culturalNotes: culturalNotes.trim() || undefined,
     })
-
+    
     if (!initialData) {
       // Show success message
       setSuccessMessage(true)
@@ -149,34 +149,34 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setEtymology("")
       setCulturalNotes("")
       setExpandAdvanced(false)
-
+      
       // Hide success message after 5 seconds
       setTimeout(() => setSuccessMessage(false), 10000)
     }
   }
-
+  
   const addCategory = () => {
     if (categoryInput.trim() && !categories.includes(categoryInput.trim())) {
       setCategories([...categories, categoryInput.trim()])
       setCategoryInput("")
     }
   }
-
+  
   const removeCategory = (category: string) => {
     setCategories(categories.filter((c) => c !== category))
   }
-
+  
   const addRelatedWord = () => {
     if (relatedWordInput.trim() && !relatedWords.includes(relatedWordInput.trim())) {
       setRelatedWords([...relatedWords, relatedWordInput.trim()])
       setRelatedWordInput("")
     }
   }
-
+  
   const removeRelatedWord = (word: string) => {
     setRelatedWords(relatedWords.filter((w) => w !== word))
   }
-
+  
   const addExample = () => {
     if (exampleBaltiInput.trim() && exampleEnglishInput.trim()) {
       setExamples([
@@ -190,25 +190,25 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setExampleEnglishInput("")
     }
   }
-
+  
   const removeExample = (index: number) => {
     setExamples(examples.filter((_, i) => i !== index))
   }
-
+  
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && categoryInput.trim()) {
       e.preventDefault()
       addCategory()
     }
   }
-
+  
   const handleRelatedWordKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && relatedWordInput.trim()) {
       e.preventDefault()
       addRelatedWord()
     }
   }
-
+  
   if (successMessage && !initialData) {
     return (
       <Card className="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900">
@@ -238,7 +238,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       </Card>
     )
   }
-
+  
   return (
     <Card>
       <CardHeader>
@@ -537,7 +537,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
             ) : (
               <>
                 <Plus className="mr-2 h-4 w-4" />
-                Contribute Word
+                Add Word
               </>
             )}
           </Button>
