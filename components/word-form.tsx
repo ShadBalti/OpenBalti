@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Save, X, Loader2 } from "lucide-react"
+import { Plus, Save, X, Loader2, ChevronDown, ChevronUp, CheckCircle } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -32,15 +32,14 @@ interface WordFormProps {
   onCancel?: () => void
 }
 
-/**
- * Form component for adding or editing a dictionary word, handling input state, validation, and submission.
- *
- * @param initialData - Existing word data to populate the form for editing; if null the form is in add mode.
- * @param isSubmitting - When true, disables the submit button and shows a loading indicator.
- * @param onSubmit - Callback invoked with the trimmed word payload when the form is submitted and valid.
- * @param onCancel - Optional callback invoked when the user cancels the form.
- * @returns The rendered word form component as JSX.
- */
+const DIALECT_OPTIONS = [
+  { value: "eastern", label: "Eastern Dialect (Chorbat, Nubra Valley)" },
+  { value: "central", label: "Central Dialect (Khaplu Valley)" },
+  { value: "western", label: "Western Dialects (Skardu, Shigar, Rondu – prestige dialect: Skardu)" },
+  { value: "southern", label: "Southern Dialect (Upper Kharmang, Kargil)" },
+  { value: "all", label: "All Dialects" },
+]
+
 export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting = false }: WordFormProps) {
   const [balti, setBalti] = useState("")
   const [english, setEnglish] = useState("")
@@ -58,21 +57,8 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
   const [etymology, setEtymology] = useState("")
   const [culturalNotes, setCulturalNotes] = useState("")
   const [errors, setErrors] = useState({ balti: "", english: "" })
-  const [formCompletion, setFormCompletion] = useState(0)
-
-  // Calculate form completion percentage
-  useEffect(() => {
-    const requiredFields = [balti, english]
-    const recommendedFields = [phonetic, dialect, usageNotes, etymology]
-    const allOptionalFields = [...recommendedFields, categoryInput, relatedWordInput, exampleBaltiInput]
-    
-    const requiredFilled = requiredFields.filter(f => f.trim()).length
-    const recommendedFilled = recommendedFields.filter(f => f.trim()).length
-    const totalFilled = requiredFilled + recommendedFilled
-    
-    const completion = Math.round((totalFilled / (requiredFields.length + recommendedFields.length)) * 100)
-    setFormCompletion(Math.min(completion, 100))
-  }, [balti, english, phonetic, dialect, usageNotes, etymology, categoryInput, relatedWordInput, exampleBaltiInput])
+  const [expandAdvanced, setExpandAdvanced] = useState(false)
+  const [successMessage, setSuccessMessage] = useState(false)
 
   useEffect(() => {
     if (initialData) {
@@ -88,6 +74,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setEtymology(initialData.etymology || "")
       setCulturalNotes(initialData.culturalNotes || "")
       setErrors({ balti: "", english: "" })
+      setExpandAdvanced(true)
     } else {
       setBalti("")
       setEnglish("")
@@ -101,7 +88,9 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setEtymology("")
       setCulturalNotes("")
       setErrors({ balti: "", english: "" })
+      setExpandAdvanced(false)
     }
+    setSuccessMessage(false)
   }, [initialData])
 
   const validate = () => {
@@ -144,6 +133,9 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
     })
 
     if (!initialData) {
+      // Show success message
+      setSuccessMessage(true)
+      
       // Clear form after submission only if adding a new word
       setBalti("")
       setEnglish("")
@@ -156,6 +148,10 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setExamples([])
       setEtymology("")
       setCulturalNotes("")
+      setExpandAdvanced(false)
+
+      // Hide success message after 5 seconds
+      setTimeout(() => setSuccessMessage(false), 5000)
     }
   }
 
@@ -213,248 +209,310 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
     }
   }
 
+  if (successMessage && !initialData) {
+    return (
+      <Card className="border-green-200 bg-green-50 dark:bg-green-950/20 dark:border-green-900">
+        <CardContent className="pt-8 pb-8">
+          <div className="text-center space-y-4">
+            <div className="flex justify-center">
+              <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-green-900 dark:text-green-100 mb-2">Word added!</h3>
+              <p className="text-green-800 dark:text-green-200 mb-1">You&apos;ve helped preserve Balti 🙌</p>
+              <p className="text-sm text-green-700 dark:text-green-300">Your contribution makes a real difference</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+              <Button 
+                onClick={() => setSuccessMessage(false)} 
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Add another
+              </Button>
+              <Button variant="outline" className="border-green-300 text-green-700 hover:bg-green-100 dark:border-green-700 dark:text-green-300">
+                Improve this word
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{initialData ? "Edit Word" : "Add New Word"}</CardTitle>
+        <div className="space-y-2">
+          <CardTitle>{initialData ? "Edit Word" : "Add New Word"}</CardTitle>
+          {!initialData && (
+            <p className="text-base text-primary font-medium">
+              Add one word. Help save a language ❤️
+            </p>
+          )}
+        </div>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="balti" className={errors.balti ? "text-destructive" : ""}>
-                Balti Word <span className="text-destructive" aria-label="required">*</span>
-              </Label>
-              <Input
-                id="balti"
-                value={balti}
-                onChange={(e) => {
-                  setBalti(e.target.value)
-                  if (e.target.value.trim()) {
-                    setErrors((prev) => ({ ...prev, balti: "" }))
-                  }
-                }}
-                placeholder="Enter Balti word"
-                className={errors.balti ? "border-destructive" : ""}
-                required
-                aria-required="true"
-                aria-describedby={errors.balti ? "balti-error" : undefined}
-              />
-              {errors.balti && <p id="balti-error" className="text-xs text-destructive mt-1" role="alert">{errors.balti}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="english" className={errors.english ? "text-destructive" : ""}>
-                English Translation <span className="text-destructive" aria-label="required">*</span>
-              </Label>
-              <Input
-                id="english"
-                value={english}
-                onChange={(e) => {
-                  setEnglish(e.target.value)
-                  if (e.target.value.trim()) {
-                    setErrors((prev) => ({ ...prev, english: "" }))
-                  }
-                }}
-                placeholder="Enter English translation"
-                className={errors.english ? "border-destructive" : ""}
-                required
-                aria-required="true"
-                aria-describedby={errors.english ? "english-error" : undefined}
-              />
-              {errors.english && <p id="english-error" className="text-xs text-destructive mt-1" role="alert">{errors.english}</p>}
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="phonetic">Pronunciation Guide (Phonetic)</Label>
-            <Input
-              id="phonetic"
-              value={phonetic}
-              onChange={(e) => setPhonetic(e.target.value)}
-              placeholder="How to pronounce this word (e.g., bahl-tee)"
-            />
-            <p className="text-xs text-muted-foreground">Add a phonetic spelling to help with pronunciation</p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="categories">Categories / Tags</Label>
-            <div className="flex gap-2">
-              <Input
-                id="categories"
-                value={categoryInput}
-                onChange={(e) => setCategoryInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Add a category (e.g., Food, Family, Nature)"
-              />
-              <Button type="button" onClick={addCategory} variant="outline" size="sm">
-                Add
-              </Button>
-            </div>
-            {categories.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {categories.map((category, index) => (
-                  <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                    {category}
-                    <button
-                      type="button"
-                      onClick={() => removeCategory(category)}
-                      className="ml-1 rounded-full hover:bg-muted p-0.5"
-                      aria-label={`Remove category: ${category}`}
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
+          {/* Main inputs section */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-foreground">Essential Information</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="balti" className={errors.balti ? "text-destructive" : ""}>
+                  Balti Word <span className="text-destructive" aria-label="required">*</span>
+                </Label>
+                <Input
+                  id="balti"
+                  value={balti}
+                  onChange={(e) => {
+                    setBalti(e.target.value)
+                    if (e.target.value.trim()) {
+                      setErrors((prev) => ({ ...prev, balti: "" }))
+                    }
+                  }}
+                  placeholder="e.g., چھا (chhá)"
+                  className={errors.balti ? "border-destructive" : ""}
+                  required
+                  aria-required="true"
+                  aria-describedby={errors.balti ? "balti-error" : undefined}
+                />
+                {errors.balti && <p id="balti-error" className="text-xs text-destructive mt-1" role="alert">{errors.balti}</p>}
               </div>
-            )}
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="dialect">Regional Dialect</Label>
-            <Input
-              id="dialect"
-              value={dialect}
-              onChange={(e) => setDialect(e.target.value)}
-              placeholder="Region where this word is commonly used (e.g., Skardu, Khaplu, Shigar)"
-            />
-            <p className="text-xs text-muted-foreground">Specify which region of Baltistan this word is used in</p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="usageNotes">Usage Notes</Label>
-            <Textarea
-              id="usageNotes"
-              value={usageNotes}
-              onChange={(e) => setUsageNotes(e.target.value)}
-              placeholder="Cultural context, usage information, or other notes"
-              rows={3}
-            />
-            <p className="text-xs text-muted-foreground">
-              Add cultural context or additional information about this word
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Usage Examples</Label>
-            <div className="space-y-2">
-              <Input
-                value={exampleBaltiInput}
-                onChange={(e) => setExampleBaltiInput(e.target.value)}
-                placeholder="Example in Balti"
-                aria-label="Example in Balti"
-              />
-              <Input
-                value={exampleEnglishInput}
-                onChange={(e) => setExampleEnglishInput(e.target.value)}
-                placeholder="English translation of example"
-                aria-label="English translation of example"
-              />
-              <Button type="button" onClick={addExample} variant="outline" size="sm">
-                Add Example
-              </Button>
+              <div className="space-y-2">
+                <Label htmlFor="english" className={errors.english ? "text-destructive" : ""}>
+                  English Translation <span className="text-destructive" aria-label="required">*</span>
+                </Label>
+                <Input
+                  id="english"
+                  value={english}
+                  onChange={(e) => {
+                    setEnglish(e.target.value)
+                    if (e.target.value.trim()) {
+                      setErrors((prev) => ({ ...prev, english: "" }))
+                    }
+                  }}
+                  placeholder="e.g., tea"
+                  className={errors.english ? "border-destructive" : ""}
+                  required
+                  aria-required="true"
+                  aria-describedby={errors.english ? "english-error" : undefined}
+                />
+                {errors.english && <p id="english-error" className="text-xs text-destructive mt-1" role="alert">{errors.english}</p>}
+              </div>
             </div>
-            {examples.length > 0 && (
-              <div className="space-y-2 mt-2">
-                {examples.map((example, index) => (
-                  <div key={index} className="p-3 bg-muted rounded-md">
-                    <p className="font-medium text-sm">{example.balti}</p>
-                    <p className="text-sm text-muted-foreground">{example.english}</p>
-                    <Button
-                      type="button"
-                      onClick={() => removeExample(index)}
-                      variant="ghost"
-                      size="sm"
-                      className="mt-2"
-                      aria-label={`Remove example ${index + 1}`}
-                    >
-                      <X className="h-3 w-3 mr-1" />
-                      Remove
+
+            <div className="space-y-2">
+              <Label htmlFor="phonetic">Pronunciation (How to say it)</Label>
+              <Input
+                id="phonetic"
+                value={phonetic}
+                onChange={(e) => setPhonetic(e.target.value)}
+                placeholder="e.g., cha (rhymes with 'spa')"
+                aria-label="Pronunciation guide"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="dialect">Dialect Used In</Label>
+              <Select value={dialect} onValueChange={setDialect}>
+                <SelectTrigger id="dialect">
+                  <SelectValue placeholder="Select which dialect uses this word" />
+                </SelectTrigger>
+                <SelectContent>
+                  {DIALECT_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Advanced details toggle */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setExpandAdvanced(!expandAdvanced)}
+              className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              {expandAdvanced ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+              Add more details (optional)
+            </button>
+          </div>
+
+          {/* Advanced details section */}
+          {expandAdvanced && (
+            <div className="space-y-6 pt-4 border-t">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-foreground">Additional Details</h3>
+
+                <div className="space-y-2">
+                  <Label htmlFor="categories">Categories / Tags</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="categories"
+                      value={categoryInput}
+                      onChange={(e) => setCategoryInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="e.g., Food, Family, Nature"
+                    />
+                    <Button type="button" onClick={addCategory} variant="outline" size="sm">
+                      Add
                     </Button>
                   </div>
-                ))}
+                  {categories.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {categories.map((category, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {category}
+                          <button
+                            type="button"
+                            onClick={() => removeCategory(category)}
+                            className="ml-1 rounded-full hover:bg-muted p-0.5"
+                            aria-label={`Remove category: ${category}`}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="usageNotes">Usage & Context</Label>
+                  <Textarea
+                    id="usageNotes"
+                    value={usageNotes}
+                    onChange={(e) => setUsageNotes(e.target.value)}
+                    placeholder="How is this word used? When do people say it? Cultural context?"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Usage Examples</Label>
+                  <div className="space-y-2">
+                    <Input
+                      value={exampleBaltiInput}
+                      onChange={(e) => setExampleBaltiInput(e.target.value)}
+                      placeholder="Example in Balti"
+                      aria-label="Example in Balti"
+                    />
+                    <Input
+                      value={exampleEnglishInput}
+                      onChange={(e) => setExampleEnglishInput(e.target.value)}
+                      placeholder="English translation of example"
+                      aria-label="English translation of example"
+                    />
+                    <Button type="button" onClick={addExample} variant="outline" size="sm">
+                      Add Example
+                    </Button>
+                  </div>
+                  {examples.length > 0 && (
+                    <div className="space-y-2 mt-2">
+                      {examples.map((example, index) => (
+                        <div key={index} className="p-3 bg-muted rounded-md">
+                          <p className="font-medium text-sm">{example.balti}</p>
+                          <p className="text-sm text-muted-foreground">{example.english}</p>
+                          <Button
+                            type="button"
+                            onClick={() => removeExample(index)}
+                            variant="ghost"
+                            size="sm"
+                            className="mt-2"
+                            aria-label={`Remove example ${index + 1}`}
+                          >
+                            <X className="h-3 w-3 mr-1" />
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="etymology">Word Origin & History</Label>
+                  <Textarea
+                    id="etymology"
+                    value={etymology}
+                    onChange={(e) => setEtymology(e.target.value)}
+                    placeholder="Where does this word come from? What's its history?"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="culturalNotes">Cultural Significance</Label>
+                  <Textarea
+                    id="culturalNotes"
+                    value={culturalNotes}
+                    onChange={(e) => setCulturalNotes(e.target.value)}
+                    placeholder="Why is this word important to Balti culture? What does it mean to the community?"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="relatedWords">Related Words</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="relatedWords"
+                      value={relatedWordInput}
+                      onChange={(e) => setRelatedWordInput(e.target.value)}
+                      onKeyDown={handleRelatedWordKeyDown}
+                      placeholder="Add related Balti words"
+                    />
+                    <Button type="button" onClick={addRelatedWord} variant="outline" size="sm">
+                      Add
+                    </Button>
+                  </div>
+                  {relatedWords.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {relatedWords.map((word, index) => (
+                        <Badge key={index} variant="outline" className="flex items-center gap-1">
+                          {word}
+                          <button
+                            type="button"
+                            onClick={() => removeRelatedWord(word)}
+                            className="ml-1 rounded-full hover:bg-muted p-0.5"
+                            aria-label={`Remove related word: ${word}`}
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="difficultyLevel">Difficulty Level</Label>
+                  <Select
+                    value={difficultyLevel}
+                    onValueChange={(value) => setDifficultyLevel(value as "beginner" | "intermediate" | "advanced")}
+                  >
+                    <SelectTrigger id="difficultyLevel">
+                      <SelectValue placeholder="Select difficulty level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="beginner">Beginner - Common everyday words</SelectItem>
+                      <SelectItem value="intermediate">Intermediate - Less common words</SelectItem>
+                      <SelectItem value="advanced">Advanced - Specialized or rare words</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="etymology">Etymology (Word Origin)</Label>
-            <Textarea
-              id="etymology"
-              value={etymology}
-              onChange={(e) => setEtymology(e.target.value)}
-              placeholder="Describe the origin and history of this word"
-              rows={2}
-            />
-            <p className="text-xs text-muted-foreground">
-              Explain where this word comes from and its historical context
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="culturalNotes">Cultural Significance</Label>
-            <Textarea
-              id="culturalNotes"
-              value={culturalNotes}
-              onChange={(e) => setCulturalNotes(e.target.value)}
-              placeholder="Describe the cultural significance and context of this word"
-              rows={2}
-            />
-            <p className="text-xs text-muted-foreground">
-              Add information about the cultural importance and context of this word
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="relatedWords">Related Words</Label>
-            <div className="flex gap-2">
-              <Input
-                id="relatedWords"
-                value={relatedWordInput}
-                onChange={(e) => setRelatedWordInput(e.target.value)}
-                onKeyDown={handleRelatedWordKeyDown}
-                placeholder="Add a related Balti word"
-              />
-              <Button type="button" onClick={addRelatedWord} variant="outline" size="sm">
-                Add
-              </Button>
             </div>
-            {relatedWords.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {relatedWords.map((word, index) => (
-                  <Badge key={index} variant="outline" className="flex items-center gap-1">
-                    {word}
-                    <button
-                      type="button"
-                      onClick={() => removeRelatedWord(word)}
-                      className="ml-1 rounded-full hover:bg-muted p-0.5"
-                      aria-label={`Remove related word: ${word}`}
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="difficultyLevel">Difficulty Level</Label>
-            <Select
-              value={difficultyLevel}
-              onValueChange={(value) => setDifficultyLevel(value as "beginner" | "intermediate" | "advanced")}
-            >
-              <SelectTrigger id="difficultyLevel">
-                <SelectValue placeholder="Select difficulty level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground">Indicates how difficult this word is for language learners</p>
-          </div>
+          )}
         </CardContent>
         <CardFooter className="flex justify-between">
           {onCancel ? (
@@ -465,11 +523,11 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
           ) : (
             <div></div>
           )}
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting} size="lg" className="min-w-fit">
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {initialData ? "Updating..." : "Adding..."}
+                {initialData ? "Updating..." : "Contributing..."}
               </>
             ) : initialData ? (
               <>
@@ -479,7 +537,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
             ) : (
               <>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Word
+                Contribute Word
               </>
             )}
           </Button>
