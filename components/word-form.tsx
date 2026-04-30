@@ -151,7 +151,7 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setExpandAdvanced(false)
 
       // Hide success message after 5 seconds
-      setTimeout(() => setSuccessMessage(false), 5000)
+      setTimeout(() => setSuccessMessage(false), 10000)
     }
   }
 
