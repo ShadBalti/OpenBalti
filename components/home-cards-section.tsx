@@ -1,5 +1,3 @@
-"use client"
-
 import { HomeCard } from "./home-card"
 import { BookOpen, Lightbulb, Info, Compass, Users, Trophy, HelpCircle, CheckCircle, Map } from "lucide-react"
 

@@ -1,5 +1,3 @@
-"use client"
-
 import { Suspense } from "react"
 import CommunityStats from "@/components/community-stats"
 

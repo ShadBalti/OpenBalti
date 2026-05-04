@@ -9,20 +9,24 @@ import WordDetailView from "@/components/word-detail-view"
 import { WordStructuredData, BreadcrumbListStructuredData } from "@/components/structured-data"
 import { Suspense } from "react"
 import { serializeObject, serializeArray } from "@/lib/serialize"
+import { slugToWord, wordToSlug } from "@/lib/utils"
 
 interface WordPageProps {
-  params: { word: string }
+  params: { slug: string }
 }
 
-async function getWordByEnglish(englishWord: string) {
+async function getWordByEnglish(slug: string) {
   try {
     await dbConnect()
-    // Convert hyphens back to spaces for searching
-    const searchWord = englishWord.replace(/-/g, " ")
+    // Convert slug back to searchable word format
+    const searchWord = slugToWord(slug)
+
+    // Escape regex special characters properly
+    const escapedSearchWord = searchWord.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
     
     // Use populate to fetch creator and editor in a single query - fixes N+1 issue
     const word = await Word.findOne({
-      english: { $regex: new RegExp(`^${searchWord.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}$`, "i") },
+      english: { $regex: new RegExp(`^${escapedSearchWord}$`, "i") },
     })
       .populate("createdBy", "name image bio isVerified isFounder")
       .populate("updatedBy", "name image bio isVerified isFounder")
@@ -68,7 +72,7 @@ async function getWordHistory(wordId: string) {
 
 export async function generateMetadata({ params }: WordPageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const word = await getWordByEnglish(resolvedParams.word)
+  const word = await getWordByEnglish(resolvedParams.slug)
 
   if (!word) {
     return generatePageMetadata(
@@ -109,7 +113,7 @@ export async function generateMetadata({ params }: WordPageProps): Promise<Metad
 
 export default async function WordPage({ params }: WordPageProps) {
   const resolvedParams = await params
-  const word = await getWordByEnglish(resolvedParams.word)
+  const word = await getWordByEnglish(resolvedParams.slug)
 
   if (!word) {
     notFound()
@@ -138,7 +142,7 @@ export async function generateStaticParams() {
     await dbConnect()
     const words = await Word.find({}).select("english").lean().limit(1000)
     return words.map((word) => ({
-      word: word.english.toLowerCase().replace(/\s+/g, "-"),
+      slug: wordToSlug(word.english),
     }))
   } catch {
     return []
