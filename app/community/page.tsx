@@ -1,6 +1,7 @@
+"use client"
+
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { generateMetadata } from "@/lib/metadata"
 import CommunityHeroStats from "@/components/community/community-hero-stats"
 import LiveFeed from "@/components/community/live-feed"
 import TrendingContent from "@/components/community/trending-content"
@@ -8,11 +9,6 @@ import CommunityLeaderboards from "@/components/community/community-leaderboards
 import ContributionActions from "@/components/community/contribution-actions"
 import ShareWidget from "@/components/community/share-widget"
 import WordOfDay from "@/components/word-of-day"
-
-export const metadata = generateMetadata(
-  "Community",
-  "Join the OpenBalti community! See live activity, trending words, top contributors, and contribute to preserving the Balti language."
-)
 
 /**
  * Community Page - Showcases community activity, engagement, and leaderboards
