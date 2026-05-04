@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import { BookOpen, Users, Globe } from "lucide-react"
 

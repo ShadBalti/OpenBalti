@@ -1,5 +1,3 @@
-"use client"
-
 import { ReactNode } from "react"
 import { Calendar, Clock, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"

@@ -5,13 +5,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Bookmark, BookmarkCheck, Lightbulb, GraduationCap, BookOpen, Scroll, Share2 } from "lucide-react"
+import { Bookmark, BookmarkCheck, Lightbulb, GraduationCap, BookOpen, Scroll, Share2, ThumbsUp, MoreVertical, Edit3 } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ShareArticle } from "@/components/share-article"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
 
 interface WordDetailViewProps {
   word: any // IWord with populated fields
@@ -20,15 +28,76 @@ interface WordDetailViewProps {
 
 export default function WordDetailView({ word, history }: WordDetailViewProps) {
   const { data: session } = useSession()
+  const router = useRouter()
   const { toast } = useToast()
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [likeCount, setLikeCount] = useState(word.helpfulCount || 0)
+  const [userLiked, setUserLiked] = useState(false)
+  const [isLiking, setIsLiking] = useState(false)
 
   useEffect(() => {
     if (session) {
       checkFavoriteStatus()
+      checkLikeStatus()
     }
   }, [session, word._id])
+
+  const checkLikeStatus = async () => {
+    if (!session) return
+    try {
+      const response = await fetch(`/api/words/${word._id}/helpful-check`)
+      const result = await response.json()
+      if (result.success) {
+        setUserLiked(result.liked)
+      }
+    } catch (error) {
+      console.error("Error checking like status:", error)
+    }
+  }
+
+  const toggleLike = async () => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to mark words as helpful",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setIsLiking(true)
+    try {
+      const response = await fetch(`/api/words/${word._id}/helpful`, {
+        method: "POST",
+      })
+      const result = await response.json()
+
+      if (result.success) {
+        setUserLiked(result.liked)
+        setLikeCount(result.helpfulCount)
+        toast({ title: result.liked ? "Marked as helpful" : "Removed from helpful" })
+      } else {
+        toast({
+          title: "Error",
+          description: result.error,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to mark as helpful",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLiking(false)
+    }
+  }
+
+  const handleEdit = () => {
+    router.push(`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}/edit`)
+  }
 
   const checkFavoriteStatus = async () => {
     try {
@@ -142,6 +211,16 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
                 size="sm"
                 showLabel={false}
               />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={toggleLike}
+                disabled={isLiking}
+                className="gap-1"
+              >
+                <ThumbsUp className={`h-4 w-4 ${userLiked ? "fill-current text-blue-600" : ""}`} />
+                <span className="text-xs">{likeCount}</span>
+              </Button>
               {session && (
                 <Button
                   variant="outline"
@@ -153,6 +232,27 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
                   {isFavorite ? <BookmarkCheck className="h-5 w-5 text-blue-600" /> : <Bookmark className="h-5 w-5" />}
                 </Button>
               )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {(session?.user?.id === word.createdBy?._id || session?.user?.role === "admin") && (
+                    <>
+                      <DropdownMenuItem onClick={handleEdit}>
+                        <Edit3 className="h-4 w-4 mr-2" />
+                        Edit This Word
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  <DropdownMenuItem>Report Content</DropdownMenuItem>
+                  <DropdownMenuItem>View on GitHub</DropdownMenuItem>
+                  <DropdownMenuItem>Copy Word ID</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <p className="text-xl text-gray-700 dark:text-foreground mt-3">{word.english}</p>

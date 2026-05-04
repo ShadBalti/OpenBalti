@@ -1,5 +1,3 @@
-"use client"
-
 import { Search, Users, Lightbulb, MessageCircle, Trophy, BookMarked, Globe, Shield, Zap, History } from "lucide-react"
 
 const features = [
