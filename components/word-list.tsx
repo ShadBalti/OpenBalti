@@ -137,7 +137,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                   }}
                 >
                   <TableCell className="font-medium">
-                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       <div>
                         {isBaltiToEnglish ? word.balti : word.english}
                         {word.phonetic && isBaltiToEnglish && (
@@ -147,12 +147,12 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       {isBaltiToEnglish ? word.english : word.balti}
                     </Link>
                   </TableCell>
                   <TableCell className="text-center">
-                    <Link href={`/word/${word._id}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       {word.difficultyLevel && (
                         <div className="flex items-center justify-center gap-1">
                           <GraduationCap className="h-4 w-4 text-muted-foreground" />

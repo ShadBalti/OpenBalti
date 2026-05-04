@@ -11,7 +11,7 @@ import { Suspense } from "react"
 import { serializeObject, serializeArray } from "@/lib/serialize"
 
 interface WordPageProps {
-  params: { word: string }
+  params: { slug: string }
 }
 
 async function getWordByEnglish(englishWord: string) {
@@ -68,7 +68,7 @@ async function getWordHistory(wordId: string) {
 
 export async function generateMetadata({ params }: WordPageProps): Promise<Metadata> {
   const resolvedParams = await params
-  const word = await getWordByEnglish(resolvedParams.word)
+  const word = await getWordByEnglish(resolvedParams.slug)
 
   if (!word) {
     return generatePageMetadata(
@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: WordPageProps): Promise<Metad
 
 export default async function WordPage({ params }: WordPageProps) {
   const resolvedParams = await params
-  const word = await getWordByEnglish(resolvedParams.word)
+  const word = await getWordByEnglish(resolvedParams.slug)
 
   if (!word) {
     notFound()
