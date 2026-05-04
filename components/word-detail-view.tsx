@@ -9,6 +9,7 @@ import { Bookmark, BookmarkCheck, Lightbulb, GraduationCap, BookOpen, Scroll, Sh
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
+import { wordToSlug } from "@/lib/utils"
 import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -96,7 +97,7 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
   }
 
   const handleEdit = () => {
-    router.push(`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}/edit`)
+    router.push(`/words/${wordToSlug(word.english)}/edit`)
   }
 
   const checkFavoriteStatus = async () => {

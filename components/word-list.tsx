@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { wordToSlug } from "@/lib/utils"
 interface WordListProps {
   words: IWord[]
   direction: "balti-to-english" | "english-to-balti"
@@ -137,7 +138,7 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                   }}
                 >
                   <TableCell className="font-medium">
-                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${wordToSlug(word.english)}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       <div>
                         {isBaltiToEnglish ? word.balti : word.english}
                         {word.phonetic && isBaltiToEnglish && (
@@ -147,12 +148,12 @@ export default function WordList({ words, direction, onEdit, onDelete, showActio
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${wordToSlug(word.english)}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       {isBaltiToEnglish ? word.english : word.balti}
                     </Link>
                   </TableCell>
                   <TableCell className="text-center">
-                    <Link href={`/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
+                    <Link href={`/words/${wordToSlug(word.english)}`} data-word-id={word._id} className="text-inherit hover:text-primary no-underline">
                       {word.difficultyLevel && (
                         <div className="flex items-center justify-center gap-1">
                           <GraduationCap className="h-4 w-4 text-muted-foreground" />
