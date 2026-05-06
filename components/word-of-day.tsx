@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CategoryBadge, DifficultyBadge, DialectBadge } from "@/components/category-status-badges"
+import { wordToSlug } from "@/lib/utils"
 import type { IWord } from "@/models/Word"
 
 interface WordOfDayProps {
@@ -91,7 +92,7 @@ export default function WordOfDay({ compact = false }: WordOfDayProps) {
     return null
   }
 
-  const wordLink = `/words/${word.balti}`
+  const wordLink = `/words/${wordToSlug(word.english)}`
 
   if (compact) {
     return (
