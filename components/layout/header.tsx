@@ -29,7 +29,6 @@ export function Header() {
     { href: "/community", label: "Community", icon: <Users className="h-4 w-4 mr-2" /> },
     { href: "/learn", label: "Learn", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/blog", label: "Blog", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
-    { href: "/resources", label: "Resources", icon: <BookOpenText className="h-4 w-4 mr-2" /> },
     { href: "/about", label: "About", icon: <Info className="h-4 w-4 mr-2" /> },
   ]
 
