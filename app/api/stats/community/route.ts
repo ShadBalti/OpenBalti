@@ -9,6 +9,10 @@ export async function GET() {
   try {
     await dbConnect()
 
+    // Calculate today's date at midnight
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
     // Get total counts
     const [totalWords, totalUsers, totalFeedback, totalComments, usefulWords, trustedWords, reviewWords] =
       await Promise.all([
@@ -19,6 +23,20 @@ export async function GET() {
         Word.countDocuments({ "feedbackStats.useful": { $gt: 0 } }),
         Word.countDocuments({ "feedbackStats.trusted": { $gt: 0 } }),
         Word.countDocuments({ "feedbackStats.needsReview": { $gt: 0 } }),
+      ])
+
+    // Get today's activity metrics
+    const [wordsAddedToday, usersJoinedToday, activeUsersToday, approvalsToday] =
+      await Promise.all([
+        Word.countDocuments({ createdAt: { $gte: today } }),
+        User.countDocuments({ createdAt: { $gte: today } }),
+        User.countDocuments({
+          "lastActivityAt": { $gte: today }
+        }).catch(() => 0),
+        WordFeedback.countDocuments({
+          createdAt: { $gte: today },
+          feedbackType: "review"
+        }).catch(() => 0),
       ])
 
     // Get top contributors
@@ -78,6 +96,7 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: {
+        // Overall stats
         totalWords,
         totalUsers,
         totalFeedback,
@@ -85,6 +104,12 @@ export async function GET() {
         usefulWords,
         trustedWords,
         reviewWords,
+        // Daily stats
+        wordsAddedToday,
+        usersJoinedToday,
+        activeUsersToday,
+        approvalsToday,
+        // Contributors
         topContributors,
         mostActiveUsers,
       },

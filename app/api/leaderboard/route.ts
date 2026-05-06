@@ -12,11 +12,54 @@ export async function GET(req: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "50", 10)
     const page = Number.parseInt(searchParams.get("page") || "1", 10)
     const sortBy = searchParams.get("sortBy") || "contributions"
+    const timeframe = searchParams.get("timeframe") || "all" // all, today, week, month
 
     const skip = (page - 1) * limit
 
+    // Calculate date range for timeframe
+    const now = new Date()
+    let dateFrom = new Date(0) // Default to all time
+
+    if (timeframe === "today") {
+      dateFrom = new Date()
+      dateFrom.setHours(0, 0, 0, 0)
+    } else if (timeframe === "week") {
+      dateFrom = new Date(now)
+      dateFrom.setDate(now.getDate() - 7)
+    } else if (timeframe === "month") {
+      dateFrom = new Date(now)
+      dateFrom.setMonth(now.getMonth() - 1)
+    }
+
     // Build aggregation pipeline for leaderboard
-    const pipeline = [
+    const pipeline: any[] = []
+
+    // For timeframe-based leaderboards, add activity lookup
+    if (timeframe !== "all") {
+      pipeline.push({
+        $lookup: {
+          from: "activitylogs",
+          localField: "_id",
+          foreignField: "user",
+          as: "activities",
+        },
+      })
+      pipeline.push({
+        $addFields: {
+          recentActivities: {
+            $filter: {
+              input: "$activities",
+              as: "activity",
+              cond: {
+                $gte: ["$$activity.createdAt", dateFrom],
+              },
+            },
+          },
+        },
+      })
+    }
+
+    pipeline.push(
       {
         $addFields: {
           contributionStats: {
@@ -43,32 +86,48 @@ export async function GET(req: NextRequest) {
               { $ifNull: ["$contributionStats.wordsReviewed", 0] },
             ],
           },
+          "recentActivityCount": {
+            $cond: [
+              { $isArray: "$recentActivities" },
+              { $size: "$recentActivities" },
+              0,
+            ],
+          },
         },
+      }
+    )
+
+    // Filter out users with no contributions
+    pipeline.push({
+      $match: timeframe !== "all"
+        ? { "recentActivityCount": { $gt: 0 } }
+        : { "contributionStats.total": { $gt: 0 } },
+    })
+
+    // Sort by contributions or recent activity
+    pipeline.push({
+      $sort:
+        timeframe !== "all"
+          ? { recentActivityCount: -1, createdAt: -1 }
+          : sortBy === "recent"
+            ? { createdAt: -1 }
+            : { "contributionStats.total": -1 },
+    })
+
+    pipeline.push({ $skip: skip })
+    pipeline.push({ $limit: limit })
+    pipeline.push({
+      $project: {
+        name: 1,
+        image: 1,
+        role: 1,
+        bio: 1,
+        contributionStats: 1,
+        badges: 1,
+        createdAt: 1,
+        recentActivityCount: timeframe !== "all" ? 1 : 0,
       },
-      // Filter out users with no contributions
-      {
-        $match: {
-          "contributionStats.total": { $gt: 0 },
-        },
-      },
-      // Sort by contributions or recent
-      {
-        $sort: sortBy === "recent" ? { createdAt: -1 } : { "contributionStats.total": -1 },
-      },
-      { $skip: skip },
-      { $limit: limit },
-      {
-        $project: {
-          name: 1,
-          image: 1,
-          role: 1,
-          bio: 1,
-          contributionStats: 1,
-          badges: 1,
-          createdAt: 1,
-        },
-      },
-    ]
+    })
 
     const users = await User.aggregate(pipeline)
 
