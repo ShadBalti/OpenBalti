@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
     const contributionsByDate = await ActivityLog.aggregate([
       {
         $match: {
-          userId: user._id,
+          user: user._id,
           action: { $in: ["create", "update", "review"] },
         },
       },

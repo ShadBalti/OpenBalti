@@ -23,9 +23,18 @@ export default function ShareWidget({
   const [url, setUrl] = useState(propUrl || "")
 
   useEffect(() => {
-    // Set the URL from window.location if not provided as prop
-    if (!propUrl && typeof window !== "undefined") {
-      setUrl(window.location.href)
+    // Priority order: prop URL > environment variable > window location
+    if (propUrl) {
+      setUrl(propUrl)
+    } else if (typeof window !== "undefined") {
+      // Get production URL if available, otherwise use window location
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+      if (siteUrl) {
+        setUrl(`${siteUrl}/community`)
+      } else {
+        // Fallback to current window location
+        setUrl(window.location.href)
+      }
     }
   }, [propUrl])
 

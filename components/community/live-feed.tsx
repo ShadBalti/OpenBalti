@@ -83,7 +83,7 @@ export default function LiveFeed({ limit = 15 }: LiveFeedProps) {
         setTotalPages(result.pagination.pages)
       }
     } catch (error) {
-      console.error("Error fetching live feed:", error)
+      console.error("[v0] Live feed fetch error:", error)
     } finally {
       setLoading(false)
     }

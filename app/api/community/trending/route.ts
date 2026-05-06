@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
       },
       {
         $group: {
-          _id: "$userId",
+          _id: "$user",
           contributionCount: { $sum: 1 },
         },
       },

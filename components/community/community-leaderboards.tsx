@@ -56,7 +56,7 @@ export default function CommunityLeaderboards({ limit = 10 }: LeaderboardsProps)
         setUsers(result.data)
       }
     } catch (error) {
-      console.error("Error fetching leaderboard:", error)
+      console.error("[v0] Leaderboard fetch error:", error)
     } finally {
       setLoading(false)
     }

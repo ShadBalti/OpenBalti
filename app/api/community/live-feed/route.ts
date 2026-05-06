@@ -25,12 +25,12 @@ export async function GET(req: NextRequest) {
       {
         $lookup: {
           from: "users",
-          localField: "userId",
+          localField: "user",
           foreignField: "_id",
-          as: "user",
+          as: "userInfo",
         },
       },
-      { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$userInfo", preserveNullAndEmptyArrays: true } },
       { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limit },
@@ -43,10 +43,12 @@ export async function GET(req: NextRequest) {
           wordEnglish: 1,
           details: 1,
           createdAt: 1,
-          "user._id": 1,
-          "user.name": 1,
-          "user.image": 1,
-          "user.role": 1,
+          user: {
+            _id: "$userInfo._id",
+            name: "$userInfo.name",
+            image: "$userInfo.image",
+            role: "$userInfo.role",
+          },
         },
       },
     ])

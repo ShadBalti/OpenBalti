@@ -63,7 +63,7 @@ export default function TrendingContent({ limit = 8 }: TrendingContentProps) {
         setData(result.data)
       }
     } catch (error) {
-      console.error("Error fetching trending data:", error)
+      console.error("[v0] Trending data fetch error:", error)
     } finally {
       setLoading(false)
     }

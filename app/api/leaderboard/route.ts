@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
         $lookup: {
           from: "activitylogs",
           localField: "_id",
-          foreignField: "userId",
+          foreignField: "user",
           as: "activities",
         },
       })

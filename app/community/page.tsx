@@ -12,6 +12,7 @@ import CommunityLeaderboards from "@/components/community/community-leaderboards
 import ContributionActions from "@/components/community/contribution-actions"
 import ShareWidget from "@/components/community/share-widget"
 import WordOfDay from "@/components/word-of-day"
+import WordActivitySection from "@/components/community/word-activity-section"
 
 /**
  * Community Page - Showcases community activity, engagement, and leaderboards
@@ -82,6 +83,19 @@ export default function CommunityPage() {
                 }
               >
                 <CommunityLeaderboards limit={10} />
+              </Suspense>
+
+              {/* Word Activity */}
+              <Suspense
+                fallback={
+                  <div className="space-y-4">
+                    {[...Array(4)].map((_, i) => (
+                      <Skeleton key={i} className="h-24 w-full" />
+                    ))}
+                  </div>
+                }
+              >
+                <WordActivitySection limit={10} timeframe="week" />
               </Suspense>
             </div>
 
