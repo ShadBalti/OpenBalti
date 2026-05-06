@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -16,13 +16,21 @@ interface ShareWidgetProps {
 export default function ShareWidget({
   title = "Join OpenBalti",
   description = "Help preserve and grow the Balti language",
-  url = typeof window !== "undefined" ? window.location.href : "",
+  url: propUrl,
 }: ShareWidgetProps) {
   const { toast } = useToast()
   const [copied, setCopied] = useState(false)
+  const [url, setUrl] = useState(propUrl || "")
+
+  useEffect(() => {
+    // Set the URL from window.location if not provided as prop
+    if (!propUrl && typeof window !== "undefined") {
+      setUrl(window.location.href)
+    }
+  }, [propUrl])
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(url || window.location.href)
+    navigator.clipboard.writeText(url || "")
     setCopied(true)
     toast({
       description: "Link copied to clipboard!",
@@ -32,16 +40,20 @@ export default function ShareWidget({
 
   const handleWhatsApp = () => {
     const text = encodeURIComponent(
-      `${title} - ${description}\n\nJoin the community: ${url || window.location.href}`
+      `${title} - ${description}\n\nJoin the community: ${url}`
     )
-    window.open(`https://wa.me/?text=${text}`, "_blank")
+    if (typeof window !== "undefined") {
+      window.open(`https://wa.me/?text=${text}`, "_blank")
+    }
   }
 
   const handleFacebook = () => {
     const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      url || window.location.href
+      url
     )}&quote=${encodeURIComponent(title)}`
-    window.open(fbUrl, "_blank", "width=600,height=400")
+    if (typeof window !== "undefined") {
+      window.open(fbUrl, "_blank", "width=600,height=400")
+    }
   }
 
   return (
@@ -99,7 +111,7 @@ export default function ShareWidget({
             <p className="text-xs font-medium mb-2 text-muted-foreground">Share URL</p>
             <input
               type="text"
-              value={url || window.location.href}
+              value={url}
               readOnly
               className="w-full text-xs bg-background border border-input rounded px-2 py-1.5 text-muted-foreground"
             />
