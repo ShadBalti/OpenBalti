@@ -3,6 +3,9 @@
 import { Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import CommunityHeroStats from "@/components/community/community-hero-stats"
+
+// Prevent static prerendering - this page uses dynamic data fetching
+export const dynamic = "force-dynamic"
 import LiveFeed from "@/components/community/live-feed"
 import TrendingContent from "@/components/community/trending-content"
 import CommunityLeaderboards from "@/components/community/community-leaderboards"
