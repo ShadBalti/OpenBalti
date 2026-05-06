@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { UserDropdown } from "@/components/auth/user-dropdown"
 import { useSession } from "next-auth/react"
-import { BookOpen, Info, Menu, X, BookOpenText, Users } from "lucide-react"
+import { BookOpen, Info, Menu, X, BookOpenText, Users, Plus } from "lucide-react"
 import { useState } from "react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
@@ -69,6 +69,14 @@ export function Header() {
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
+          {session && (
+            <Button asChild variant="default" size="sm" className="gap-1 hidden sm:flex">
+              <Link href="/contribute">
+                <Plus className="h-4 w-4" />
+                <span>Contribute</span>
+              </Link>
+            </Button>
+          )}
           <UserDropdown />
           <Button
             variant="outline"

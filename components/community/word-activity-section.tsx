@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Loader2, BookOpen, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { wordToSlug } from "@/lib/utils"
 
 interface WordActivity {
   _id: string
@@ -82,7 +83,7 @@ export default function WordActivitySection({ limit = 15, timeframe = "week" }: 
         ) : (
           <div className="space-y-4">
             {words.map((word) => (
-              <Link key={word._id} href={`/words/${word._id}`} className="block">
+              <Link key={word._id} href={`/words/${wordToSlug(word.english)}`} className="block">
                 <div className="p-4 rounded-lg border hover:border-primary/50 hover:bg-muted/50 transition-colors">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">

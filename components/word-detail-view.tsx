@@ -14,6 +14,7 @@ import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ShareArticle } from "@/components/share-article"
+import { BreadcrumbNav } from "@/components/breadcrumb-nav"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -195,6 +196,14 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
 
   return (
     <div className="space-y-6">
+      {/* Breadcrumb Navigation */}
+      <BreadcrumbNav
+        items={[
+          { label: "Dictionary", href: "/dictionary" },
+          { label: word.english },
+        ]}
+      />
+
       {/* Header */}
       <Card className="border-0 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
         <CardHeader>
@@ -240,7 +249,10 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {(session?.user?.id === word.createdBy?._id || session?.user?.role === "admin") && (
+                  {(session?.user?.id === word.createdBy?._id || 
+                    session?.user?.role === "admin" || 
+                    (session?.user as any)?.isFounder === true ||
+                    (session?.user as any)?.isModerator === true) && (
                     <>
                       <DropdownMenuItem onClick={handleEdit}>
                         <Edit3 className="h-4 w-4 mr-2" />

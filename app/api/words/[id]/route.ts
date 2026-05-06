@@ -72,6 +72,20 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
+    // Check authorization - allow if user is creator, admin, founder, or moderator
+    const isCreator = session.user.id === originalWord.createdBy?.toString()
+    const isAdmin = session.user.role === "admin"
+    const isFounder = (session.user as any).isFounder === true
+    const isModerator = (session.user as any).isModerator === true
+
+    if (!isCreator && !isAdmin && !isFounder && !isModerator) {
+      console.log(`⚠️ API: User ${session.user.id} not authorized to update word ${params.id}`)
+      return NextResponse.json(
+        { success: false, error: "You don't have permission to edit this word" },
+        { status: 403 },
+      )
+    }
+
     // Add updatedBy field to track who made the change
     const updateData = {
       ...body,
@@ -141,14 +155,36 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     await dbConnect()
     console.log(`✅ API: MongoDB connected for deleting word ID: ${params.id}`)
 
-    const word = await Word.findByIdAndDelete(params.id)
-
+    // Fetch the word first to check authorization
+    const word = await Word.findById(params.id)
     if (!word) {
       console.log(`⚠️ API: Word with ID ${params.id} not found for deletion`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
-    console.log(`✅ API: Successfully deleted word: ${word.balti} - ${word.english}`)
+    // Check authorization - allow if user is creator, admin, founder, or moderator
+    const isCreator = session.user.id === word.createdBy?.toString()
+    const isAdmin = session.user.role === "admin"
+    const isFounder = (session.user as any).isFounder === true
+    const isModerator = (session.user as any).isModerator === true
+
+    if (!isCreator && !isAdmin && !isFounder && !isModerator) {
+      console.log(`⚠️ API: User ${session.user.id} not authorized to delete word ${params.id}`)
+      return NextResponse.json(
+        { success: false, error: "You don't have permission to delete this word" },
+        { status: 403 },
+      )
+    }
+
+    // Now delete the word
+    const deletedWord = await Word.findByIdAndDelete(params.id)
+
+    if (!deletedWord) {
+      console.log(`⚠️ API: Word with ID ${params.id} not found for deletion`)
+      return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
+    }
+
+    console.log(`✅ API: Successfully deleted word: ${deletedWord.balti} - ${deletedWord.english}`)
 
     await WordComment.deleteMany({ wordId: params.id })
     await WordFeedback.deleteMany({ wordId: params.id })
@@ -158,9 +194,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     await logActivity({
       session,
       action: "delete",
-      wordId: word._id,
-      wordBalti: word.balti,
-      wordEnglish: word.english,
+      wordId: deletedWord._id,
+      wordBalti: deletedWord.balti,
+      wordEnglish: deletedWord.english,
       details: "Deleted word from dictionary",
     })
 
