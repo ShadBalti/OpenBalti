@@ -14,33 +14,25 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Converts a word to a URL-friendly slug format.
- * Handles spaces, special characters, and normalizes the string.
- * Example: "To Be" -> "to-be", "Don't" -> "dont"
+ * Converts a word to a URL-friendly slug format using URL encoding.
+ * Preserves special characters like apostrophes, commas, slashes, etc.
+ * Example: "To Be" -> "to%20be", "Don't" -> "don%27t", "C/C++" -> "c%2fc%2b%2b"
  *
  * @param {string} word - The word to convert to slug format
- * @returns {string} The normalized slug
+ * @returns {string} The URL-encoded slug
  */
 export function wordToSlug(word: string): string {
-  return word
-    .toLowerCase() // Convert to lowercase
-    .trim() // Remove leading/trailing whitespace
-    .replace(/\s+/g, "-") // Replace one or more spaces with single hyphen
-    .replace(/[^\w-]/g, "") // Remove all non-word characters except hyphens
-    .replace(/-+/g, "-") // Replace multiple consecutive hyphens with single hyphen
+  return encodeURIComponent(word.toLowerCase().trim())
 }
 
 /**
- * Converts a slug back to a search-friendly format.
- * Replaces hyphens with spaces for database queries.
- * Example: "to-be" -> "to be"
+ * Converts a slug back to the original word format.
+ * Decodes URL-encoded characters.
+ * Example: "to%20be" -> "to be", "don%27t" -> "don't"
  *
  * @param {string} slug - The slug to convert
- * @returns {string} The normalized search word
+ * @returns {string} The decoded word
  */
 export function slugToWord(slug: string): string {
-  return slug
-    .replace(/-/g, " ") // Replace hyphens with spaces
-    .trim() // Remove leading/trailing spaces
-    .replace(/\s+/g, " ") // Normalize multiple spaces to single space
+  return decodeURIComponent(slug)
 }
