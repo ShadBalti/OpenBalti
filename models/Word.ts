@@ -26,7 +26,8 @@ import mongoose, { Schema, type Document } from "mongoose"
  * @property {number} feedbackStats.trusted - The number of times the word was marked as trusted.
  * @property {number} feedbackStats.needsReview - The number of times the word was flagged for review.
  */
-export interface IWord extends Document {
+export interface IWord extends Document<string> {
+  _id: string
   balti: string
   english: string
   phonetic?: string
@@ -38,8 +39,8 @@ export interface IWord extends Document {
   examples?: Array<{ balti: string; english: string }>
   etymology?: string
   culturalNotes?: string
-  createdBy: mongoose.Types.ObjectId
-  updatedBy?: mongoose.Types.ObjectId
+  createdBy: mongoose.Types.ObjectId | string
+  updatedBy?: mongoose.Types.ObjectId | string
   createdAt: Date
   updatedAt: Date
   feedbackStats?: {
@@ -47,6 +48,7 @@ export interface IWord extends Document {
     trusted: number
     needsReview: number
   }
+  reviewStatus?: "flagged" | "reviewed" | null
 }
 
 /**
@@ -55,8 +57,7 @@ export interface IWord extends Document {
  * It defines the structure, data types, and validation for dictionary word entries.
  * It also includes text indexes on the `balti` and `english` fields to optimize search performance.
  */
-const WordSchema = new Schema(
-  {
+const wordSchemaDefinition: Record<string, unknown> = {
     balti: {
       type: String,
       required: true,
@@ -140,11 +141,13 @@ const WordSchema = new Schema(
         default: 0,
       },
     },
-  },
-  { timestamps: true },
-)
+  }
+
+const UntypedSchema = Schema as any
+const WordSchema: Schema = new UntypedSchema(wordSchemaDefinition, { timestamps: true })
 
 // Create text indexes for search
 WordSchema.index({ balti: "text", english: "text" })
 
-export default mongoose.models.Word || mongoose.model<IWord>("Word", WordSchema)
+const UntypedMongoose = mongoose as any
+export default UntypedMongoose.models.Word || UntypedMongoose.model("Word", WordSchema)

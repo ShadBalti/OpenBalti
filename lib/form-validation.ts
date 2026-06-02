@@ -130,11 +130,10 @@ export function validateField(
 
   // Check pattern
   if (rules.pattern) {
-    const patternValidator = validationRules[rules.pattern]
-    if (patternValidator && typeof patternValidator === "function") {
-      if (!patternValidator(value)) {
-        return errorMessages[rules.pattern as keyof typeof errorMessages] || errorMessages.invalidInput
-      }
+    const patternValidator = (patternValue: string) => validationPatterns[rules.pattern!].test(patternValue)
+    if (!patternValidator(value)) {
+      const patternMessage = errorMessages[rules.pattern as keyof typeof errorMessages]
+      return typeof patternMessage === "string" ? patternMessage : errorMessages.invalidInput
     }
   }
 

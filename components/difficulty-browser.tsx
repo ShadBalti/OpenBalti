@@ -19,7 +19,17 @@ interface DifficultyGroup {
  *
  * @returns {JSX.Element} The rendered difficulty browser component.
  */
-export default function DifficultyBrowser() {
+interface DifficultyBrowserProps {
+  selectedDifficulty?: string | null
+  onDifficultyChange?: (difficulty: string | null) => void
+  inline?: boolean
+}
+
+export default function DifficultyBrowser({
+  selectedDifficulty = null,
+  onDifficultyChange,
+  inline = false,
+}: DifficultyBrowserProps) {
   const [difficulties, setDifficulties] = useState<DifficultyGroup[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -82,33 +92,48 @@ export default function DifficultyBrowser() {
     )
   }
 
+  const renderDifficultyButton = (difficulty: DifficultyGroup) => (
+    <Button
+      variant={selectedDifficulty === difficulty.level ? "default" : "outline"}
+      className="w-full justify-between"
+      onClick={() => onDifficultyChange?.(selectedDifficulty === difficulty.level ? null : difficulty.level)}
+    >
+      <div className="flex items-center">
+        <GraduationCap className="mr-2 h-4 w-4 text-primary" />
+        <span className="capitalize">{difficulty.level}</span>
+      </div>
+      <div className="flex items-center">
+        <span className="text-muted-foreground mr-2">{difficulty.count} words</span>
+        <ChevronRight className="h-4 w-4" />
+      </div>
+    </Button>
+  )
+
+  const content = (
+    <div className="grid gap-2">
+      {difficulties.map((difficulty) =>
+        inline ? (
+          <div key={difficulty.level}>{renderDifficultyButton(difficulty)}</div>
+        ) : (
+          <Link key={difficulty.level} href={`/?difficulty=${encodeURIComponent(difficulty.level)}`} className="block">
+            {renderDifficultyButton(difficulty)}
+          </Link>
+        )
+      )}
+    </div>
+  )
+
+  if (inline) {
+    return content
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Browse by Difficulty</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid gap-2">
-          {difficulties.map((difficulty) => (
-            <Link
-              key={difficulty.level}
-              href={`/?difficulty=${encodeURIComponent(difficulty.level)}`}
-              className="block"
-            >
-              <Button variant="outline" className="w-full justify-between">
-                <div className="flex items-center">
-                  <GraduationCap className="mr-2 h-4 w-4 text-primary" />
-                  <span className="capitalize">{difficulty.level}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-muted-foreground mr-2">{difficulty.count} words</span>
-                  <ChevronRight className="h-4 w-4" />
-                </div>
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </CardContent>
+      <CardContent>{content}</CardContent>
     </Card>
   )
+
 }

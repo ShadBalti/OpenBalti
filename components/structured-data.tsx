@@ -26,13 +26,17 @@ export function DictionaryStructuredData({
    */
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
 
-  const structuredData = {
+  const keywords = Array.isArray(baseMetadata.keywords)
+    ? baseMetadata.keywords.join(", ")
+    : baseMetadata.keywords
+
+  const structuredData: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Dataset",
     name: name,
     description: description,
     url: url,
-    keywords: baseMetadata.keywords?.join(", "),
+    keywords,
     creator: {
       "@type": "Organization",
       name: "OpenBalti Project",

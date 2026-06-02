@@ -220,7 +220,7 @@ export default function ReviewPage() {
       if (result.success) {
         // Update the word in the local state
         setWords((prevWords) =>
-          prevWords.map((word) => (word._id === wordId ? { ...word, reviewStatus: status } : word)),
+          prevWords.map((word) => (word._id === wordId ? ({ ...word, reviewStatus: status } as IWord) : word)),
         )
 
         return true
@@ -407,7 +407,7 @@ export default function ReviewPage() {
                         <TableRow key={word._id} className="group">
                           <TableCell className="font-medium">{word.balti}</TableCell>
                           <TableCell>{word.english}</TableCell>
-                          <TableCell>{getReviewStatusBadge(word.reviewStatus)}</TableCell>
+                          <TableCell>{getReviewStatusBadge(word.reviewStatus ?? null)}</TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-1">
                               <Button

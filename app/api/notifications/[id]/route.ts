@@ -9,7 +9,8 @@ import dbConnect from "@/lib/mongodb"
  * PUT /api/notifications/[id]
  * Mark a specific notification as read
  */
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
 
@@ -20,7 +21,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     await dbConnect()
 
     // Verify the notification belongs to the user
-    const notification = await Notification.findById(params.id)
+    const notification = await Notification.findById(id)
 
     if (!notification) {
       return NextResponse.json({ success: false, error: "Notification not found" }, { status: 404 })
@@ -30,7 +31,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 })
     }
 
-    const updated = await NotificationService.markAsRead(params.id)
+    const updated = await NotificationService.markAsRead(id)
 
     return NextResponse.json({
       success: true,
@@ -46,7 +47,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
  * DELETE /api/notifications/[id]
  * Delete a specific notification
  */
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
 
@@ -57,7 +59,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     await dbConnect()
 
     // Verify the notification belongs to the user
-    const notification = await Notification.findById(params.id)
+    const notification = await Notification.findById(id)
 
     if (!notification) {
       return NextResponse.json({ success: false, error: "Notification not found" }, { status: 404 })
@@ -67,7 +69,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 })
     }
 
-    await NotificationService.delete(params.id)
+    await NotificationService.delete(id)
 
     return NextResponse.json({
       success: true,

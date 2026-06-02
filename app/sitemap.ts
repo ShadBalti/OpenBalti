@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
+import type { IWord } from "@/models/Word"
 
 /**
  * Safe slug generator for URLs
@@ -29,8 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .exec()
 
     wordUrls = words
-      .filter((w) => w?.english)
-      .map((word) => {
+      .filter((w: Partial<IWord>) => w?.english)
+      .map((word: Partial<IWord>) => {
         const slug = slugify(word.english as string)
 
         return {

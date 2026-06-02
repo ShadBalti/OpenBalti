@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
+import type { IWord } from "@/models/Word"
 import { calculateFuzzyScore } from "@/lib/fuzzy-search"
 import { searchCache, type CacheKey } from "@/lib/search-cache"
 
@@ -55,23 +56,22 @@ export async function GET(req: NextRequest) {
       }))
     }
 
-    let results = await Word.find(query).sort({ createdAt: -1 })
+    let results = (await Word.find(query).sort({ createdAt: -1 })) as IWord[]
 
     // Apply fuzzy matching if enabled
     if (search && fuzzy) {
       results = results
-        .map((word) => ({
+        .map((word: IWord) => ({
           word,
           score: Math.max(calculateFuzzyScore(search, word.balti), calculateFuzzyScore(search, word.english)),
         }))
-        .filter(({ score }) => score >= 0.6)
-        .sort((a, b) => b.score - a.score)
-        .map(({ word }) => word)
+        .filter(({ score }: { score: number }) => score >= 0.6)
+        .sort((a: { score: number }, b: { score: number }) => b.score - a.score)
+        .map(({ word }: { word: IWord }) => word)
     } else if (search) {
       // Standard regex search
-      const searchRegex = { $regex: search, $options: "i" }
       results = results.filter(
-        (word) => word.balti.match(new RegExp(search, "i")) || word.english.match(new RegExp(search, "i")),
+        (word: IWord) => word.balti.match(new RegExp(search, "i")) || word.english.match(new RegExp(search, "i")),
       )
     }
 

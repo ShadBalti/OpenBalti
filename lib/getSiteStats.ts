@@ -89,7 +89,7 @@ export const getTopContributors = unstable_cache(
         },
       ])
       
-      return topContributors.filter((c) => c.userId && c.username)
+      return topContributors.filter((c: { userId?: unknown; username?: unknown }) => c.userId && c.username)
     } catch (error) {
       console.error("[getTopContributors] Error fetching contributors:", error)
       return []

@@ -170,7 +170,7 @@ export async function checkAndAwardBadges(userId: string): Promise<IBadge[]> {
     }
 
     const stats = user.contributionStats || { wordsAdded: 0, wordsEdited: 0, wordsReviewed: 0 }
-    const existingBadgeIds = new Set((user.badges || []).map((b) => b.id))
+    const existingBadgeIds = new Set((user.badges || []).map((b: IBadge) => b.id))
     const newBadges: IBadge[] = []
 
     // Check each badge definition

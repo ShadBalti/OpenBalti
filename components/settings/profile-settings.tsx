@@ -20,6 +20,9 @@ const formSchema = z.object({
   isPublic: z.boolean().default(true),
 })
 
+type ProfileFormInput = z.input<typeof formSchema>
+type ProfileFormValues = z.output<typeof formSchema>
+
 interface ProfileSettingsProps {
   user: {
     id: string
@@ -36,7 +39,7 @@ interface ProfileSettingsProps {
 export default function ProfileSettings({ user }: ProfileSettingsProps) {
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ProfileFormInput, unknown, ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: user.name || "",
@@ -47,7 +50,7 @@ export default function ProfileSettings({ user }: ProfileSettingsProps) {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: ProfileFormValues) {
     setIsLoading(true)
 
     try {

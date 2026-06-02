@@ -11,9 +11,10 @@ const validateObjectId = (id: string): boolean => {
   return isValidObjectId(id)
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
@@ -22,7 +23,6 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    const { id } = params
     const { content } = await req.json()
 
     if (!content || content.trim().length === 0) {
@@ -74,13 +74,13 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   }
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
-    const { id } = params
 
     await dbConnect()
 

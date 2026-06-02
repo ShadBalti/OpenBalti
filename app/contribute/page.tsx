@@ -376,7 +376,7 @@ export default async function ContributePage() {
 
           {topContributors && topContributors.length > 0 ? (
             <div className="grid md:grid-cols-3 gap-6 mb-8">
-              {topContributors.map((contributor, idx) => (
+              {topContributors.map((contributor: any, idx: number) => (
                 <Card key={idx} className="text-center border-primary/20 hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="mb-4">

@@ -10,6 +10,7 @@ import {
 } from "@/components/structured-data"
 import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 import Word from "@/models/Word"
+import type { IWord } from "@/models/Word"
 import dbConnect from "@/lib/mongodb"
 
 export const metadata: Metadata = generatePageMetadata(
@@ -84,7 +85,7 @@ async function getInitialWords() {
       .sort({ createdAt: -1 })
       .limit(50)
       .lean()
-    return words ? words.map(word => JSON.parse(JSON.stringify(word))) : []
+    return words ? words.map((word: IWord) => JSON.parse(JSON.stringify(word))) : []
   } catch (error) {
     console.error("Error fetching words:", error)
     return []
@@ -153,7 +154,7 @@ export default async function DictionaryPage() {
             <section className="sr-only" aria-labelledby="seo-word-list">
               <h2 id="seo-word-list">Featured Dictionary Words</h2>
               <ul>
-                {initialWords.map((word) => (
+                {initialWords.map((word: any) => (
                   <li key={word._id?.toString()}>
                     <a href={`/words/${word.english.toLowerCase().replace(/\s+/g, '-')}`}>
                       {word.balti} - {word.english}
@@ -193,7 +194,7 @@ export default async function DictionaryPage() {
               "@type": "DefinedTermSet",
               numberOfTerms: totalWords,
               // Include featured words for better SEO coverage
-              hasPart: initialWords.map((word) => ({
+              hasPart: initialWords.map((word: any) => ({
                 "@type": "DefinedTerm",
                 name: word.balti,
                 description: word.english,

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import type { Metric } from "web-vitals"
 
 /**
  * Hook to track Web Vitals (LCP, FID, CLS, TTFB, INP)
@@ -9,19 +10,17 @@ import { useEffect } from "react"
 export function useWebVitals() {
   useEffect(() => {
     // Import web-vitals library dynamically
-    import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB, getINP }) => {
-      getCLS(sendMetric)
-      getFID(sendMetric)
-      getFCP(sendMetric)
-      getLCP(sendMetric)
-      getTTFB(sendMetric)
-      // INP (Interaction to Next Paint) - newer metric replacing FID
-      if (getINP) getINP(sendMetric)
+    import("web-vitals").then(({ onCLS, onFCP, onLCP, onTTFB, onINP }) => {
+      onCLS(sendMetric)
+      onFCP(sendMetric)
+      onLCP(sendMetric)
+      onTTFB(sendMetric)
+      onINP(sendMetric)
     })
   }, [])
 }
 
-function sendMetric(metric: any) {
+function sendMetric(metric: Metric) {
   // Determine if metric is "good" (within Web Vitals thresholds)
   const isGood = isWebVitalGood(metric.name, metric.value)
   
@@ -52,7 +51,7 @@ function sendMetric(metric: any) {
       value: Math.round(metric.delta),
       delta: metric.delta,
       id: metric.id,
-      timestamp: metric.startTime,
+      timestamp: Date.now(),
       rating: metric.rating || "none",
     }))
   }

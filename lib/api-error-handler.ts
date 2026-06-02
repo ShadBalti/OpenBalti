@@ -109,7 +109,7 @@ export function createErrorResponse(
     message: finalMessage,
     timestamp: new Date().toISOString(),
     ...(requestId && { requestId }),
-    ...(details && { details }),
+    ...(details !== undefined ? { details } : {}),
     severity,
   }
 

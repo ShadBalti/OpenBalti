@@ -4,8 +4,11 @@ import { ThumbsUp, Shield, AlertTriangle, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface FeedbackFilterProps {
-  onFilterChange: (filter: string | null) => void
-  activeFilter: string | null
+  onFilterChange?: (filter: string | null) => void
+  activeFilter?: string | null
+  selectedFeedback?: string | null
+  onFeedbackChange?: (filter: string | null) => void
+  inline?: boolean
 }
 
 /**
@@ -17,7 +20,15 @@ interface FeedbackFilterProps {
  * @param {string | null} props.activeFilter - The currently active filter.
  * @returns {JSX.Element} The rendered feedback filter component.
  */
-export default function FeedbackFilter({ onFilterChange, activeFilter }: FeedbackFilterProps) {
+export default function FeedbackFilter({
+  onFilterChange,
+  activeFilter,
+  selectedFeedback,
+  onFeedbackChange,
+  inline = false,
+}: FeedbackFilterProps) {
+  const currentFilter = selectedFeedback ?? activeFilter ?? null
+  const handleChange = onFeedbackChange ?? onFilterChange ?? (() => undefined)
   const filters = [
     { id: "useful", label: "Most Useful", icon: <ThumbsUp className="h-4 w-4 mr-2" /> },
     { id: "trusted", label: "Most Trusted", icon: <Shield className="h-4 w-4 mr-2" /> },
@@ -25,22 +36,22 @@ export default function FeedbackFilter({ onFilterChange, activeFilter }: Feedbac
   ]
 
   const handleFilterClick = (filterId: string) => {
-    if (activeFilter === filterId) {
-      onFilterChange(null)
+    if (currentFilter === filterId) {
+      handleChange(null)
     } else {
-      onFilterChange(filterId)
+      handleChange(filterId)
     }
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
+    <div className={`flex flex-wrap gap-2 ${inline ? "" : "mb-4"}`}>
       <div className="flex items-center mr-2">
         <span className="text-sm font-medium mr-2">Filter by feedback:</span>
       </div>
       {filters.map((filter) => (
         <Button
           key={filter.id}
-          variant={activeFilter === filter.id ? "default" : "outline"}
+          variant={currentFilter === filter.id ? "default" : "outline"}
           size="sm"
           onClick={() => handleFilterClick(filter.id)}
           className="flex items-center"
@@ -49,10 +60,10 @@ export default function FeedbackFilter({ onFilterChange, activeFilter }: Feedbac
           {filter.label}
         </Button>
       ))}
-      {activeFilter && (
+      {currentFilter && (
         <Badge variant="outline" className="flex items-center gap-1">
           Active filter
-          <Button variant="ghost" size="icon" onClick={() => onFilterChange(null)} className="h-4 w-4 p-0 ml-1">
+          <Button variant="ghost" size="icon" onClick={() => handleChange(null)} className="h-4 w-4 p-0 ml-1">
             <X className="h-3 w-3" />
             <span className="sr-only">Clear filter</span>
           </Button>
