@@ -1,4 +1,6 @@
-import { ReactNode } from "react"
+"use client"
+
+import { ReactNode, useState, useEffect } from "react"
 import { Calendar, Clock, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -47,11 +49,32 @@ export function BlogArticleLayout({
   children,
   relatedArticles,
 }: BlogArticleLayoutProps) {
+  const [readingProgress, setReadingProgress] = useState(0)
   const currentUrl = typeof window !== "undefined" ? window.location.href : ""
   const categoryClass = categoryColors[category] || categoryColors.Learning
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+      setReadingProgress(scrollPercent)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
     <main className="min-h-screen bg-background">
+      {/* Reading Progress Bar */}
+      <div className="fixed top-16 left-0 right-0 h-1 bg-secondary z-50">
+        <div
+          className="h-full bg-primary transition-all duration-300"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
       {/* Article Header */}
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Category Badge */}

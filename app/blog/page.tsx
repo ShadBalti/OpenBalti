@@ -19,7 +19,13 @@ export const metadata = generateMetadata(
   },
 )
 
-export default function BlogPage() {
+interface BlogPageProps {
+  searchParams: Promise<{ category?: string }>
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const params = await searchParams
+  const selectedCategory = params.category?.toLowerCase()
   const articles = [
     {
       slug: "getting-started-with-balti",
@@ -83,6 +89,17 @@ export default function BlogPage() {
     },
   ]
 
+  const categories = [
+    { name: "Learning", color: "blue" },
+    { name: "Culture", color: "amber" },
+    { name: "Linguistics", color: "purple" },
+    { name: "Community", color: "green" },
+  ]
+
+  const filteredArticles = selectedCategory
+    ? articles.filter((article) => article.category.toLowerCase() === selectedCategory)
+    : articles
+
   return (
     <main className="min-h-screen">
       {/* Enhanced Hero Section */}
@@ -100,10 +117,50 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* Category Filter */}
+      <section className="sticky top-16 z-40 py-4 px-4 sm:px-6 lg:px-8 bg-background/80 backdrop-blur-sm border-b border-border">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2">
+            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">Filter:</span>
+            <Link
+              href="/blog"
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                !selectedCategory
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              }`}
+            >
+              All Articles
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat.name}
+                href={`/blog?category=${cat.name.toLowerCase()}`}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                  selectedCategory === cat.name.toLowerCase()
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                }`}
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Articles Grid */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
+        {filteredArticles.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-muted-foreground text-lg mb-4">No articles found in this category.</p>
+            <Link href="/blog" className="text-primary hover:underline font-medium">
+              View all articles →
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredArticles.map((article) => (
             <article
               key={article.slug}
               className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
@@ -160,31 +217,8 @@ export default function BlogPage() {
               </div>
             </article>
           ))}
-        </div>
-      </section>
-
-      {/* Category Browse Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-secondary/20">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold mb-8 text-center">Browse by Category</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto">
-            {[
-              { name: "Learning", color: "blue" },
-              { name: "Culture", color: "amber" },
-              { name: "Linguistics", color: "purple" },
-              { name: "Community", color: "green" },
-            ].map((category) => (
-              <Link
-                key={category.name}
-                href={`/blog?category=${category.name.toLowerCase()}`}
-                className={`p-4 bg-card border border-border rounded-lg hover:border-${category.color}-500/50 transition-colors group`}
-              >
-                <h3 className="font-semibold group-hover:text-primary transition-colors">{category.name}</h3>
-                <p className="text-sm text-muted-foreground">Explore {category.name.toLowerCase()} articles</p>
-              </Link>
-            ))}
           </div>
-        </div>
+        )}
       </section>
 
       {/* CTA Section */}

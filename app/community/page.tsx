@@ -13,6 +13,7 @@ import ContributionActions from "@/components/community/contribution-actions"
 import ShareWidget from "@/components/community/share-widget"
 import WordOfDay from "@/components/word-of-day"
 import WordActivitySection from "@/components/community/word-activity-section"
+import JoinUsers from "@/components/community/join-users"
 
 /**
  * Community Page - Showcases community activity, engagement, and leaderboards
@@ -22,13 +23,16 @@ export default function CommunityPage() {
     <main className="min-h-screen bg-background">
       <div className="container py-8 md:py-12">
         <div className="space-y-12">
-          {/* Header */}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                Community
+          {/* Header Section */}
+          <div className="space-y-8 border-b border-border pb-8">
+            <div className="space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full mb-4">
+                <span className="text-xs font-semibold text-primary uppercase tracking-wide">Community Hub</span>
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+                Together We Thrive
               </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl">
+              <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
                 Join thousands of contributors preserving and growing the Balti language. 
                 See live activity, trending contributions, and celebrate our community&apos;s achievements.
               </p>
@@ -37,16 +41,23 @@ export default function CommunityPage() {
             {/* Hero Stats */}
             <Suspense
               fallback={
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {[...Array(4)].map((_, i) => (
-                    <Skeleton key={i} className="h-32 w-full" />
-                  ))}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, i) => (
+                      <Skeleton key={i} className="h-40 w-full" />
+                    ))}
+                  </div>
                 </div>
               }
             >
               <CommunityHeroStats />
             </Suspense>
           </div>
+
+          {/* Join Users Section */}
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <JoinUsers limit={12} />
+          </Suspense>
 
           {/* Word of the Day */}
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -56,7 +67,10 @@ export default function CommunityPage() {
           </Suspense>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="border-t border-border pt-8">
+            <h2 className="text-3xl font-bold mb-8">Community Highlights</h2>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: Live Feed + Leaderboards */}
             <div className="lg:col-span-2 space-y-6">
               {/* Live Feed */}
@@ -130,20 +144,32 @@ export default function CommunityPage() {
           </div>
 
           {/* CTA Section */}
-          <div className="rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 p-8 md:p-12 text-center space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold">
-              Ready to Make an Impact?
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Join our community of language enthusiasts and contribute to preserving Balti 
-              language and culture for generations to come.
-            </p>
-            <a
-              href="/contribute"
-              className="inline-block px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
-            >
-              Start Contributing
-            </a>
+          <div className="border-t border-border pt-12 mt-8">
+            <div className="rounded-xl bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 border border-primary/30 p-8 md:p-16 text-center space-y-6">
+              <div className="space-y-3">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                  Ready to Make an Impact?
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                  Join our community of language enthusiasts and contribute to preserving Balti 
+                  language and culture for generations to come.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="/contribute"
+                  className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all hover:shadow-lg hover:shadow-primary/30"
+                >
+                  Start Contributing
+                </a>
+                <a
+                  href="/community/members"
+                  className="px-8 py-3 bg-card border border-border rounded-lg font-medium hover:border-primary/50 hover:shadow-md transition-all"
+                >
+                  View All Members
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
