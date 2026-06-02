@@ -32,7 +32,11 @@ export default function WordEditPage() {
   useEffect(() => {
     if (word && session) {
       // Allow edit if user is creator, admin, founder, or moderator
-      const isCreator = session.user?.id === (word.createdBy as any)?._id
+      // Convert both to strings for comparison since createdBy can be an object or ID string
+      const creatorId = typeof (word.createdBy as any) === 'object' 
+        ? (word.createdBy as any)?._id?.toString() 
+        : (word.createdBy as any)?.toString()
+      const isCreator = session.user?.id === creatorId
       const isAdmin = session.user?.role === "admin"
       const isFounder = (session.user as any)?.isFounder === true
       const isModerator = (session.user as any)?.isModerator === true
