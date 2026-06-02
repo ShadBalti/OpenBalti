@@ -36,8 +36,9 @@ export default function JoinUsers({ limit = 12 }: JoinUsersProps) {
       const response = await fetch(`/api/users?limit=${limit}&sortBy=contributions`)
       const result = await response.json()
       if (result.success) {
-        setUsers(result.data.users || [])
-        setTotalUsers(result.data.total || result.data.users?.length || 0)
+        const usersData = Array.isArray(result.data) ? result.data : result.data.users || []
+        setUsers(usersData)
+        setTotalUsers(result.pagination?.total || usersData.length || 0)
       }
     } catch (error) {
       console.error("[v0] Failed to fetch active users:", error)
