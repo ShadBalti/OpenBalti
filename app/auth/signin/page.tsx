@@ -1,11 +1,12 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import SignInForm from "@/components/auth/signin-form"
-import { generateMetadata } from "@/lib/metadata"
+import { generateNoIndexMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = generateMetadata(
+export const metadata: Metadata = generateNoIndexMetadata(
   "Sign In",
   "Sign in to your OpenBalti account to contribute to the dictionary.",
+  "/auth/signin",
 )
 
 /**

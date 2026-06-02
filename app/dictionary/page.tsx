@@ -52,11 +52,11 @@ export const metadata: Metadata = generatePageMetadata(
       description: "Browse thousands of Balti words with English translations, pronunciations, and examples. Contribute to language preservation.",
       images: [
         {
-          url: "https://openbalti.com/og-dictionary.jpg",
+          url: "/android-chrome-512x512.png",
           width: 1200,
           height: 630,
           alt: "OpenBalti Dictionary - Browse and preserve the Balti language",
-          type: "image/jpeg",
+          type: "image/png",
         },
       ],
       siteName: "OpenBalti",
@@ -66,7 +66,7 @@ export const metadata: Metadata = generatePageMetadata(
       card: "summary_large_image",
       title: "OpenBalti Dictionary - Balti-English Translation",
       description: "Browse thousands of Balti words with translations, pronunciations, and examples",
-      images: ["https://openbalti.com/og-dictionary.jpg"],
+      images: ["/android-chrome-512x512.png"],
       creator: "@openbalti",
       site: "@openbalti",
     },

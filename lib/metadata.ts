@@ -1,5 +1,29 @@
-import type { Metadata } from "next";
-import { getKeywordsFor } from "@/lib/seoKeywords";
+import type { Metadata } from "next"
+import { getKeywordsFor } from "@/lib/seoKeywords"
+
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"
+const defaultOgImage = "/android-chrome-512x512.png"
+
+function toAbsoluteUrl(url: string): string {
+  if (/^https?:\/\//i.test(url)) {
+    return url
+  }
+
+  return new URL(url.startsWith("/") ? url : `/${url}`, siteUrl).toString()
+}
+
+const defaultRobots: Metadata["robots"] = {
+  index: true,
+  follow: true,
+  nocache: false,
+  googleBot: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+  },
+}
 
 /**
  * @const {Metadata} baseMetadata
@@ -9,7 +33,8 @@ import { getKeywordsFor } from "@/lib/seoKeywords";
  * This object is extended by the `generateMetadata` function for page-specific overrides.
  */
 export const baseMetadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://openbalti.com"),
+  metadataBase: new URL(siteUrl),
+  applicationName: "OpenBalti",
   title: {
     default: "OpenBalti Dictionary | Free Online Balti Language Resource",
     template: "%s | OpenBalti Dictionary",
@@ -17,43 +42,41 @@ export const baseMetadata: Metadata = {
   description:
     "OpenBalti is a clean, modern Balti–English dictionary that helps you explore meanings, learn everyday phrases, and understand Balti culture while supporting language preservation.",
   keywords: [
-  "Balti language",
-  "Balti dictionary",
-  "Balti translator",
-  "English to Balti translation",
-  "Balti to English translation",
-  "Balti words meaning",
-  "Balti vocabulary",
-  "Learn Balti",
-  "Balti grammar",
-  "Balti phrases",
-  "Balti script",
-  "Balti writing system",
-  "Baltistan language",
-  "Balti culture",
-  "Balti language preservation",
-  "Balti heritage",
-  "Endangered languages Pakistan",
-  "Balti learning resources",
-  "OpenBalti",
-  "Digital Balti dictionary",
-  "Language preservation project",
-  "Balti word list A–Z",
-  "Balti verbs",
-  "Balti nouns",
-  "Balti adjectives",
-  "Balti new words",
-],
-  authors: [{ name: "OpenBalti Team" }],
+    ...getKeywordsFor("/"),
+    "Balti language",
+    "Balti dictionary",
+    "Balti translator",
+    "English to Balti translation",
+    "Balti to English translation",
+    "Balti words meaning",
+    "Balti vocabulary",
+    "Learn Balti",
+    "Balti grammar",
+    "Balti phrases",
+    "Balti script",
+    "Balti writing system",
+    "Baltistan language",
+    "Balti culture",
+    "Balti language preservation",
+    "Balti heritage",
+    "Endangered languages Pakistan",
+    "Balti learning resources",
+    "OpenBalti",
+    "Digital Balti dictionary",
+    "Language preservation project",
+    "Balti word list A–Z",
+    "Balti verbs",
+    "Balti nouns",
+    "Balti adjectives",
+    "Balti new words",
+  ],
+  authors: [{ name: "OpenBalti Team", url: siteUrl }],
   creator: "OpenBalti Project",
   publisher: "OpenBalti Project",
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-  },
+  category: "education",
+  robots: defaultRobots,
   alternates: {
-    canonical: "https://openbalti.com",
+    canonical: siteUrl,
   },
   formatDetection: {
     email: false,
@@ -65,20 +88,21 @@ export const baseMetadata: Metadata = {
     title: "OpenBalti Dictionary | Free Online Balti Language Resource",
     description:
       "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
-    images: ["/android-chrome-512x512.png"],
+    images: [defaultOgImage],
     creator: "@openbalti",
+    site: "@openbalti",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://openbalti.com",
+    url: siteUrl,
     title: "OpenBalti Dictionary | Free Online Balti Language Resource",
     description:
       "OpenBalti is a comprehensive and user-friendly online dictionary that helps you translate and learn the Balti language.",
     siteName: "OpenBalti Dictionary",
     images: [
       {
-        url: "/android-chrome-512x512.png",
+        url: defaultOgImage,
         width: 1200,
         height: 630,
         alt: "OpenBalti Dictionary",
@@ -86,9 +110,12 @@ export const baseMetadata: Metadata = {
     ],
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },
+      { url: "/icon-dark-32x32.png", media: "(prefers-color-scheme: dark)" },
+    ],
+    apple: "/apple-icon.png",
   },
   manifest: "/site.webmanifest",
 }
@@ -113,41 +140,90 @@ export function generateMetadata(
     overrides?: Partial<Metadata>
   }
 ): Metadata {
-  const { keywords = [], canonical, overrides = {}, ...metadataOverrides } = options || {}
+  const {
+    keywords = [],
+    canonical,
+    overrides = {},
+    openGraph: openGraphOverrides,
+    twitter: twitterOverrides,
+    alternates: alternatesOverrides,
+    robots: robotsOverrides,
+    ...metadataOverrides
+  } = options || {}
+  const {
+    openGraph: overrideOpenGraph,
+    twitter: overrideTwitter,
+    alternates: overrideAlternates,
+    robots: overrideRobots,
+    ...remainingOverrides
+  } = overrides
   const pageDescription = description || baseMetadata.description
-  const mergedOverrides: Partial<Metadata> = {
-    ...metadataOverrides,
-    ...(canonical
-      ? {
-          alternates: {
-            ...(baseMetadata.alternates || {}),
-            ...(metadataOverrides.alternates || {}),
-            canonical,
-          },
-        }
-      : {}),
-    ...overrides,
+  const canonicalUrl = canonical ? toAbsoluteUrl(canonical) : undefined
+  const baseKeywords = Array.isArray(baseMetadata.keywords) ? baseMetadata.keywords : []
+  const uniqueKeywords = Array.from(new Set([...baseKeywords, ...keywords].filter(Boolean)))
+
+  const pageOpenGraph: Metadata["openGraph"] = {
+    ...baseMetadata.openGraph,
+    title,
+    description: pageDescription || baseMetadata.openGraph?.description,
+    ...(canonicalUrl ? { url: canonicalUrl } : { url: undefined }),
+    ...(openGraphOverrides || {}),
+    ...(overrideOpenGraph || {}),
+  }
+
+  const pageTwitter: Metadata["twitter"] = {
+    ...baseMetadata.twitter,
+    title,
+    description: pageDescription || baseMetadata.twitter?.description,
+    ...(twitterOverrides || {}),
+    ...(overrideTwitter || {}),
   }
 
   return {
-    ...baseMetadata,
+    metadataBase: baseMetadata.metadataBase,
+    applicationName: baseMetadata.applicationName,
+    authors: baseMetadata.authors,
+    creator: baseMetadata.creator,
+    publisher: baseMetadata.publisher,
+    category: baseMetadata.category,
+    formatDetection: baseMetadata.formatDetection,
+    icons: baseMetadata.icons,
+    manifest: baseMetadata.manifest,
+    robots: {
+      ...(defaultRobots as object),
+      ...((robotsOverrides || {}) as object),
+      ...((overrideRobots || {}) as object),
+    },
     title,
     description: pageDescription,
-    keywords: [...(baseMetadata.keywords || []), ...keywords],
-    openGraph: {
-      ...baseMetadata.openGraph,
-      title,
-      description: pageDescription || baseMetadata.openGraph?.description,
-      ...(metadataOverrides.openGraph || {}),
-      ...(overrides.openGraph || {}),
-    },
-    twitter: {
-      ...baseMetadata.twitter,
-      title,
-      description: pageDescription || baseMetadata.twitter?.description,
-      ...(metadataOverrides.twitter || {}),
-      ...(overrides.twitter || {}),
-    },
-    ...mergedOverrides,
+    keywords: uniqueKeywords,
+    openGraph: pageOpenGraph,
+    twitter: pageTwitter,
+    alternates: canonicalUrl
+      ? {
+          canonical: canonicalUrl,
+          ...(alternatesOverrides || {}),
+          ...(overrideAlternates || {}),
+        }
+      : {
+          ...(alternatesOverrides || {}),
+          ...(overrideAlternates || {}),
+        },
+    ...metadataOverrides,
+    ...remainingOverrides,
   }
+}
+
+export function generateNoIndexMetadata(title: string, description?: string, canonical?: string): Metadata {
+  return generateMetadata(title, description, {
+    canonical,
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  })
 }
