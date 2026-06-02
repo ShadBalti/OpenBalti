@@ -3,16 +3,17 @@ import dbConnect from "@/lib/mongodb"
 import WordHistory from "@/models/WordHistory"
 import Word from "@/models/Word"
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    console.log(`🔄 API: Connecting to MongoDB for fetching history of word ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for fetching history of word ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for fetching history of word ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for fetching history of word ID: ${id}`)
 
     // First check if the word exists
-    const word = await Word.findById(params.id)
+    const word = await Word.findById(id)
     if (!word) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found`)
+      console.log(`⚠️ API: Word with ID ${id} not found`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
@@ -25,12 +26,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     const skip = (page - 1) * limit
 
     // Fetch history with pagination
-    const history = await WordHistory.find({ wordId: params.id }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean()
+    const history = await WordHistory.find({ wordId: id }).sort({ createdAt: -1 }).skip(skip).limit(limit).lean()
 
     // Get total count for pagination
-    const totalCount = await WordHistory.countDocuments({ wordId: params.id })
+    const totalCount = await WordHistory.countDocuments({ wordId: id })
 
-    console.log(`📋 API: Successfully fetched ${history.length} history entries for word ID: ${params.id}`)
+    console.log(`📋 API: Successfully fetched ${history.length} history entries for word ID: ${id}`)
 
     return NextResponse.json({
       success: true,
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       },
     })
   } catch (error) {
-    console.error(`❌ API Error fetching history for word ID ${params.id}:`, error)
+    console.error(`❌ API Error fetching history for word ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to fetch word history" }, { status: 500 })
   }
 }

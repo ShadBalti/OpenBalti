@@ -4,7 +4,8 @@ import { generateMetadata as generateUserMetadata } from "@/lib/metadata"
 import UserProfile from "@/components/profile/user-profile"
 import { ErrorBoundary } from "@/components/error-boundary"
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  await params
   return generateUserMetadata("User Profile", "View contributor profile and statistics")
 }
 
@@ -18,7 +19,8 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
  * @param {string} props.params.id - The ID of the user whose profile is to be displayed.
  * @returns {JSX.Element} The rendered user profile page.
  */
-export default function UserProfilePage({ params }: { params: { id: string } }) {
+export default async function UserProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   return (
     <div className="container py-8 md:py-12">
       <div className="mx-auto max-w-4xl space-y-8">
@@ -49,7 +51,7 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
               </div>
             }
           >
-            <UserProfile userId={params.id} />
+            <UserProfile userId={id} />
           </Suspense>
         </ErrorBoundary>
       </div>

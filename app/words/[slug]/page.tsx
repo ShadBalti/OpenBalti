@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
+import type { IWord } from "@/models/Word"
 import WordHistory from "@/models/WordHistory"
 import User from "@/models/User"
 import { generateMetadata as generatePageMetadata } from "@/lib/metadata"
@@ -12,7 +13,7 @@ import { serializeObject, serializeArray } from "@/lib/serialize"
 import { slugToWord, wordToSlug } from "@/lib/utils"
 
 interface WordPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 async function getWordByEnglish(slug: string) {
@@ -141,7 +142,7 @@ export async function generateStaticParams() {
   try {
     await dbConnect()
     const words = await Word.find({}).select("english").lean().limit(1000)
-    return words.map((word) => ({
+    return words.map((word: Pick<IWord, "english">) => ({
       slug: wordToSlug(word.english),
     }))
   } catch {

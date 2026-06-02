@@ -8,9 +8,9 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateStaticParams() {
@@ -21,7 +21,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const author = getAuthor(params.slug)
+  const { slug } = await params
+  const author = getAuthor(slug)
 
   if (!author) {
     return {
@@ -53,8 +54,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function AuthorPage({ params }: Props) {
-  const author = getAuthor(params.slug)
+export default async function AuthorPage({ params }: Props) {
+  const { slug } = await params
+  const author = getAuthor(slug)
 
   if (!author) {
     notFound()

@@ -78,7 +78,7 @@ export default function AdvancedSearch({ onSearch, isLoading = false }: Advanced
   })
   
   const suggestionsRef = useRef < HTMLDivElement > (null)
-  const debounceTimer = useRef < NodeJS.Timeout > ()
+  const debounceTimer = useRef < NodeJS.Timeout | null > (null)
 
   // Initialize placeholder suggestions
   useEffect(() => {

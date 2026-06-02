@@ -91,7 +91,7 @@ export interface IUser extends Document {
  * It defines the structure, validation, and middleware for user documents stored in MongoDB.
  * This schema includes a pre-save hook to automatically hash user passwords.
  */
-const UserSchema: Schema = new Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -219,17 +219,12 @@ const UserSchema: Schema = new Schema(
 )
 
 // Hash password before saving
-UserSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function (this: IUser) {
   if (!this.isModified("password")) {
-    return next()
+    return
   }
 
-  try {
-    this.password = await hash(this.password, 12)
-    next()
-  } catch (error) {
-    next(error as Error)
-  }
+  this.password = await hash(this.password, 12)
 })
 
 // Check if the model is already defined to prevent overwriting during hot reloads

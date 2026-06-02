@@ -23,6 +23,13 @@ export default async function SettingsPage() {
     redirect("/auth/signin?callbackUrl=/settings")
   }
 
+  const settingsUser = {
+    id: session.user.id,
+    name: session.user.name || "",
+    email: session.user.email || "",
+    image: session.user.image || undefined,
+  }
+
   return (
     <div className="container py-8 md:py-12">
       <div className="mx-auto max-w-3xl space-y-8">
@@ -43,10 +50,10 @@ export default async function SettingsPage() {
                 <TabsTrigger value="account">Account</TabsTrigger>
               </TabsList>
               <TabsContent value="profile" className="mt-6">
-                <ProfileSettings user={session.user} />
+                <ProfileSettings user={settingsUser} />
               </TabsContent>
               <TabsContent value="account" className="mt-6">
-                <AccountSettings user={session.user} />
+                <AccountSettings user={settingsUser} />
               </TabsContent>
             </Tabs>
           </CardContent>

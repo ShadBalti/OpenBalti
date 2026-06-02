@@ -5,7 +5,8 @@ import dbConnect from "@/lib/mongodb"
 import User from "@/models/User"
 import { isValidObjectId } from "mongoose"
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
 
@@ -13,17 +14,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    if (session.user.id !== params.id) {
+    if (session.user.id !== id) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 })
     }
 
-    if (!isValidObjectId(params.id)) {
+    if (!isValidObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid user ID" }, { status: 400 })
     }
 
     await dbConnect()
 
-    const user = await User.findById(params.id).select("searchPresets")
+    const user = await User.findById(id).select("searchPresets")
 
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
@@ -36,7 +37,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
 
@@ -44,11 +46,11 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    if (session.user.id !== params.id) {
+    if (session.user.id !== id) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 })
     }
 
-    if (!isValidObjectId(params.id)) {
+    if (!isValidObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid user ID" }, { status: 400 })
     }
 
@@ -60,7 +62,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
     await dbConnect()
 
-    const user = await User.findById(params.id)
+    const user = await User.findById(id)
 
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
@@ -85,7 +87,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
 
@@ -93,11 +96,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    if (session.user.id !== params.id) {
+    if (session.user.id !== id) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 })
     }
 
-    if (!isValidObjectId(params.id)) {
+    if (!isValidObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid user ID" }, { status: 400 })
     }
 
@@ -109,7 +112,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
     await dbConnect()
 
-    const user = await User.findByIdAndUpdate(params.id, { $pull: { searchPresets: { _id: presetId } } }, { new: true })
+    const user = await User.findByIdAndUpdate(id, { $pull: { searchPresets: { _id: presetId } } }, { new: true })
 
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })

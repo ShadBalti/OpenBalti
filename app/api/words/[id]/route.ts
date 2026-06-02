@@ -12,34 +12,36 @@ const validateObjectId = (id: string): boolean => {
   return isValidObjectId(id)
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
-    console.log(`🔄 API: Connecting to MongoDB for fetching word ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for fetching word ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for fetching word ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for fetching word ID: ${id}`)
 
-    const word = await Word.findById(params.id)
+    const word = await Word.findById(id)
 
     if (!word) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found`)
+      console.log(`⚠️ API: Word with ID ${id} not found`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
     console.log(`📋 API: Successfully fetched word: ${word.balti} - ${word.english}`)
     return NextResponse.json({ success: true, data: word })
   } catch (error) {
-    console.error(`❌ API Error fetching word ID ${params.id}:`, error)
+    console.error(`❌ API Error fetching word ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to fetch word" }, { status: 500 })
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
@@ -50,15 +52,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 })
     }
 
-    console.log(`🔄 API: Connecting to MongoDB for updating word ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for updating word ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for updating word ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for updating word ID: ${id}`)
 
     const body = await req.json()
 
     // Validate required fields
     if (!body.balti || !body.english) {
-      console.log(`⚠️ API: Validation failed for updating word ID: ${params.id} - missing required fields`)
+      console.log(`⚠️ API: Validation failed for updating word ID: ${id} - missing required fields`)
       return NextResponse.json(
         { success: false, error: "Balti word and English translation are required" },
         { status: 400 },
@@ -66,9 +68,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     // Get the original word for logging
-    const originalWord = await Word.findById(params.id)
+    const originalWord = await Word.findById(id)
     if (!originalWord) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found for update`)
+      console.log(`⚠️ API: Word with ID ${id} not found for update`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
@@ -79,7 +81,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     const isModerator = (session.user as any).isModerator === true
 
     if (!isCreator && !isAdmin && !isFounder && !isModerator) {
-      console.log(`⚠️ API: User ${session.user.id} not authorized to update word ${params.id}`)
+      console.log(`⚠️ API: User ${session.user.id} not authorized to update word ${id}`)
       return NextResponse.json(
         { success: false, error: "You don't have permission to edit this word" },
         { status: 403 },
@@ -92,7 +94,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       updatedBy: session.user.id,
     }
 
-    const word = await Word.findByIdAndUpdate(params.id, updateData, { new: true, runValidators: true })
+    const word = await Word.findByIdAndUpdate(id, updateData, { new: true, runValidators: true })
 
     console.log(`✅ API: Successfully updated word: ${word.balti} - ${word.english}`)
 
@@ -133,14 +135,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
     return NextResponse.json({ success: true, data: word })
   } catch (error) {
-    console.error(`❌ API Error updating word ID ${params.id}:`, error)
+    console.error(`❌ API Error updating word ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to update word" }, { status: 500 })
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
@@ -151,14 +154,14 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 })
     }
 
-    console.log(`🔄 API: Connecting to MongoDB for deleting word ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for deleting word ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for deleting word ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for deleting word ID: ${id}`)
 
     // Fetch the word first to check authorization
-    const word = await Word.findById(params.id)
+    const word = await Word.findById(id)
     if (!word) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found for deletion`)
+      console.log(`⚠️ API: Word with ID ${id} not found for deletion`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
@@ -169,7 +172,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const isModerator = (session.user as any).isModerator === true
 
     if (!isCreator && !isAdmin && !isFounder && !isModerator) {
-      console.log(`⚠️ API: User ${session.user.id} not authorized to delete word ${params.id}`)
+      console.log(`⚠️ API: User ${session.user.id} not authorized to delete word ${id}`)
       return NextResponse.json(
         { success: false, error: "You don't have permission to delete this word" },
         { status: 403 },
@@ -177,18 +180,18 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 
     // Now delete the word
-    const deletedWord = await Word.findByIdAndDelete(params.id)
+    const deletedWord = await Word.findByIdAndDelete(id)
 
     if (!deletedWord) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found for deletion`)
+      console.log(`⚠️ API: Word with ID ${id} not found for deletion`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
     console.log(`✅ API: Successfully deleted word: ${deletedWord.balti} - ${deletedWord.english}`)
 
-    await WordComment.deleteMany({ wordId: params.id })
-    await WordFeedback.deleteMany({ wordId: params.id })
-    console.log(`✅ API: Cascade deleted comments and feedback for word ${params.id}`)
+    await WordComment.deleteMany({ wordId: id })
+    await WordFeedback.deleteMany({ wordId: id })
+    console.log(`✅ API: Cascade deleted comments and feedback for word ${id}`)
 
     // Log the activity
     await logActivity({
@@ -202,7 +205,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
     return NextResponse.json({ success: true, data: {} })
   } catch (error) {
-    console.error(`❌ API Error deleting word ID ${params.id}:`, error)
+    console.error(`❌ API Error deleting word ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to delete word" }, { status: 500 })
   }
 }

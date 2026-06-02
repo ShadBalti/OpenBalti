@@ -19,7 +19,13 @@ interface DialectGroup {
  *
  * @returns {JSX.Element} The rendered dialect browser component.
  */
-export default function DialectBrowser() {
+interface DialectBrowserProps {
+  selectedDialect?: string | null
+  onDialectChange?: (dialect: string | null) => void
+  inline?: boolean
+}
+
+export default function DialectBrowser({ selectedDialect = null, onDialectChange, inline = false }: DialectBrowserProps) {
   const [dialects, setDialects] = useState<DialectGroup[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -97,29 +103,48 @@ export default function DialectBrowser() {
     )
   }
 
+  const renderDialectButton = (dialect: DialectGroup) => (
+    <Button
+      variant={selectedDialect === dialect.name ? "default" : "outline"}
+      className="w-full justify-between"
+      onClick={() => onDialectChange?.(selectedDialect === dialect.name ? null : dialect.name)}
+    >
+      <div className="flex items-center">
+        <MapPin className="mr-2 h-4 w-4 text-primary" />
+        <span>{dialect.name || "Unspecified"}</span>
+      </div>
+      <div className="flex items-center">
+        <span className="text-muted-foreground mr-2">{dialect.count} words</span>
+        <ChevronRight className="h-4 w-4" />
+      </div>
+    </Button>
+  )
+
+  const content = (
+    <div className="grid gap-2">
+      {dialects.map((dialect) =>
+        inline ? (
+          <div key={dialect.name}>{renderDialectButton(dialect)}</div>
+        ) : (
+          <Link key={dialect.name} href={`/?category=${encodeURIComponent(dialect.name)}`} className="block">
+            {renderDialectButton(dialect)}
+          </Link>
+        )
+      )}
+    </div>
+  )
+
+  if (inline) {
+    return content
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Browse by Region</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid gap-2">
-          {dialects.map((dialect) => (
-            <Link key={dialect.name} href={`/?category=${encodeURIComponent(dialect.name)}`} className="block">
-              <Button variant="outline" className="w-full justify-between">
-                <div className="flex items-center">
-                  <MapPin className="mr-2 h-4 w-4 text-primary" />
-                  <span>{dialect.name || "Unspecified"}</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-muted-foreground mr-2">{dialect.count} words</span>
-                  <ChevronRight className="h-4 w-4" />
-                </div>
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </CardContent>
+      <CardContent>{content}</CardContent>
     </Card>
   )
+
 }

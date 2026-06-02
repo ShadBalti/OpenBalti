@@ -1,3 +1,5 @@
+import type { AuthOptions } from "next-auth"
+import type { Adapter } from "next-auth/adapters"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GithubProvider from "next-auth/providers/github"
@@ -22,7 +24,7 @@ requiredEnvVars.forEach((envVar) => {
 })
 
 // Build providers array - include OAuth only if credentials are provided
-const providers = [
+const providers: AuthOptions["providers"] = [
   CredentialsProvider({
     name: "Credentials",
     credentials: {
@@ -83,8 +85,8 @@ if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
   )
 }
 
-export const authOptions = {
-  adapter: MongoDBAdapter(clientPromise),
+export const authOptions: AuthOptions = {
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
   providers,
   pages: {
     signIn: "/auth/signin",
@@ -102,7 +104,7 @@ export const authOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id
-        session.user.role = token.role
+        session.user.role = token.role || "user"
       }
       return session
     },
@@ -111,8 +113,6 @@ export const authOptions = {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  // Trust the host when behind a proxy (fixes NEXTAUTH_URL warning in development)
-  trustHost: true,
 }
 
 export default authOptions

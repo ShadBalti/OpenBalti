@@ -107,28 +107,47 @@ export const baseMetadata: Metadata = {
 export function generateMetadata(
   title: string,
   description?: string,
-  options?: {
+  options?: Partial<Metadata> & {
     keywords?: string[]
+    canonical?: string
     overrides?: Partial<Metadata>
   }
 ): Metadata {
-  const { keywords = [], overrides = {} } = options || {}
+  const { keywords = [], canonical, overrides = {}, ...metadataOverrides } = options || {}
+  const pageDescription = description || baseMetadata.description
+  const mergedOverrides: Partial<Metadata> = {
+    ...metadataOverrides,
+    ...(canonical
+      ? {
+          alternates: {
+            ...(baseMetadata.alternates || {}),
+            ...(metadataOverrides.alternates || {}),
+            canonical,
+          },
+        }
+      : {}),
+    ...overrides,
+  }
 
   return {
     ...baseMetadata,
     title,
-    description: description || baseMetadata.description,
-    keywords: [...baseMetadata.keywords!, ...keywords],
+    description: pageDescription,
+    keywords: [...(baseMetadata.keywords || []), ...keywords],
     openGraph: {
       ...baseMetadata.openGraph,
       title,
-      description: description || baseMetadata.openGraph?.description,
+      description: pageDescription || baseMetadata.openGraph?.description,
+      ...(metadataOverrides.openGraph || {}),
+      ...(overrides.openGraph || {}),
     },
     twitter: {
       ...baseMetadata.twitter,
       title,
-      description: description || baseMetadata.twitter?.description,
+      description: pageDescription || baseMetadata.twitter?.description,
+      ...(metadataOverrides.twitter || {}),
+      ...(overrides.twitter || {}),
     },
-    ...overrides,
+    ...mergedOverrides,
   }
 }

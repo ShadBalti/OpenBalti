@@ -4,27 +4,28 @@ import User from "@/models/User"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth-options"
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    console.log(`🔄 API: Connecting to MongoDB for fetching user ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for fetching user ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for fetching user ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for fetching user ID: ${id}`)
 
     const session = await getServerSession(authOptions)
-    const isOwnProfile = session?.user?.id === params.id
+    const isOwnProfile = session?.user?.id === id
     const isAdmin = session?.user?.role === "admin"
 
     // Validate the user ID format to prevent MongoDB errors
-    if (!params.id.match(/^[0-9a-fA-F]{24}$/)) {
-      console.log(`⚠️ API: Invalid user ID format: ${params.id}`)
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      console.log(`⚠️ API: Invalid user ID format: ${id}`)
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
     }
 
     // Find the user
-    const user = await User.findById(params.id).select("-password")
+    const user = await User.findById(id).select("-password")
 
     if (!user) {
-      console.log(`⚠️ API: User with ID ${params.id} not found`)
+      console.log(`⚠️ API: User with ID ${id} not found`)
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
     }
 
@@ -60,12 +61,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     console.log(`📋 API: Successfully fetched user: ${user.name}`)
     return NextResponse.json({ success: true, data: userData })
   } catch (error) {
-    console.error(`❌ API Error fetching user ID ${params.id}:`, error)
+    console.error(`❌ API Error fetching user ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to fetch user" }, { status: 500 })
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     // Check if user is authenticated
     const session = await getServerSession(authOptions)
@@ -75,18 +77,18 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     // Only allow users to update their own profile (or admins)
-    if (session.user.id !== params.id && session.user.role !== "admin") {
+    if (session.user.id !== id && session.user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 403 })
     }
 
     // Validate the user ID format
-    if (!params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
       return NextResponse.json({ success: false, error: "Invalid user ID format" }, { status: 400 })
     }
 
-    console.log(`🔄 API: Connecting to MongoDB for updating user ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for updating user ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for updating user ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for updating user ID: ${id}`)
 
     const body = await req.json()
 
@@ -112,12 +114,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     // Update the user
-    const user = await User.findByIdAndUpdate(params.id, updateData, { new: true, runValidators: true }).select(
+    const user = await User.findByIdAndUpdate(id, updateData, { new: true, runValidators: true }).select(
       "-password",
     )
 
     if (!user) {
-      console.log(`⚠️ API: User with ID ${params.id} not found for update`)
+      console.log(`⚠️ API: User with ID ${id} not found for update`)
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 })
     }
 
@@ -137,7 +139,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       },
     })
   } catch (error) {
-    console.error(`❌ API Error updating user ID ${params.id}:`, error)
+    console.error(`❌ API Error updating user ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to update user" }, { status: 500 })
   }
 }

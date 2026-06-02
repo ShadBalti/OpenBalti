@@ -10,9 +10,10 @@ const validateObjectId = (id: string): boolean => {
   return isValidObjectId(id)
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!validateObjectId(params.id)) {
+    if (!validateObjectId(id)) {
       return NextResponse.json({ success: false, error: "Invalid word ID format" }, { status: 400 })
     }
 
@@ -23,15 +24,15 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 })
     }
 
-    console.log(`🔄 API: Connecting to MongoDB for updating review status of word ID: ${params.id}...`)
+    console.log(`🔄 API: Connecting to MongoDB for updating review status of word ID: ${id}...`)
     await dbConnect()
-    console.log(`✅ API: MongoDB connected for updating review status of word ID: ${params.id}`)
+    console.log(`✅ API: MongoDB connected for updating review status of word ID: ${id}`)
 
     const body = await req.json()
 
     // Validate review status
     if (!["flagged", "reviewed", null].includes(body.reviewStatus)) {
-      console.log(`⚠️ API: Invalid review status for word ID: ${params.id}`)
+      console.log(`⚠️ API: Invalid review status for word ID: ${id}`)
       return NextResponse.json(
         { success: false, error: "Invalid review status. Must be 'flagged', 'reviewed', or null" },
         { status: 400 },
@@ -39,14 +40,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     // Get the original word for logging
-    const originalWord = await Word.findById(params.id)
+    const originalWord = await Word.findById(id)
     if (!originalWord) {
-      console.log(`⚠️ API: Word with ID ${params.id} not found for review status update`)
+      console.log(`⚠️ API: Word with ID ${id} not found for review status update`)
       return NextResponse.json({ success: false, error: "Word not found" }, { status: 404 })
     }
 
     const word = await Word.findByIdAndUpdate(
-      params.id,
+      id,
       {
         reviewStatus: body.reviewStatus,
         updatedBy: session.user.id,
@@ -77,7 +78,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
     return NextResponse.json({ success: true, data: word })
   } catch (error) {
-    console.error(`❌ API Error updating review status for word ID ${params.id}:`, error)
+    console.error(`❌ API Error updating review status for word ID ${id}:`, error)
     return NextResponse.json({ success: false, error: "Failed to update review status" }, { status: 500 })
   }
 }
