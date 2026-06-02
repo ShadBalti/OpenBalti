@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth-options"
-import { generateMetadata } from "@/lib/metadata"
+import { generateNoIndexMetadata } from "@/lib/metadata"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import Link from "next/link"
 import ActivityLogList from "@/components/activity/activity-log-list"
 import { Separator } from "@/components/ui/separator"
 
-export const metadata = generateMetadata("Your Profile", "View your account and recent activity")
+export const metadata = generateNoIndexMetadata("Your Profile", "View your account and recent activity", "/profile")
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions)

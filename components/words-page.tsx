@@ -204,7 +204,7 @@ export default function WordsPage({ initialWords = [], totalWords = 0 }: WordsPa
     if (feedback) params.append("feedback", feedback)
 
     const queryString = params.toString()
-    router.push(queryString ? `/?${queryString}` : "/")
+    router.push(queryString ? `/dictionary?${queryString}` : "/dictionary")
   }
 
   const handleSearchChange = (term: string) => {

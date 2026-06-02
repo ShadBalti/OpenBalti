@@ -9,7 +9,7 @@ import { SkipLink } from "@/components/layout/skip-link"
 import { Breadcrumb } from "@/components/layout/breadcrumb"
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav"
 import { baseMetadata } from "@/lib/metadata"
-import { OrganizationStructuredData } from "@/components/structured-data"
+import { OrganizationStructuredData, WebsiteStructuredData } from "@/components/structured-data"
 import { Toaster } from "@/components/ui/toaster"
 import { SessionProvider } from "@/components/auth/session-provider"
 import { GoogleAnalytics } from "@/components/analytics"
@@ -64,6 +64,7 @@ export default function RootLayout({
             </div>
             <Toaster />
             <OrganizationStructuredData />
+            <WebsiteStructuredData />
           </ThemeProvider>
         </SessionProvider>
         <Analytics />

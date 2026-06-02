@@ -73,6 +73,7 @@ export function OrganizationStructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${baseUrl}/#organization`,
     name: "OpenBalti Project",
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
@@ -102,9 +103,19 @@ export function WebsiteStructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${baseUrl}/#website`,
     name: "OpenBalti",
+    alternateName: "OpenBalti Dictionary",
     description: "A platform for preserving and documenting the Balti language",
     url: baseUrl,
+    publisher: {
+      "@id": `${baseUrl}/#organization`,
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${baseUrl}/dictionary?search={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
   }
 
   return (

@@ -5,6 +5,8 @@ import FavoritesList from "@/components/favorites-list"
 export const metadata = {
   title: "My Favorites - OpenBalti Dictionary",
   description: "View and manage your favorite Balti words",
+  alternates: { canonical: "/favorites" },
+  robots: { index: false, follow: false },
 }
 
 /**

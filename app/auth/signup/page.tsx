@@ -1,10 +1,11 @@
 import type { Metadata } from "next"
 import SignUpForm from "@/components/auth/signup-form"
-import { generateMetadata } from "@/lib/metadata"
+import { generateNoIndexMetadata } from "@/lib/metadata"
 
-export const metadata: Metadata = generateMetadata(
+export const metadata: Metadata = generateNoIndexMetadata(
   "Sign Up",
   "Create an OpenBalti account to contribute to the dictionary.",
+  "/auth/signup",
 )
 
 /**

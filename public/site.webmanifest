@@ -1,0 +1,33 @@
+{
+  "name": "OpenBalti Dictionary",
+  "short_name": "OpenBalti",
+  "description": "A free Balti-English dictionary and language learning resource for preserving Balti vocabulary, phrases, script, and culture.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1f2937",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education", "reference", "dictionary", "language"],
+  "lang": "en"
+}

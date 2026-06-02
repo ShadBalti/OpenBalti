@@ -102,7 +102,7 @@ export async function generateMetadata({ params }: WordPageProps): Promise<Metad
       description,
       images: [
         {
-          url: "/og-image.png",
+          url: "/android-chrome-512x512.png",
           width: 1200,
           height: 630,
           alt: `${word.english} - Balti Dictionary`,

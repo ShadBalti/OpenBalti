@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth-options"
-import { generateMetadata } from "@/lib/metadata"
+import { generateNoIndexMetadata } from "@/lib/metadata"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProfileSettings from "@/components/settings/profile-settings"
 import AccountSettings from "@/components/settings/account-settings"
 
-export const metadata = generateMetadata("Settings", "Manage your OpenBalti account settings and preferences.")
+export const metadata = generateNoIndexMetadata("Settings", "Manage your OpenBalti account settings and preferences.", "/settings")
 
 /**
  * Renders the user settings page, which allows authenticated users to manage their profile

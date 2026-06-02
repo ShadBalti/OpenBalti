@@ -90,16 +90,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     { url: `${baseUrl}/get-started`, lastModified: now, changeFrequency: "monthly", priority: 0.85 },
     { url: `${baseUrl}/learning-roadmap`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${baseUrl}/resources`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
 
     { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: `${baseUrl}/success-stories`, lastModified: now, changeFrequency: "monthly", priority: 0.75 },
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${baseUrl}/contribute`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/leaderboard`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/review`, lastModified: now, changeFrequency: "weekly", priority: 0.3 },
     { url: `${baseUrl}/contributors`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/favorites`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/activity`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
 
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
