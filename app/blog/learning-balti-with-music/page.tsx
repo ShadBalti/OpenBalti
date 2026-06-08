@@ -1,5 +1,6 @@
 import { generateMetadata } from "@/lib/metadata"
-import Link from "next/link"
+import { ARTICLES } from "@/lib/blog-articles"
+import { BlogArticleLayout } from "@/components/blog-article-layout"
 
 export const metadata = generateMetadata(
   "Learning Balti Through Music and Folk Songs",
@@ -7,23 +8,20 @@ export const metadata = generateMetadata(
   { keywords: ["Balti music", "folk songs", "language learning through music", "cultural immersion"] },
 )
 
+const article = ARTICLES["learning-balti-with-music"]
+
 export default function LearningWithMusicPage() {
   return (
-    <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <article className="max-w-4xl mx-auto">
-        <header className="mb-12">
-          <Link href="/blog" className="text-primary hover:underline mb-6 inline-block">
-            ← Back to Blog
-          </Link>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Learning Balti Through Music and Folk Songs</h1>
-          <div className="flex items-center gap-4 text-muted-foreground">
-            <span>December 15, 2024</span>
-            <span>•</span>
-            <span>6 min read</span>
-          </div>
-        </header>
-
-        <div className="prose prose-lg dark:prose-invert max-w-none space-y-8">
+    <BlogArticleLayout
+      slug={article.slug}
+      title={article.title}
+      excerpt={article.excerpt}
+      date={article.date}
+      readTime={article.readTime}
+      category={article.category}
+      author={article.author}
+      relatedArticles={article.relatedArticles}
+    >
           <section>
             <h2>Music: The Universal Language Teacher</h2>
             <p>
@@ -192,14 +190,6 @@ export default function LearningWithMusicPage() {
               cultural too.
             </p>
           </section>
-        </div>
-
-        <footer className="mt-16 pt-8 border-t border-border">
-          <Link href="/blog" className="text-primary hover:underline">
-            ← Back to Blog
-          </Link>
-        </footer>
-      </article>
-    </main>
+    </BlogArticleLayout>
   )
 }

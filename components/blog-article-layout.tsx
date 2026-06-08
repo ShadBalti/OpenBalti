@@ -1,11 +1,12 @@
 "use client"
 
 import { ReactNode, useState, useEffect } from "react"
-import { Calendar, Clock, User } from "lucide-react"
+import { Calendar, Clock, ArrowLeft } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ShareArticle } from "@/components/share-article"
 import Link from "next/link"
+import Image from "next/image"
 
 interface BlogArticleLayoutProps {
   title: string
@@ -13,6 +14,7 @@ interface BlogArticleLayoutProps {
   date: string
   readTime: string
   category: string
+  slug: string
   author: {
     name: string
     role: string
@@ -21,6 +23,7 @@ interface BlogArticleLayoutProps {
     link?: string
   }
   children: ReactNode
+  heroImage?: string
   relatedArticles?: Array<{
     slug: string
     title: string
@@ -45,8 +48,10 @@ export function BlogArticleLayout({
   date,
   readTime,
   category,
+  slug,
   author,
   children,
+  heroImage,
   relatedArticles,
 }: BlogArticleLayoutProps) {
   const [readingProgress, setReadingProgress] = useState(0)
@@ -77,6 +82,27 @@ export function BlogArticleLayout({
 
       {/* Article Header */}
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6" aria-label="Breadcrumb">
+          <Link href="/blog" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors text-sm font-medium group">
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Blog
+          </Link>
+        </nav>
+        {/* Hero Image */}
+        {heroImage && (
+          <div className="relative w-full h-[300px] md:h-[400px] rounded-xl overflow-hidden mb-8 shadow-lg">
+            <Image
+              src={heroImage}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          </div>
+        )}
+
         {/* Category Badge */}
         <div className="mb-6">
           <Badge variant="outline" className={`border ${categoryClass}`}>

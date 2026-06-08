@@ -1,4 +1,5 @@
 import { generateMetadata } from "@/lib/metadata"
+import { ARTICLES, ALL_ARTICLES } from "@/lib/blog-articles"
 import Link from "next/link"
 import { Calendar, ArrowRight, BookOpen } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +20,21 @@ export const metadata = generateMetadata(
   },
 )
 
+// Centralized category colors
+export const categoryColors: Record<string, string> = {
+  Learning: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+  Culture: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+  Linguistics: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+  Community: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+}
+
+export const categoryBorderColors: Record<string, string> = {
+  Learning: "bg-blue-500",
+  Culture: "bg-amber-500",
+  Linguistics: "bg-purple-500",
+  Community: "bg-green-500",
+}
+
 interface BlogPageProps {
   searchParams: Promise<{ category?: string }>
 }
@@ -26,68 +42,16 @@ interface BlogPageProps {
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const params = await searchParams
   const selectedCategory = params.category?.toLowerCase()
-  const articles = [
-    {
-      slug: "getting-started-with-balti",
-      title: "Getting Started with Balti: A Beginner's Guide",
-      category: "Learning",
-      date: "January 15, 2025",
-      excerpt:
-        "Learn the fundamentals of Balti language with this comprehensive beginner's guide covering pronunciation, basic grammar, essential phrases, and practical learning strategies.",
-      readTime: "8 min read",
-      keywords: "Balti for beginners, learn Balti, Balti pronunciation, beginner guide",
-    },
-    {
-      slug: "why-balti-language-matters",
-      title: "Why the Balti Language Matters: Preserving Cultural Identity",
-      category: "Culture",
-      date: "January 10, 2025",
-      excerpt:
-        "Explore why preserving the Balti language is crucial for maintaining cultural identity, preventing linguistic loss, and honoring the heritage of Baltistan communities worldwide.",
-      readTime: "6 min read",
-      keywords: "language preservation, Balti culture, endangered languages, cultural identity",
-    },
-    {
-      slug: "balti-dialects-explained",
-      title: "Understanding Balti Dialects: A Complete Overview",
-      category: "Linguistics",
-      date: "January 5, 2025",
-      excerpt:
-        "Deep dive into the regional variations of Balti language across Skardu, Khaplu, Kargil, and Nubra Valley. Learn what makes each dialect unique and how to identify them.",
-      readTime: "10 min read",
-      keywords: "Balti dialects, regional variations, Skardu, Khaplu, Kargil, Nubra",
-    },
-    {
-      slug: "traditional-crafts-balti-culture",
-      title: "Traditional Crafts: The Living Art of Baltistan",
-      category: "Culture",
-      date: "December 28, 2024",
-      excerpt:
-        "Discover the intricate traditional crafts of Baltistan including carpet weaving, woodcarving, embroidery, and metalwork that tell stories of heritage and artistic excellence.",
-      readTime: "7 min read",
-      keywords: "Balti crafts, traditional arts, carpet weaving, Baltistan culture",
-    },
-    {
-      slug: "community-spotlight",
-      title: "Community Spotlight: Native Speakers Preserving Balti",
-      category: "Community",
-      date: "December 20, 2024",
-      excerpt:
-        "Meet passionate community members who are dedicating their time and expertise to teach and preserve the Balti language for future generations through various initiatives.",
-      readTime: "5 min read",
-      keywords: "community, native speakers, language preservation, Balti community",
-    },
-    {
-      slug: "learning-balti-with-music",
-      title: "Learning Balti Through Music and Folk Songs",
-      category: "Learning",
-      date: "December 15, 2024",
-      excerpt:
-        "Music is a powerful way to learn any language. Explore traditional Balti songs, folk melodies, and how they can help you master the language naturally and enjoyably.",
-      readTime: "6 min read",
-      keywords: "Balti music, folk songs, language learning through music, cultural immersion",
-    },
-  ]
+  // Map articles from configuration to display format with read time
+  const articles = ALL_ARTICLES.map((article) => ({
+    slug: article.slug,
+    title: article.title,
+    category: article.category,
+    date: article.date,
+    excerpt: article.excerpt,
+    readTime: article.readTime,
+    keywords: article.keywords,
+  }))
 
   const categories = [
     { name: "Learning", color: "blue" },
@@ -163,49 +127,28 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {filteredArticles.map((article) => (
             <article
               key={article.slug}
-              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col"
             >
-              <div
-                className={`h-1 ${
-                  article.category === "Learning"
-                    ? "bg-blue-500"
-                    : article.category === "Culture"
-                      ? "bg-amber-500"
-                      : article.category === "Linguistics"
-                        ? "bg-purple-500"
-                        : "bg-green-500"
-                }`}
-              />
-              <div className="p-6">
+              <div className={`h-1 ${categoryBorderColors[article.category]}`} />
+              <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-3 gap-2">
                   <Badge
                     variant="secondary"
-                    className={`${
-                      article.category === "Learning"
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                        : article.category === "Culture"
-                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-                          : article.category === "Linguistics"
-                            ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
-                            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                    }`}
+                    className={categoryColors[article.category]}
                   >
                     {article.category}
                   </Badge>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{article.readTime}</span>
                 </div>
                 <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
                   {article.title}
                 </h3>
-                <p className="text-muted-foreground mb-4 line-clamp-3 text-sm leading-relaxed">{article.excerpt}</p>
+                <p className="text-muted-foreground mb-6 line-clamp-3 text-sm leading-relaxed flex-1">{article.excerpt}</p>
                 <div className="flex items-center justify-between pt-4 border-t border-border gap-2">
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {article.date}
                     </span>
-                    <span>•</span>
-                    <span>{article.readTime}</span>
                   </div>
                   <Link
                     href={`/blog/${article.slug}`}
