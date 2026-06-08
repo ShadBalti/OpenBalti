@@ -219,6 +219,171 @@ export const ARTICLES: Record<string, Article> = {
       },
     ],
   },
+
+  "how-to-learn-balti-complete-guide": {
+    slug: "how-to-learn-balti-complete-guide",
+    title: "How to Learn Balti Language: Complete Guide for Beginners",
+    excerpt:
+      "A comprehensive roadmap for learning Balti with step-by-step strategies, recommended resources, study tips, tools, and proven methods used by successful language learners.",
+    category: "Learning",
+    date: "January 20, 2025",
+    readTime: "11 min read",
+    keywords: "how to learn Balti, Balti language course, learn Balti online, Balti learning guide, language learning strategy",
+    author: {
+      name: "Dr. Amina Hassan",
+      role: "Language Learning Expert",
+      bio: "Dr. Amina Hassan specializes in language acquisition methodology and has helped thousands of learners master new languages using proven techniques.",
+    },
+    relatedArticles: [
+      {
+        slug: "getting-started-with-balti",
+        title: "Getting Started with Balti: A Beginner's Guide",
+        category: "Learning",
+      },
+      {
+        slug: "best-resources-learning-balti-2025",
+        title: "Best Resources for Learning Balti Language 2025",
+        category: "Learning",
+      },
+      {
+        slug: "learning-balti-with-music",
+        title: "Learning Balti Through Music and Folk Songs",
+        category: "Learning",
+      },
+    ],
+  },
+
+  "best-resources-learning-balti-2025": {
+    slug: "best-resources-learning-balti-2025",
+    title: "Best Resources for Learning Balti Language 2025",
+    excerpt:
+      "Discover the top apps, websites, books, courses, online teachers, and community platforms for learning Balti. Expert reviews and recommendations for every learning style.",
+    category: "Learning",
+    date: "January 25, 2025",
+    readTime: "10 min read",
+    keywords: "Balti learning resources, Balti apps, Balti language courses, learn Balti online, Balti study materials",
+    author: {
+      name: "Sofia Rahman",
+      role: "EdTech & Language Resources Specialist",
+      bio: "Sofia Rahman reviews and evaluates language learning tools and platforms to help learners find the best fit for their needs and goals.",
+    },
+    relatedArticles: [
+      {
+        slug: "how-to-learn-balti-complete-guide",
+        title: "How to Learn Balti Language: Complete Guide for Beginners",
+        category: "Learning",
+      },
+      {
+        slug: "learning-balti-with-music",
+        title: "Learning Balti Through Music and Folk Songs",
+        category: "Learning",
+      },
+      {
+        slug: "community-spotlight",
+        title: "Community Spotlight: Native Speakers Preserving Balti",
+        category: "Community",
+      },
+    ],
+  },
+
+  "balti-pronunciation-guide-master-sounds": {
+    slug: "balti-pronunciation-guide-master-sounds",
+    title: "Balti Language Pronunciation Guide: Master the Sounds",
+    excerpt:
+      "Master Balti pronunciation with detailed phonetic breakdowns, IPA notation, audio guides, mouth position diagrams, and solutions for common pronunciation challenges.",
+    category: "Linguistics",
+    date: "February 1, 2025",
+    readTime: "9 min read",
+    keywords: "Balti pronunciation, how to pronounce Balti, Balti phonetics, Balti sounds, Balti accent",
+    author: {
+      name: "Prof. Tenzin Dorje",
+      role: "Phonetics & Linguistics Specialist",
+      bio: "Prof. Tenzin Dorje is an expert in Tibetic languages phonetics and has developed innovative pronunciation teaching methods.",
+    },
+    relatedArticles: [
+      {
+        slug: "getting-started-with-balti",
+        title: "Getting Started with Balti: A Beginner's Guide",
+        category: "Learning",
+      },
+      {
+        slug: "balti-dialects-explained",
+        title: "Understanding Balti Dialects: A Complete Overview",
+        category: "Linguistics",
+      },
+      {
+        slug: "balti-language-guide-2026",
+        title: "Comprehensive Balti Language Guide 2026",
+        category: "Learning",
+      },
+    ],
+  },
+
+  "essential-balti-phrases-travelers-visitors": {
+    slug: "essential-balti-phrases-travelers-visitors",
+    title: "Essential Balti Phrases for Travelers & Visitors",
+    excerpt:
+      "Learn practical Balti phrases for travelers visiting Baltistan. Includes greetings, asking for help, dining, directions, cultural etiquette, and tips for respectful communication.",
+    category: "Learning",
+    date: "February 5, 2025",
+    readTime: "8 min read",
+    keywords: "Balti phrases, Balti greetings, Balti for tourists, travel Balti, Baltistan phrases, practical Balti",
+    author: {
+      name: "Hassan Ahmed",
+      role: "Cultural & Travel Guide Expert",
+      bio: "Hassan Ahmed has spent years guiding travelers through Baltistan and knows the practical phrases and cultural tips that matter most.",
+    },
+    relatedArticles: [
+      {
+        slug: "getting-started-with-balti",
+        title: "Getting Started with Balti: A Beginner's Guide",
+        category: "Learning",
+      },
+      {
+        slug: "why-balti-language-matters",
+        title: "Why the Balti Language Matters: Preserving Cultural Identity",
+        category: "Culture",
+      },
+      {
+        slug: "traditional-crafts-balti-culture",
+        title: "Traditional Crafts: The Living Art of Baltistan",
+        category: "Culture",
+      },
+    ],
+  },
+
+  "balti-language-facts-history-everything": {
+    slug: "balti-language-facts-history-everything",
+    title: "Balti Language Facts & History: Everything You Need to Know",
+    excerpt:
+      "Comprehensive overview of Balti language history, linguistic classification, speaker statistics, evolution, and fascinating facts. Build authority and deep understanding of this unique language.",
+    category: "Linguistics",
+    date: "February 10, 2025",
+    readTime: "10 min read",
+    keywords: "Balti language facts, Balti history, Tibetic languages, Balti language origin, endangered languages, linguistic heritage",
+    author: {
+      name: "Dr. Namgyal Tsering",
+      role: "Historical Linguist & Language Anthropologist",
+      bio: "Dr. Namgyal Tsering has authored numerous papers on Tibetic languages and is recognized as a leading authority on Balti linguistic heritage.",
+    },
+    relatedArticles: [
+      {
+        slug: "why-balti-language-matters",
+        title: "Why the Balti Language Matters: Preserving Cultural Identity",
+        category: "Culture",
+      },
+      {
+        slug: "balti-dialects-explained",
+        title: "Understanding Balti Dialects: A Complete Overview",
+        category: "Linguistics",
+      },
+      {
+        slug: "community-spotlight",
+        title: "Community Spotlight: Native Speakers Preserving Balti",
+        category: "Community",
+      },
+    ],
+  },
 }
 
 // Export a list of all articles
