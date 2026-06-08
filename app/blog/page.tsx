@@ -19,6 +19,21 @@ export const metadata = generateMetadata(
   },
 )
 
+// Centralized category colors
+export const categoryColors: Record<string, string> = {
+  Learning: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+  Culture: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+  Linguistics: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+  Community: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+}
+
+export const categoryBorderColors: Record<string, string> = {
+  Learning: "bg-blue-500",
+  Culture: "bg-amber-500",
+  Linguistics: "bg-purple-500",
+  Community: "bg-green-500",
+}
+
 interface BlogPageProps {
   searchParams: Promise<{ category?: string }>
 }
@@ -163,49 +178,28 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {filteredArticles.map((article) => (
             <article
               key={article.slug}
-              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300"
+              className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col"
             >
-              <div
-                className={`h-1 ${
-                  article.category === "Learning"
-                    ? "bg-blue-500"
-                    : article.category === "Culture"
-                      ? "bg-amber-500"
-                      : article.category === "Linguistics"
-                        ? "bg-purple-500"
-                        : "bg-green-500"
-                }`}
-              />
-              <div className="p-6">
+              <div className={`h-1 ${categoryBorderColors[article.category]}`} />
+              <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center justify-between mb-3 gap-2">
                   <Badge
                     variant="secondary"
-                    className={`${
-                      article.category === "Learning"
-                        ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                        : article.category === "Culture"
-                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-                          : article.category === "Linguistics"
-                            ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
-                            : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                    }`}
+                    className={categoryColors[article.category]}
                   >
                     {article.category}
                   </Badge>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">{article.readTime}</span>
                 </div>
                 <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors line-clamp-2">
                   {article.title}
                 </h3>
-                <p className="text-muted-foreground mb-4 line-clamp-3 text-sm leading-relaxed">{article.excerpt}</p>
+                <p className="text-muted-foreground mb-6 line-clamp-3 text-sm leading-relaxed flex-1">{article.excerpt}</p>
                 <div className="flex items-center justify-between pt-4 border-t border-border gap-2">
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {article.date}
                     </span>
-                    <span>•</span>
-                    <span>{article.readTime}</span>
                   </div>
                   <Link
                     href={`/blog/${article.slug}`}
