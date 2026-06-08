@@ -384,6 +384,171 @@ export const ARTICLES: Record<string, Article> = {
       },
     ],
   },
+
+  "balti-grammar-rules-conjugation-guide": {
+    slug: "balti-grammar-rules-conjugation-guide",
+    title: "Complete Balti Grammar Rules & Conjugation Guide",
+    excerpt:
+      "Master Balti grammar with comprehensive coverage of verb conjugation patterns, noun declensions, agreement rules, and advanced grammatical structures. Includes practice exercises and common mistakes to avoid.",
+    category: "Linguistics",
+    date: "February 15, 2025",
+    readTime: "13 min read",
+    keywords: "Balti grammar, Balti verb conjugation, Balti grammar rules, learn Balti grammar, Balti verb tenses",
+    author: {
+      name: "Dr. Kalsang Norbu",
+      role: "Grammar & Syntax Specialist",
+      bio: "Dr. Kalsang Norbu specializes in the grammatical structures of Tibetic languages and has developed innovative teaching methods for complex grammatical concepts.",
+    },
+    relatedArticles: [
+      {
+        slug: "balti-language-guide-2026",
+        title: "Comprehensive Balti Language Guide 2026",
+        category: "Learning",
+      },
+      {
+        slug: "balti-pronunciation-guide-master-sounds",
+        title: "Balti Language Pronunciation Guide: Master the Sounds",
+        category: "Linguistics",
+      },
+      {
+        slug: "balti-alphabet-writing-system-guide",
+        title: "Balti Alphabet & Writing System: Complete Guide",
+        category: "Linguistics",
+      },
+    ],
+  },
+
+  "balti-alphabet-writing-system-guide": {
+    slug: "balti-alphabet-writing-system-guide",
+    title: "Balti Alphabet & Writing System: Complete Guide",
+    excerpt:
+      "Learn the complete Balti writing system including historical scripts, modern Perso-Arabic orthography, letter shapes, diacritics, and writing conventions. Features practice worksheets and downloadable resources.",
+    category: "Linguistics",
+    date: "February 18, 2025",
+    readTime: "11 min read",
+    keywords: "Balti alphabet, Balti script, Balti writing system, how to write Balti, Balti orthography",
+    author: {
+      name: "Prof. Wangchuk Dorje",
+      role: "Writing Systems & Orthography Expert",
+      bio: "Prof. Wangchuk Dorje is renowned for his expertise in Tibetic writing systems and has contributed to standardizing Balti orthography.",
+    },
+    relatedArticles: [
+      {
+        slug: "balti-language-guide-2026",
+        title: "Comprehensive Balti Language Guide 2026",
+        category: "Learning",
+      },
+      {
+        slug: "balti-grammar-rules-conjugation-guide",
+        title: "Complete Balti Grammar Rules & Conjugation Guide",
+        category: "Linguistics",
+      },
+      {
+        slug: "getting-started-with-balti",
+        title: "Getting Started with Balti: A Beginner's Guide",
+        category: "Learning",
+      },
+    ],
+  },
+
+  "balti-vocabulary-builder-essential-words": {
+    slug: "balti-vocabulary-builder-essential-words",
+    title: "Balti Vocabulary Builder: Essential Words by Category",
+    excerpt:
+      "Build your Balti vocabulary systematically with organized word lists across categories including numbers, colors, family, food, home, nature, and more. Includes downloadable vocabulary sheets and pronunciation guides.",
+    category: "Learning",
+    date: "February 20, 2025",
+    readTime: "12 min read",
+    keywords: "Balti vocabulary, Balti words, Balti vocabulary list, Balti vocabulary builder, learn Balti words",
+    author: {
+      name: "Amir Khalid",
+      role: "Vocabulary & Lexicon Specialist",
+      bio: "Amir Khalid has created comprehensive vocabulary building systems for multiple languages and specializes in making vocabulary learning efficient and memorable.",
+    },
+    relatedArticles: [
+      {
+        slug: "how-to-learn-balti-complete-guide",
+        title: "How to Learn Balti Language: Complete Guide for Beginners",
+        category: "Learning",
+      },
+      {
+        slug: "best-resources-learning-balti-2025",
+        title: "Best Resources for Learning Balti Language 2025",
+        category: "Learning",
+      },
+      {
+        slug: "essential-balti-phrases-travelers-visitors",
+        title: "Essential Balti Phrases for Travelers & Visitors",
+        category: "Learning",
+      },
+    ],
+  },
+
+  "master-balti-conversation-speaking-practice": {
+    slug: "master-balti-conversation-speaking-practice",
+    title: "Master Balti Conversation: Speaking Tips & Practice Dialogues",
+    excerpt:
+      "Become confident speaking Balti with real-world dialogue examples, conversation patterns, practical speaking strategies, and pronunciation practice. Features native speaker audio and confidence-building techniques.",
+    category: "Learning",
+    date: "February 22, 2025",
+    readTime: "11 min read",
+    keywords: "Balti conversation, Balti speaking practice, Balti dialogues, how to speak Balti, Balti fluency",
+    author: {
+      name: "Faisal Malik",
+      role: "Conversation & Fluency Coach",
+      bio: "Faisal Malik has coached hundreds of learners to conversational fluency through innovative dialogue-based learning and practical speaking techniques.",
+    },
+    relatedArticles: [
+      {
+        slug: "how-to-learn-balti-complete-guide",
+        title: "How to Learn Balti Language: Complete Guide for Beginners",
+        category: "Learning",
+      },
+      {
+        slug: "essential-balti-phrases-travelers-visitors",
+        title: "Essential Balti Phrases for Travelers & Visitors",
+        category: "Learning",
+      },
+      {
+        slug: "learning-balti-with-music",
+        title: "Learning Balti Through Music and Folk Songs",
+        category: "Learning",
+      },
+    ],
+  },
+
+  "balti-idioms-expressions-slang-guide": {
+    slug: "balti-idioms-expressions-slang-guide",
+    title: "Balti Language Idioms, Expressions & Slang Guide",
+    excerpt:
+      "Master native Balti with comprehensive coverage of idioms, cultural expressions, colloquial phrases, and modern slang. Learn how native speakers truly communicate with cultural context and usage examples.",
+    category: "Linguistics",
+    date: "February 25, 2025",
+    readTime: "10 min read",
+    keywords: "Balti idioms, Balti expressions, Balti slang, native Balti speakers, Balti colloquialisms",
+    author: {
+      name: "Saira Khan",
+      role: "Native Language & Culture Expert",
+      bio: "Saira Khan is a native Balti speaker and linguist who documents authentic expressions, idioms, and colloquialisms used by native speakers.",
+    },
+    relatedArticles: [
+      {
+        slug: "balti-language-facts-history-everything",
+        title: "Balti Language Facts & History: Everything You Need to Know",
+        category: "Linguistics",
+      },
+      {
+        slug: "master-balti-conversation-speaking-practice",
+        title: "Master Balti Conversation: Speaking Tips & Practice Dialogues",
+        category: "Learning",
+      },
+      {
+        slug: "balti-dialects-explained",
+        title: "Understanding Balti Dialects: A Complete Overview",
+        category: "Linguistics",
+      },
+    ],
+  },
 }
 
 // Export a list of all articles
