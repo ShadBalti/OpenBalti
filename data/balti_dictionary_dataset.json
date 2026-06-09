@@ -105,21 +105,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "kho ngi",
-    "english": "His, her",
-    "phonetic": "kho ngi",
-    "categories": [
-      "Family & Relationships"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "ngayi",
     "english": "Our",
     "phonetic": "ngayi",
@@ -138,51 +123,6 @@
     "balti": "khoni",
     "english": "Their",
     "phonetic": "khoni",
-    "categories": [
-      "Family & Relationships"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "rgyal fo",
-    "english": "King",
-    "phonetic": "rgyal fo",
-    "categories": [
-      "Family & Relationships"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "rgyal mo",
-    "english": "Queen",
-    "phonetic": "rgyal mo",
-    "categories": [
-      "Family & Relationships"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "lhon po",
-    "english": "Minister",
-    "phonetic": "lhon po",
     "categories": [
       "Family & Relationships"
     ],
@@ -346,7 +286,7 @@
   },
   {
     "balti": "ani",
-    "english": "Aunt (father\u2019s side)",
+    "english": "Aunt (father’s side)",
     "phonetic": "ani",
     "categories": [
       "Family & Relationships"
@@ -361,7 +301,7 @@
   },
   {
     "balti": "ajang",
-    "english": "Uncle (father\u2019s side)",
+    "english": "Uncle (father’s side)",
     "phonetic": "ajang",
     "categories": [
       "Family & Relationships"
@@ -376,7 +316,7 @@
   },
   {
     "balti": "matchon",
-    "english": "Aunt (mother\u2019s side)",
+    "english": "Aunt (mother’s side)",
     "phonetic": "matchon",
     "categories": [
       "Family & Relationships"
@@ -391,7 +331,7 @@
   },
   {
     "balti": "nenay",
-    "english": "Aunt (mother\u2019s side)",
+    "english": "Aunt (mother’s side)",
     "phonetic": "nenay",
     "categories": [
       "Family & Relationships"
@@ -406,7 +346,7 @@
   },
   {
     "balti": "agu",
-    "english": "Uncle (mother\u2019s side)",
+    "english": "Uncle (mother’s side)",
     "phonetic": "agu",
     "categories": [
       "Family & Relationships"
@@ -445,21 +385,6 @@
     "usageNotes": "",
     "relatedWords": [],
     "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "loqfi oma",
-    "english": "Yogurt, curd",
-    "phonetic": "loqfi oma",
-    "categories": [
-      "Food & Drink"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
     "examples": [],
     "etymology": "",
     "culturalNotes": ""
@@ -585,21 +510,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "ni ma",
-    "english": "Sun",
-    "phonetic": "ni ma",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "lzod",
     "english": "Moon",
     "phonetic": "lzod",
@@ -630,21 +540,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "tsang po",
-    "english": "River",
-    "phonetic": "tsang po",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "ri",
     "english": "Mountain",
     "phonetic": "ri",
@@ -663,21 +558,6 @@
     "balti": "spang",
     "english": "Plain",
     "phonetic": "spang",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "lung ma",
-    "english": "Valley",
-    "phonetic": "lung ma",
     "categories": [
       "Nature & Environment"
     ],
@@ -855,21 +735,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "bong bu",
-    "english": "Donkey",
-    "phonetic": "bong bu",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "lug",
     "english": "Sheep",
     "phonetic": "lug",
@@ -918,51 +783,6 @@
     "balti": "baang",
     "english": "Cow",
     "phonetic": "baang",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "bya mo",
-    "english": "Hen",
-    "phonetic": "bya mo",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "bya fo",
-    "english": "Cock",
-    "phonetic": "bya fo",
-    "categories": [
-      "Nature & Environment"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "bya fro",
-    "english": "Bird",
-    "phonetic": "bya fro",
     "categories": [
       "Nature & Environment"
     ],
@@ -1170,21 +990,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "luk tul",
-    "english": "Palm",
-    "phonetic": "luk tul",
-    "categories": [
-      "Body Parts"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "khrimnong",
     "english": "Elbow",
     "phonetic": "khrimnong",
@@ -1335,36 +1140,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "yang chena yo?",
-    "english": "Hello/How are you?",
-    "phonetic": "yang chena yo?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "na lyakhmo yod",
-    "english": "I am fine",
-    "phonetic": "na lyakhmo yod",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "shokh",
     "english": "Come in",
     "phonetic": "shokh",
@@ -1390,111 +1165,6 @@
     "usageNotes": "",
     "relatedWords": [],
     "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "seikha shokh",
-    "english": "Sit down",
-    "phonetic": "seikha shokh",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "seikha dok",
-    "english": "Sit down",
-    "phonetic": "seikha dok",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "yang gar na oneng yod pin?",
-    "english": "Where do you come from?",
-    "phonetic": "yang gar na oneng yod pin?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "yang gar gowen yod pin?",
-    "english": "Where are you going?",
-    "phonetic": "yang gar gowen yod pin?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "yang gar dogpin?",
-    "english": "Where do you live?",
-    "phonetic": "yang gar dogpin?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "na Skardu dogpi in",
-    "english": "I live in Skardu",
-    "phonetic": "na Skardu dogpi in",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "skiye jaq boarak",
-    "english": "Happy Birthday",
-    "phonetic": "skiye jaq boarak",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
     "examples": [],
     "etymology": "",
     "culturalNotes": ""
@@ -1590,9 +1260,9 @@
     "culturalNotes": ""
   },
   {
-    "balti": "ja\u010das",
+    "balti": "jačas",
     "english": "Food",
-    "phonetic": "ja\u010das",
+    "phonetic": "jačas",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -1605,9 +1275,9 @@
     "culturalNotes": ""
   },
   {
-    "balti": "\u017eerba",
+    "balti": "žerba",
     "english": "Blind",
-    "phonetic": "\u017eerba",
+    "phonetic": "žerba",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -1620,9 +1290,9 @@
     "culturalNotes": ""
   },
   {
-    "balti": "sken\u017euks",
+    "balti": "skenžuks",
     "english": "Embrace",
-    "phonetic": "sken\u017euks",
+    "phonetic": "skenžuks",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -1650,9 +1320,9 @@
     "culturalNotes": ""
   },
   {
-    "balti": "\u0161aa",
+    "balti": "šaa",
     "english": "Meat",
-    "phonetic": "\u0161aa",
+    "phonetic": "šaa",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -1698,21 +1368,6 @@
     "balti": "yari",
     "english": "Your",
     "phonetic": "yari",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "kho ngi",
-    "english": "His/Her",
-    "phonetic": "kho ngi",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -1805,21 +1460,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "loqfi oma",
-    "english": "Yogurt",
-    "phonetic": "loqfi oma",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "churu",
     "english": "Coral",
     "phonetic": "churu",
@@ -1895,51 +1535,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "yang chena yo?",
-    "english": "How are you?",
-    "phonetic": "yang chena yo?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "yang gar na oneng yod pin?",
-    "english": "Where are you from?",
-    "phonetic": "yang gar na oneng yod pin?",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "rin po",
-    "english": "Price",
-    "phonetic": "rin po",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "kharra",
     "english": "Sugar",
     "phonetic": "kharra",
@@ -1950,21 +1545,6 @@
     "usageNotes": "",
     "relatedWords": [],
     "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "chamche thaqrin",
-    "english": "How far",
-    "phonetic": "chamche thaqrin",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
     "examples": [],
     "etymology": "",
     "culturalNotes": ""
@@ -2015,39 +1595,9 @@
     "culturalNotes": ""
   },
   {
-    "balti": "Gyoqpa khid",
-    "english": "Good morning",
-    "phonetic": "Gyoqpa khid",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Pitok khid",
-    "english": "Good night",
-    "phonetic": "Pitok khid",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "\u00d1it",
+    "balti": "Ñit",
     "english": "Sleep",
-    "phonetic": "\u00d1it",
+    "phonetic": "Ñit",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -2108,21 +1658,6 @@
     "balti": "Thos",
     "english": "Hear",
     "phonetic": "Thos",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Lam song",
-    "english": "Walk",
-    "phonetic": "Lam song",
     "categories": [
       "Greetings & Common Phrases"
     ],
@@ -8240,51 +7775,6 @@
     "culturalNotes": ""
   },
   {
-    "balti": "Nis-na chik",
-    "english": "Either",
-    "phonetic": "Nis-na chik",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Nis-na met",
-    "english": "Neither",
-    "phonetic": "Nis-na met",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Zhanba chik",
-    "english": "Another",
-    "phonetic": "Zhanba chik",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
     "balti": "Zhanba-ung",
     "english": "Others",
     "phonetic": "Zhanba-ung",
@@ -8340,126 +7830,6 @@
     "usageNotes": "",
     "relatedWords": [],
     "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Na soso",
-    "english": "Myself",
-    "phonetic": "Na soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Khyang soso",
-    "english": "Yourself",
-    "phonetic": "Khyang soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Kho soso",
-    "english": "Himself",
-    "phonetic": "Kho soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Mo soso",
-    "english": "Herself",
-    "phonetic": "Mo soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "O soso",
-    "english": "Itself",
-    "phonetic": "O soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "beginner",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Naya soso",
-    "english": "Ourselves",
-    "phonetic": "Naya soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Yidang soso",
-    "english": "Yourselves",
-    "phonetic": "Yidang soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Khoung soso",
-    "english": "Themselves",
-    "phonetic": "Khoung soso",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
     "examples": [],
     "etymology": "",
     "culturalNotes": ""
@@ -8648,21 +8018,6 @@
     "balti": "Gar-tshangma",
     "english": "Everywhere",
     "phonetic": "Gar-tshangma",
-    "categories": [
-      "Greetings & Common Phrases"
-    ],
-    "dialect": "General",
-    "usageNotes": "",
-    "relatedWords": [],
-    "difficultyLevel": "intermediate",
-    "examples": [],
-    "etymology": "",
-    "culturalNotes": ""
-  },
-  {
-    "balti": "Diring pitok",
-    "english": "Tonight",
-    "phonetic": "Diring pitok",
     "categories": [
       "Greetings & Common Phrases"
     ],
