@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "seed": "tsx scripts/seed-dictionary.ts",
     "lint": "next lint",
     "start": "next start"
   },

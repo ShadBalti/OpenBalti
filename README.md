@@ -98,7 +98,23 @@ The codebase is thoroughly documented using **JSDoc** comments. This provides de
 - MongoDB (local or Atlas)
 - Environment variables for NextAuth & DB connection. Create a `.env.local` file in the root of the project and add the necessary environment variables.
 
-### 🧠 Installation
+#### 📚 Dictionary Dataset
+
+This project includes a comprehensive Balti-English dictionary dataset located at `data/balti_dictionary_dataset.json`. This dataset contains 909 entries, each with Balti and English translations, phonetic transcriptions, categories, and other linguistic details.
+
+#### 🚀 Seeding the Database
+
+To populate your MongoDB instance with the dictionary data, use the provided seed script:
+
+```bash
+npm run seed
+```
+
+This script reads the `balti_dictionary_dataset.json` file and bulk-inserts the entries into the `Word` collection, skipping any duplicates based on the `balti` field. Progress will be logged to the console, showing how many entries were inserted and how many were skipped.
+
+Before running the seed script, ensure your `MONGODB_URI` environment variable is correctly set in a `.env.local` file at the project root.
+
+
 
 \`\`\`bash
 # Clone repository
