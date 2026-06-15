@@ -70,20 +70,23 @@ export function FeaturesSection() {
       aria-labelledby="features-heading"
     >
       <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-20 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-primary/10 border border-primary/30 rounded-full group hover:bg-primary/20 transition-colors">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            <span className="text-sm font-medium text-primary">Platform Features</span>
+        {/* Section Header with Visual Background */}
+        <div className="relative max-w-4xl mx-auto mb-20">
+          <div className="absolute -inset-8 bg-gradient-to-r from-primary/5 via-accent-2/5 to-primary/5 rounded-3xl blur-xl -z-10" aria-hidden="true"></div>
+          <div className="max-w-3xl mx-auto text-center animate-fade-in">
+            <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-primary/10 border border-primary/30 rounded-full group hover:bg-primary/20 transition-colors">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <span className="text-sm font-medium text-primary">Platform Features</span>
+            </div>
+            <h2 id="features-heading" className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+              <span className="block">Everything You Need</span>
+              <span className="text-gradient animate-gradient-shift bg-gradient-to-r from-primary via-accent-2 to-primary">to Learn, Contribute & Preserve</span>
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              OpenBalti combines powerful technology with community collaboration to create the most comprehensive Balti
+              language resource. Whether you&apos;re learning, teaching, or contributing, we have the tools you need.
+            </p>
           </div>
-          <h2 id="features-heading" className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
-            <span className="block">Everything You Need</span>
-            <span className="text-gradient">to Learn, Contribute & Preserve</span>
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            OpenBalti combines powerful technology with community collaboration to create the most comprehensive Balti
-            language resource. Whether you&apos;re learning, teaching, or contributing, we have the tools you need.
-          </p>
         </div>
 
         {/* Features Grid */}

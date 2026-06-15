@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { BookOpen, Users, Globe } from "lucide-react"
 
 export function HeroSection() {
@@ -12,7 +13,9 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          {/* Left: Text Content */}
+          <div className="max-w-2xl space-y-8">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
               <span className="text-gradient animate-gradient-shift bg-gradient-to-r from-primary via-accent-2 to-primary">Preserve & Learn</span>
@@ -66,6 +69,54 @@ export function HeroSection() {
                 <BookOpen className="h-5 w-5 text-primary group-hover:animate-float" aria-hidden="true" />
               </div>
               <span className="font-medium">Free Forever</span>
+            </div>
+          </div>
+          </div>
+
+          {/* Right: Featured Image */}
+          <div className="hidden md:flex relative justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            <div className="relative w-full max-w-sm">
+              {/* Decorative background */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent-2/20 rounded-3xl blur-2xl animate-pulse" aria-hidden="true"></div>
+              
+              {/* Main image */}
+              <div className="relative rounded-3xl overflow-hidden border-2 border-primary/30 shadow-2xl shadow-primary/20 hover:shadow-primary/40 transition-shadow duration-500">
+                <Image
+                  src="/balti-script.png"
+                  alt="Balti Language Script - Ancient Tibetic Writing"
+                  width={400}
+                  height={500}
+                  className="w-full h-auto object-cover"
+                  priority
+                />
+                {/* Overlay accent */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent pointer-events-none"></div>
+              </div>
+
+              {/* Floating accent cards */}
+              <div className="absolute -bottom-6 -left-4 bg-background border border-border rounded-2xl p-4 shadow-lg animate-float">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center">
+                    <span className="text-lg font-bold text-success">✓</span>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">Community</p>
+                    <p className="font-semibold">1000+ Words</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute -top-4 -right-4 bg-background border border-border rounded-2xl p-4 shadow-lg animate-float" style={{ animationDelay: "1.5s" }}>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-accent-3/20 flex items-center justify-center">
+                    <span className="text-lg">🌍</span>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">Global</p>
+                    <p className="font-semibold">50+ Contributors</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
