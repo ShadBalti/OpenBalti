@@ -157,38 +157,38 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-            <div className="group relative bg-gradient-to-br from-info/10 to-transparent border border-info/20 hover:border-info/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-info/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-info/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+            <div className="group relative bg-gradient-to-br from-info/10 to-transparent border border-info/20 hover:border-info/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-info/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-info/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
               <div className="relative">
-                <div className="w-12 h-12 rounded-lg bg-info/20 flex items-center justify-center mb-3 group-hover:bg-info/30 transition-colors">
-                  <span className="text-xl">📚</span>
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-info/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-info/30 transition-colors">
+                  <span className="text-lg sm:text-xl">📚</span>
                 </div>
-                <h3 className="font-semibold mb-2 text-lg">Learn</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Learn</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Help a new generation learn Balti using modern, easy-to-use digital tools.
                 </p>
               </div>
             </div>
-            <div className="group relative bg-gradient-to-br from-warning/10 to-transparent border border-warning/20 hover:border-warning/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-warning/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-warning/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+            <div className="group relative bg-gradient-to-br from-warning/10 to-transparent border border-warning/20 hover:border-warning/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-warning/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-warning/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
               <div className="relative">
-                <div className="w-12 h-12 rounded-lg bg-warning/20 flex items-center justify-center mb-3 group-hover:bg-warning/30 transition-colors">
-                  <span className="text-xl">📖</span>
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-warning/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-warning/30 transition-colors">
+                  <span className="text-lg sm:text-xl">📖</span>
                 </div>
-                <h3 className="font-semibold mb-2 text-lg">Document</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Document</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Support both classical and modern Balti scripts for complete documentation.
                 </p>
               </div>
             </div>
-            <div className="group relative bg-gradient-to-br from-accent-3/10 to-transparent border border-accent-3/20 hover:border-accent-3/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-accent-3/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-accent-3/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+            <div className="group relative bg-gradient-to-br from-accent-3/10 to-transparent border border-accent-3/20 hover:border-accent-3/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-accent-3/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-accent-3/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
               <div className="relative">
-                <div className="w-12 h-12 rounded-lg bg-accent-3/20 flex items-center justify-center mb-3 group-hover:bg-accent-3/30 transition-colors">
-                  <span className="text-xl">🤝</span>
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-accent-3/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-accent-3/30 transition-colors">
+                  <span className="text-lg sm:text-xl">🤝</span>
                 </div>
-                <h3 className="font-semibold mb-2 text-lg">Collaborate</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collaborate</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Keep the project open-source so the global community can help improve it.
                 </p>
               </div>

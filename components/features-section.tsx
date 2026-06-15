@@ -66,23 +66,23 @@ const features = [
 export function FeaturesSection() {
   return (
     <section
-      className="py-16 md:py-24 bg-gradient-to-b from-muted/50 via-background to-muted/50"
+      className="py-8 sm:py-16 md:py-24 bg-gradient-to-b from-muted/50 via-background to-muted/50"
       aria-labelledby="features-heading"
     >
       <div className="container mx-auto px-4">
         {/* Section Header with Visual Background */}
-        <div className="relative max-w-4xl mx-auto mb-20">
-          <div className="absolute -inset-8 bg-gradient-to-r from-primary/5 via-accent-2/5 to-primary/5 rounded-3xl blur-xl -z-10" aria-hidden="true"></div>
+        <div className="relative max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20">
+          <div className="absolute -inset-4 sm:-inset-8 bg-gradient-to-r from-primary/5 via-accent-2/5 to-primary/5 rounded-2xl sm:rounded-3xl blur-xl -z-10" aria-hidden="true"></div>
           <div className="max-w-3xl mx-auto text-center animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-primary/10 border border-primary/30 rounded-full group hover:bg-primary/20 transition-colors">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-2 mb-4 sm:mb-6 bg-primary/10 border border-primary/30 rounded-full group hover:bg-primary/20 transition-colors">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              <span className="text-sm font-medium text-primary">Platform Features</span>
+              <span className="text-xs sm:text-sm font-medium text-primary">Platform Features</span>
             </div>
-            <h2 id="features-heading" className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+            <h2 id="features-heading" className="text-2xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
               <span className="block">Everything You Need</span>
               <span className="text-gradient animate-gradient-shift bg-gradient-to-r from-primary via-accent-2 to-primary">to Learn, Contribute & Preserve</span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed">
               OpenBalti combines powerful technology with community collaboration to create the most comprehensive Balti
               language resource. Whether you&apos;re learning, teaching, or contributing, we have the tools you need.
             </p>
@@ -90,24 +90,24 @@ export function FeaturesSection() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
               <article
                 key={feature.title}
-                className="group relative p-6 bg-gradient-to-br from-muted/50 to-muted/30 hover:from-primary/10 hover:to-muted/50 border border-border hover:border-primary/50 rounded-2xl transition-all duration-500 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background overflow-hidden animate-fade-in"
+                className="group relative p-4 sm:p-6 bg-gradient-to-br from-muted/50 to-muted/30 hover:from-primary/10 hover:to-muted/50 border border-border hover:border-primary/50 rounded-xl sm:rounded-2xl transition-all duration-500 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background overflow-hidden animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
                 <div className="relative z-10">
-                  <div className="mb-4 inline-flex p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl group-hover:from-primary/30 group-hover:to-primary/20 group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-300">
-                    <Icon className="h-6 w-6 text-primary group-hover:animate-spin-slow" aria-hidden="true" />
+                  <div className="mb-3 sm:mb-4 inline-flex p-2 sm:p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg sm:rounded-xl group-hover:from-primary/30 group-hover:to-primary/20 group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-300">
+                    <Icon className="h-5 sm:h-6 w-5 sm:w-6 text-primary group-hover:animate-spin-slow" aria-hidden="true" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 group-hover:text-primary transition-colors duration-300">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                  <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">{feature.description}</p>
                 </div>
               </article>
             )
