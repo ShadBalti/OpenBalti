@@ -12,40 +12,64 @@ export default function AboutPage() {
     <div className="container py-10 md:py-16">
       <div className="mx-auto max-w-4xl space-y-12">
         
-        {/* ================= HERO ================= */}
-        <div className="space-y-6 text-center">
-          <div className="mx-auto max-w-md">
-            <div className="relative inline-block mb-6">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/40 blur-sm"></div>
-              <span className="relative inline-block px-4 py-1.5 text-sm font-medium text-primary bg-background rounded-full border border-primary/20">
-                Preserving Our Heritage
-              </span>
+        {/* ================= HERO WITH IMAGE ================= */}
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="space-y-6">
+            <div>
+              <div className="relative inline-block mb-6">
+                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary/20 to-primary/40 blur-sm"></div>
+                <span className="relative inline-block px-4 py-1.5 text-sm font-medium text-primary bg-background rounded-full border border-primary/20">
+                  Preserving Our Heritage
+                </span>
+              </div>
+
+              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                About <span className="text-primary">OpenBalti</span>
+              </h1>
             </div>
 
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              About <span className="text-primary">OpenBalti</span>
-            </h1>
+            <p className="text-lg text-muted-foreground">
+              Preserving language. Protecting heritage. Empowering generations.
+            </p>
+
+            <p className="text-base md:text-lg">
+              OpenBalti is a free, community-driven digital dictionary and language platform dedicated to documenting and revitalizing the Balti language for the digital age.
+            </p>
+
+            <div className="pt-4">
+              <div className="h-1 w-24 bg-primary rounded-full"></div>
+            </div>
           </div>
 
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Preserving language. Protecting heritage. Empowering generations.
-          </p>
-
-          <p className="text-base md:text-lg max-w-2xl mx-auto">
-            OpenBalti is a free, community-driven digital dictionary and language platform dedicated to documenting and revitalizing the Balti language for the digital age.
-          </p>
-
-          <div className="pt-4">
-            <div className="h-1 w-24 bg-primary mx-auto rounded-full"></div>
+          <div className="hidden md:flex relative justify-center">
+            <div className="relative w-full max-w-sm">
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-accent-2/20 rounded-3xl blur-2xl" aria-hidden="true"></div>
+              <div className="relative rounded-3xl overflow-hidden border-2 border-primary/30 shadow-2xl">
+                <Image
+                  src="/balti-script.png"
+                  alt="Balti Language Heritage"
+                  width={400}
+                  height={400}
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ================= QUOTE ================= */}
-        <div className="bg-primary/5 border border-primary/10 rounded-2xl p-6 md:p-8">
-          <blockquote className="italic text-xl md:text-2xl font-light text-center">
-            "When a language dies, we don't just lose words; we lose a unique way of seeing the world."
-          </blockquote>
-          <p className="text-center mt-4 text-muted-foreground">— Dilshad Hussain</p>
+        {/* ================= QUOTE WITH VISUAL ================= */}
+        <div className="relative bg-gradient-to-br from-primary/10 via-accent-2/5 to-primary/10 border border-primary/20 rounded-3xl p-8 md:p-12 overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl" aria-hidden="true"></div>
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-accent-2/10 rounded-full blur-3xl" aria-hidden="true"></div>
+          <div className="relative">
+            <svg className="w-12 h-12 text-primary/30 mb-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 21c3 -1 7 -1 11 -1c4 0 8 0 11 1m-17 -4c0 -1 .5 -4.5 2 -6.5m9 0c1.5 2 2 5.5 2 6.5m9 0c1.5 2 2 5.5 2 6.5"/>
+            </svg>
+            <blockquote className="italic text-2xl md:text-3xl font-light text-center text-foreground">
+              "When a language dies, we don't just lose words; we lose a unique way of seeing the world."
+            </blockquote>
+            <p className="text-center mt-6 text-muted-foreground">— Dilshad Hussain</p>
+          </div>
         </div>
 
         {/* ================= URGENCY ================= */}
@@ -120,30 +144,54 @@ export default function AboutPage() {
             <Link href="/dictionary" className="text-primary underline">Balti-English dictionary</Link> and open digital tools.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
-            <div className="border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Preserve</h3>
-              <p className="text-sm text-muted-foreground">
-                Build the largest freely accessible Balti-English dictionary so rare and traditional words are never lost.
-              </p>
+          <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+            <div className="group relative bg-gradient-to-br from-success/10 to-transparent border border-success/20 hover:border-success/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-success/10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-success/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+              <div className="relative">
+                <div className="w-12 h-12 rounded-lg bg-success/20 flex items-center justify-center mb-3 group-hover:bg-success/30 transition-colors">
+                  <span className="text-xl">🏛️</span>
+                </div>
+                <h3 className="font-semibold mb-2 text-lg">Preserve</h3>
+                <p className="text-sm text-muted-foreground">
+                  Build the largest freely accessible Balti-English dictionary so rare and traditional words are never lost.
+                </p>
+              </div>
             </div>
-            <div className="border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Learn</h3>
-              <p className="text-sm text-muted-foreground">
-                Help a new generation learn Balti using modern, easy-to-use digital tools.
-              </p>
+            <div className="group relative bg-gradient-to-br from-info/10 to-transparent border border-info/20 hover:border-info/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-info/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-info/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+              <div className="relative">
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-info/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-info/30 transition-colors">
+                  <span className="text-lg sm:text-xl">📚</span>
+                </div>
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Learn</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Help a new generation learn Balti using modern, easy-to-use digital tools.
+                </p>
+              </div>
             </div>
-            <div className="border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Document</h3>
-              <p className="text-sm text-muted-foreground">
-                Support both classical and modern Balti scripts for complete documentation.
-              </p>
+            <div className="group relative bg-gradient-to-br from-warning/10 to-transparent border border-warning/20 hover:border-warning/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-warning/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-warning/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+              <div className="relative">
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-warning/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-warning/30 transition-colors">
+                  <span className="text-lg sm:text-xl">📖</span>
+                </div>
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Document</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Support both classical and modern Balti scripts for complete documentation.
+                </p>
+              </div>
             </div>
-            <div className="border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Collaborate</h3>
-              <p className="text-sm text-muted-foreground">
-                Keep the project open-source so the global community can help improve it.
-              </p>
+            <div className="group relative bg-gradient-to-br from-accent-3/10 to-transparent border border-accent-3/20 hover:border-accent-3/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:shadow-accent-3/10">
+              <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-accent-3/5 rounded-full -mr-12 sm:-mr-16 -mt-12 sm:-mt-16 group-hover:scale-150 transition-transform duration-500" aria-hidden="true"></div>
+              <div className="relative">
+                <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg bg-accent-3/20 flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-accent-3/30 transition-colors">
+                  <span className="text-lg sm:text-xl">🤝</span>
+                </div>
+                <h3 className="font-semibold mb-1 sm:mb-2 text-base sm:text-lg">Collaborate</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Keep the project open-source so the global community can help improve it.
+                </p>
+              </div>
             </div>
           </div>
 

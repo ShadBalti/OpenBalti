@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/hero-section"
 import { FeaturesSection } from "@/components/features-section"
 import { ImpactSection } from "@/components/impact-section"
 import { CTASection } from "@/components/cta-section"
+import { CulturalGallery } from "@/components/cultural-gallery"
 import { ExpertiseBadges } from "@/components/expertise-badges"
 import { Stats } from "@/components/social-proof"
 import Link from "next/link"
@@ -212,6 +213,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <CulturalGallery />
 
       <ImpactSection />
       <FeaturesSection />

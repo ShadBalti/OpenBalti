@@ -11,7 +11,7 @@ export function HomeCardsSection() {
   return (
     <>
       {/* Core Tools Section */}
-      <section aria-labelledby="core-tools" className="mx-auto max-w-5xl px-4 py-12 md:py-16">
+      <section aria-labelledby="core-tools" className="mx-auto max-w-5xl px-4 py-16 md:py-24">
         <div className="mb-12 text-center">
           <h2 id="core-tools" className="text-3xl sm:text-4xl font-bold text-white mb-3">
             Explore OpenBalti

@@ -26,19 +26,39 @@ export function Footer() {
   }
 
   return (
-    <footer className="border-t bg-muted/40" aria-labelledby="footer-heading">
+    <footer className="border-t bg-gradient-to-b from-muted/50 to-background relative overflow-hidden" aria-labelledby="footer-heading">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" aria-hidden="true"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-2/5 rounded-full blur-3xl" aria-hidden="true"></div>
+      </div>
+
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="container py-12 md:py-16">
+      <div className="container py-12 md:py-16 relative z-10">
         {/* Footer Links Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="font-semibold text-foreground">OpenBalti</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+              <h3 className="font-semibold text-foreground text-lg">OpenBalti</h3>
+            </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Preserving and documenting the Balti language for future generations through community collaboration.
             </p>
+            <div className="flex gap-3 mt-2">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors">
+                <span className="text-lg">💬</span>
+              </div>
+              <div className="w-8 h-8 rounded-lg bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors">
+                <span className="text-lg">🌍</span>
+              </div>
+              <div className="w-8 h-8 rounded-lg bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors">
+                <span className="text-lg">📚</span>
+              </div>
+            </div>
           </div>
 
           {/* Learning Links */}
