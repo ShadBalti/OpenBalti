@@ -18,10 +18,9 @@ interface WordCardProps {
 }
 
 const difficultyColors: Record<string, string> = {
-  Beginner: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-  Intermediate:
-    "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
-  Advanced: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+  Beginner: "badge-success",
+  Intermediate: "badge-warning",
+  Advanced: "badge-info",
 }
 
 export function WordCard({
@@ -94,8 +93,8 @@ export function WordCard({
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">{word.english}</h3>
-            <p className="text-primary font-medium text-sm">{word.balti}</p>
+            <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{word.english}</h3>
+            <p className="text-primary font-medium text-base leading-relaxed">{word.balti}</p>
           </div>
           <Badge className={`whitespace-nowrap ${difficultyColor}`} variant="secondary">
             {word.difficultyLevel}
@@ -151,14 +150,14 @@ export function WordCard({
           <Button
             variant="ghost"
             size="sm"
-            className="flex-1 h-8 gap-1"
+            className="flex-1 h-9 gap-1 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             onClick={handleFavoriteToggle}
             disabled={isLoading}
           >
             {favorite ? (
               <>
-                <BookmarkCheck className="h-4 w-4" />
-                <span className="text-xs">Saved</span>
+                <BookmarkCheck className="h-4 w-4 text-primary" />
+                <span className="text-xs font-medium">Saved</span>
               </>
             ) : (
               <>
@@ -168,13 +167,22 @@ export function WordCard({
             )}
           </Button>
 
-          <Button variant="ghost" size="sm" className="flex-1 h-8 gap-1" onClick={handleShare}>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="flex-1 h-9 gap-1 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" 
+            onClick={handleShare}
+          >
             <Share2 className="h-4 w-4" />
             <span className="text-xs">Share</span>
           </Button>
 
           <Link href={`/words/${word.english.replace(/\s+/g, "-")}`}>
-            <Button variant="ghost" size="sm" className="h-8 gap-1">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-9 gap-1 hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary text-primary hover:text-primary font-medium"
+            >
               <span className="text-xs">Learn</span>
               <ChevronRight className="h-4 w-4" />
             </Button>

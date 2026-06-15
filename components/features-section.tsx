@@ -66,7 +66,7 @@ const features = [
 export function FeaturesSection() {
   return (
     <section
-      className="py-16 md:py-24 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800"
+      className="py-16 md:py-24 bg-gradient-to-b from-muted/50 via-background to-muted/50"
       aria-labelledby="features-heading"
     >
       <div className="container mx-auto px-4">
@@ -91,12 +91,12 @@ export function FeaturesSection() {
             return (
               <article
                 key={feature.title}
-                className="group p-6 bg-gray-800/50 hover:bg-gray-800/80 border border-gray-700 hover:border-blue-500/50 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-400"
+                className="group p-6 bg-muted/30 hover:bg-muted/50 border border-border hover:border-primary/50 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
               >
-                <div className="mb-4 inline-flex p-3 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 transition-colors duration-200">
-                  <Icon className="h-6 w-6 text-blue-500" aria-hidden="true" />
+                <div className="mb-4 inline-flex p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors duration-200">
+                  <Icon className="h-6 w-6 text-primary" aria-hidden="true" />
                 </div>
-                <h3 className="text-lg font-semibold mb-3 group-hover:text-blue-400 transition-colors">
+                <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
                   {feature.title}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>

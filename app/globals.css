@@ -144,25 +144,13 @@
   }
 }
 
-/* Added text gradient utility for hero heading */
-@keyframes textGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
+/* Text gradient utility using design tokens - static gradient for accessibility */
 .text-gradient {
-  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--info)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  background-size: 200% 200%;
+  color: hsl(var(--primary));
 }
 
 .animate-fade-in {
@@ -177,7 +165,26 @@
   animation: slideUp 0.3s ease-in-out;
 }
 
-/* Custom scrollbar */
+/* Semantic color utilities for badges and status indicators */
+.badge-success {
+  @apply bg-success/10 text-success dark:bg-success/20 dark:text-success;
+}
+
+.badge-warning {
+  @apply bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning;
+}
+
+.badge-info {
+  @apply bg-info/10 text-info dark:bg-info/20 dark:text-info;
+}
+
+/* Custom scrollbar - Firefox support */
+* {
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) hsl(var(--muted));
+  scrollbar-width: thin;
+}
+
+/* WebKit scrollbar (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -191,6 +198,7 @@
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--muted-foreground) / 0.3);
   border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
