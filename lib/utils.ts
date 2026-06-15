@@ -14,25 +14,26 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Converts a word to a URL-friendly slug format using URL encoding.
- * Preserves special characters like apostrophes, commas, slashes, etc.
- * Example: "To Be" -> "to%20be", "Don't" -> "don%27t", "C/C++" -> "c%2fc%2b%2b"
+ * Converts a word to a URL-friendly slug format.
+ * Lowercases the word, trims whitespace, and replaces runs of whitespace with single hyphens.
+ * Example: "To Be" -> "to-be", "As if" -> "as-if", "Don't" -> "don't"
  *
  * @param {string} word - The word to convert to slug format
- * @returns {string} The URL-encoded slug
+ * @returns {string} The URL-friendly slug
  */
 export function wordToSlug(word: string): string {
-  return encodeURIComponent(word.toLowerCase().trim())
+  return encodeURIComponent(word.toLowerCase().trim().replace(/\s+/g, "-"))
 }
 
 /**
  * Converts a slug back to the original word format.
- * Decodes URL-encoded characters.
- * Example: "to%20be" -> "to be", "don%27t" -> "don't"
+ * Decodes URL-encoded characters and converts hyphens back to spaces.
+ * The result is used for a case-insensitive lookup, so casing does not matter.
+ * Example: "as-if" -> "as if", "to-be" -> "to be", "don't" -> "don't"
  *
  * @param {string} slug - The slug to convert
- * @returns {string} The decoded word
+ * @returns {string} The decoded word with spaces
  */
 export function slugToWord(slug: string): string {
-  return decodeURIComponent(slug)
+  return decodeURIComponent(slug).replace(/-/g, " ")
 }

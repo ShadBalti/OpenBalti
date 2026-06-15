@@ -12,6 +12,7 @@ import { WordsPageSkeleton } from "@/components/skeletons/words-page-skeleton"
 import Word from "@/models/Word"
 import type { IWord } from "@/models/Word"
 import dbConnect from "@/lib/mongodb"
+import { wordToSlug } from "@/lib/utils"
 
 export const metadata: Metadata = generatePageMetadata(
   "Balti Dictionary - Search 5000+ Words | English-Balti Translation Tool & Language Preservation",
@@ -156,7 +157,7 @@ export default async function DictionaryPage() {
               <ul>
                 {initialWords.map((word: any) => (
                   <li key={word._id?.toString()}>
-                    <a href={`/words/${word.english.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <a href={`/words/${wordToSlug(word.english)}`}>
                       {word.balti} - {word.english}
                       {word.phonetic && ` (${word.phonetic})`}
                     </a>
@@ -198,7 +199,7 @@ export default async function DictionaryPage() {
                 "@type": "DefinedTerm",
                 name: word.balti,
                 description: word.english,
-                url: `https://openbalti.com/words/${word.english.toLowerCase().replace(/\s+/g, '-')}`,
+                url: `https://openbalti.com/words/${wordToSlug(word.english)}`,
                 inLanguage: ["en", "bal"],
                 ...(word.phonetic && { pronunciation: word.phonetic }),
                 ...(word.partOfSpeech && { termCode: word.partOfSpeech }),

@@ -1,4 +1,5 @@
 import { baseMetadata } from "@/lib/metadata"
+import { wordToSlug } from "@/lib/utils"
 
 interface DictionaryStructuredDataProps {
   url: string
@@ -247,7 +248,7 @@ export function WordStructuredData({ word }: { word: any }) {
     alternateName: word.balti,
     description: `${word.english} - ${word.balti}. ${word.usageNotes || word.etymology || "Balti language dictionary entry."}`,
     inLanguage: "Balti",
-    url: `${baseUrl}/words/${word.english.toLowerCase().replace(/\s+/g, "-")}`,
+    url: `${baseUrl}/words/${wordToSlug(word.english)}`,
     pronunciation: word.phonetic
       ? {
           "@type": "Thing",

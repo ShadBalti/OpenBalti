@@ -9,6 +9,7 @@ import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useToast } from "@/hooks/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { wordToSlug } from "@/lib/utils"
 
 interface WordCardProps {
   word: any
@@ -68,7 +69,7 @@ export function WordCard({
   }
 
   const handleShare = () => {
-    const url = `${typeof window !== "undefined" ? window.location.origin : ""}/words/${word.english.replace(/\s+/g, "-")}`
+    const url = `${typeof window !== "undefined" ? window.location.origin : ""}/words/${wordToSlug(word.english)}`
     const text = `${word.english} - ${word.balti}`
 
     if (navigator.share) {
@@ -178,7 +179,7 @@ export function WordCard({
             <span className="text-xs">Share</span>
           </Button>
 
-          <Link href={`/words/${word.english.replace(/\s+/g, "-")}`}>
+          <Link href={`/words/${wordToSlug(word.english)}`}>
             <Button 
               variant="ghost" 
               size="sm" 

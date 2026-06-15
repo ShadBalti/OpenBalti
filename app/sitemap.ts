@@ -2,18 +2,15 @@ import type { MetadataRoute } from "next"
 import dbConnect from "@/lib/mongodb"
 import Word from "@/models/Word"
 import type { IWord } from "@/models/Word"
+import { wordToSlug } from "@/lib/utils"
 
 /**
- * Safe slug generator for URLs
+ * Safe slug generator for URLs.
+ * Delegates to the shared wordToSlug helper so sitemap URLs stay consistent
+ * with the links generated across the site and the word detail page lookup.
  */
 function slugify(text: string) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/['"]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
+  return wordToSlug(text)
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
