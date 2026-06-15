@@ -89,14 +89,15 @@ export function WordCard({
   const creator = word.createdBy as any
 
   return (
-    <Card className="group hover:shadow-md hover:border-primary/50 transition-all">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2 mb-2">
+    <Card className="group relative overflow-hidden hover:shadow-xl hover:shadow-primary/20 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 animate-fade-in">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true"></div>
+      <CardHeader className="pb-3 relative z-10">
+        <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex-1">
-            <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{word.english}</h3>
-            <p className="text-primary font-medium text-base leading-relaxed">{word.balti}</p>
+            <h3 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">{word.english}</h3>
+            <p className="text-primary font-semibold text-lg leading-relaxed">{word.balti}</p>
           </div>
-          <Badge className={`whitespace-nowrap ${difficultyColor}`} variant="secondary">
+          <Badge className={`whitespace-nowrap animate-bounce-in ${difficultyColor}`} variant="secondary">
             {word.difficultyLevel}
           </Badge>
         </div>
