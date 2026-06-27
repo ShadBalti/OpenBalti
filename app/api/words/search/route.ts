@@ -28,8 +28,16 @@ export async function GET(req: NextRequest) {
     const escapedQuery = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
     // Search for exact match first (case-insensitive), then partial matches
+    const exactMatch = new RegExp(`^${escapedQuery}$`, "i")
     const word = await Word.findOne({
-      english: { $regex: new RegExp(`^${escapedQuery}$`, "i") },
+      $or: [
+        { english: { $regex: exactMatch } },
+        { balti: { $regex: exactMatch } },
+        { phonetic: { $regex: exactMatch } },
+        { searchTerms: { $regex: exactMatch } },
+        { "scripts.text": { $regex: exactMatch } },
+        { "definitions.text": { $regex: exactMatch } },
+      ],
     }).lean()
 
     if (word) {
@@ -38,7 +46,14 @@ export async function GET(req: NextRequest) {
 
     // If no exact match, search for partial matches
     const partialMatches = await Word.find({
-      english: { $regex: escapedQuery, $options: "i" },
+      $or: [
+        { english: { $regex: escapedQuery, $options: "i" } },
+        { balti: { $regex: escapedQuery, $options: "i" } },
+        { phonetic: { $regex: escapedQuery, $options: "i" } },
+        { searchTerms: { $regex: escapedQuery, $options: "i" } },
+        { "scripts.text": { $regex: escapedQuery, $options: "i" } },
+        { "definitions.text": { $regex: escapedQuery, $options: "i" } },
+      ],
     })
       .lean()
       .limit(10)

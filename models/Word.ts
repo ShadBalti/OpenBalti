@@ -1,36 +1,31 @@
 import mongoose, { Schema, type Document } from "mongoose"
 
-/**
- * @interface IWord
- * @extends {Document}
- * @description Represents a single entry in the dictionary.
- * It contains all the linguistic and metadata associated with a word.
- *
- * @property {string} balti - The word in the Balti language.
- * @property {string} english - The English translation of the word.
- * @property {string} [phonetic] - The phonetic spelling of the Balti word.
- * @property {string[]} [categories] - An array of categories or tags associated with the word.
- * @property {string} [dialect] - The regional dialect the word belongs to.
- * @property {string} [usageNotes] - Notes on how the word is used.
- * @property {string[]} [relatedWords] - An array of related words.
- * @property {"beginner" | "intermediate" | "advanced"} [difficultyLevel] - The difficulty level for language learners.
- * @property {Array<{ balti: string; english: string }>} [examples] - An array of example sentences.
- * @property {string} [etymology] - The origin and history of the word.
- * @property {string} [culturalNotes] - Notes on the cultural significance of the word.
- * @property {mongoose.Types.ObjectId} createdBy - The ID of the user who created the word.
- * @property {mongoose.Types.ObjectId} [updatedBy] - The ID of the user who last updated the word.
- * @property {Date} createdAt - The timestamp when the word was created.
- * @property {Date} updatedAt - The timestamp when the word was last updated.
- * @property {object} [feedbackStats] - Statistics on community feedback for the word.
- * @property {number} feedbackStats.useful - The number of times the word was marked as useful.
- * @property {number} feedbackStats.trusted - The number of times the word was marked as trusted.
- * @property {number} feedbackStats.needsReview - The number of times the word was flagged for review.
- */
+export type WordScript = "persoArabic" | "yige" | "roman" | "ipa"
+export type DefinitionLanguage = "english" | "urdu" | "balti"
+
+export interface IWordScriptForm {
+  script: WordScript
+  text: string
+  isPrimary?: boolean
+  transliteration?: string
+  notes?: string
+}
+
+export interface IWordDefinition {
+  language: DefinitionLanguage
+  text: string
+  isPrimary?: boolean
+}
+
 export interface IWord extends Document<string> {
   _id: string
   balti: string
   english: string
   phonetic?: string
+  scripts?: IWordScriptForm[]
+  definitions?: IWordDefinition[]
+  partOfSpeech: string
+  searchTerms?: string[]
   categories?: string[]
   dialect?: string
   usageNotes?: string
@@ -39,6 +34,7 @@ export interface IWord extends Document<string> {
   examples?: Array<{ balti: string; english: string }>
   etymology?: string
   culturalNotes?: string
+  linguisticData?: Record<string, unknown>
   createdBy: mongoose.Types.ObjectId | string
   updatedBy?: mongoose.Types.ObjectId | string
   createdAt: Date
@@ -51,103 +47,168 @@ export interface IWord extends Document<string> {
   reviewStatus?: "flagged" | "reviewed" | null
 }
 
-/**
- * @const WordSchema
- * @description The Mongoose schema for the Word model.
- * It defines the structure, data types, and validation for dictionary word entries.
- * It also includes text indexes on the `balti` and `english` fields to optimize search performance.
- */
+const scriptFormSchema = new Schema(
+  {
+    script: {
+      type: String,
+      enum: ["persoArabic", "yige", "roman", "ipa"],
+      required: true,
+    },
+    text: { type: String, required: true, trim: true },
+    isPrimary: { type: Boolean, default: false },
+    transliteration: { type: String, trim: true },
+    notes: { type: String, trim: true },
+  },
+  { _id: false },
+)
+
+const definitionSchema = new Schema(
+  {
+    language: {
+      type: String,
+      enum: ["english", "urdu", "balti"],
+      required: true,
+    },
+    text: { type: String, required: true, trim: true },
+    isPrimary: { type: Boolean, default: false },
+  },
+  { _id: false },
+)
+
 const wordSchemaDefinition: Record<string, unknown> = {
-    balti: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    english: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    phonetic: {
-      type: String,
-      trim: true,
-    },
-    categories: {
-      type: [String],
-      default: [],
-    },
-    dialect: {
-      type: String,
-      trim: true,
-    },
-    usageNotes: {
-      type: String,
-      trim: true,
-    },
-    relatedWords: {
-      type: [String],
-      default: [],
-    },
-    difficultyLevel: {
-      type: String,
-      enum: ["beginner", "intermediate", "advanced"],
-      default: "intermediate",
-    },
-    examples: {
-      type: [
-        {
-          balti: {
-            type: String,
-            required: true,
-            trim: true,
-          },
-          english: {
-            type: String,
-            required: true,
-            trim: true,
-          },
+  balti: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  english: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  phonetic: {
+    type: String,
+    trim: true,
+  },
+  scripts: {
+    type: [scriptFormSchema],
+    default: [],
+  },
+  definitions: {
+    type: [definitionSchema],
+    default: [],
+  },
+  partOfSpeech: {
+    type: String,
+    required: true,
+    trim: true,
+    default: "unknown",
+    index: true,
+  },
+  searchTerms: {
+    type: [String],
+    default: [],
+    set: (terms: string[] = []) => Array.from(new Set(terms.map((term) => term.trim()).filter(Boolean))),
+  },
+  categories: {
+    type: [String],
+    default: [],
+  },
+  dialect: {
+    type: String,
+    trim: true,
+  },
+  usageNotes: {
+    type: String,
+    trim: true,
+  },
+  relatedWords: {
+    type: [String],
+    default: [],
+  },
+  difficultyLevel: {
+    type: String,
+    enum: ["beginner", "intermediate", "advanced"],
+    default: "intermediate",
+  },
+  examples: {
+    type: [
+      {
+        balti: {
+          type: String,
+          required: true,
+          trim: true,
         },
-      ],
-      default: [],
-    },
-    etymology: {
-      type: String,
-      trim: true,
-    },
-    culturalNotes: {
-      type: String,
-      trim: true,
-    },
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    updatedBy: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    feedbackStats: {
-      useful: {
-        type: Number,
-        default: 0,
+        english: {
+          type: String,
+          required: true,
+          trim: true,
+        },
       },
-      trusted: {
-        type: Number,
-        default: 0,
-      },
-      needsReview: {
-        type: Number,
-        default: 0,
-      },
+    ],
+    default: [],
+  },
+  etymology: {
+    type: String,
+    trim: true,
+  },
+  culturalNotes: {
+    type: String,
+    trim: true,
+  },
+  linguisticData: {
+    type: Schema.Types.Mixed,
+    default: {},
+  },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  updatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  feedbackStats: {
+    useful: {
+      type: Number,
+      default: 0,
     },
-  }
+    trusted: {
+      type: Number,
+      default: 0,
+    },
+    needsReview: {
+      type: Number,
+      default: 0,
+    },
+  },
+}
 
 const UntypedSchema = Schema as any
 const WordSchema: Schema = new UntypedSchema(wordSchemaDefinition, { timestamps: true })
 
-// Create text indexes for search
-WordSchema.index({ balti: "text", english: "text" })
+WordSchema.pre("validate", function normalizeCompatibleFields(this: IWord) {
+  const word = this
+
+  if (!word.scripts?.length) {
+    word.scripts = [
+      { script: "roman", text: word.balti, isPrimary: true },
+      ...(word.phonetic ? [{ script: "ipa" as const, text: word.phonetic }] : []),
+    ]
+  }
+
+  if (!word.definitions?.length) {
+    word.definitions = [{ language: "english", text: word.english, isPrimary: true }]
+  }
+
+})
+
+WordSchema.index({ balti: "text", english: "text", phonetic: "text", searchTerms: "text", "scripts.text": "text", "definitions.text": "text" })
+WordSchema.index({ partOfSpeech: 1, dialect: 1 })
+WordSchema.index({ searchTerms: 1 })
+WordSchema.index({ "scripts.script": 1, "scripts.text": 1 })
+WordSchema.index({ "definitions.language": 1, "definitions.text": 1 })
 
 const UntypedMongoose = mongoose as any
 export default UntypedMongoose.models.Word || UntypedMongoose.model("Word", WordSchema)

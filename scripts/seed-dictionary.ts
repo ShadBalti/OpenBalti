@@ -20,7 +20,7 @@ if (!MONGODB_URI) {
 const PLACEHOLDER_CREATED_BY = new mongoose.Types.ObjectId('60d5ec49f8c7d1001c8b4567'); // Example ObjectId
 
 async function seedDictionary() {
-  await mongoose.connect(MONGODB_URI);
+  await mongoose.connect(MONGODB_URI as string);
   console.log('Connected to MongoDB.');
 
   try {
@@ -44,6 +44,17 @@ async function seedDictionary() {
           balti: entry.balti,
           english: entry.english,
           phonetic: entry.phonetic || '',
+          scripts: entry.scripts || [
+            { script: 'roman', text: entry.balti, isPrimary: true },
+            ...(entry.phonetic ? [{ script: 'ipa', text: entry.phonetic }] : []),
+          ],
+          definitions: entry.definitions || [
+            { language: 'english', text: entry.english, isPrimary: true },
+            ...(entry.urdu ? [{ language: 'urdu', text: entry.urdu }] : []),
+            ...(entry.baltiDefinition ? [{ language: 'balti', text: entry.baltiDefinition }] : []),
+          ],
+          partOfSpeech: entry.partOfSpeech || 'unknown',
+          searchTerms: entry.searchTerms || [entry.balti, entry.english, entry.phonetic].filter(Boolean),
           categories: entry.categories || [],
           dialect: entry.dialect || '',
           usageNotes: entry.usageNotes || '',
@@ -52,6 +63,7 @@ async function seedDictionary() {
           examples: entry.examples || [],
           etymology: entry.etymology || '',
           culturalNotes: entry.culturalNotes || '',
+          linguisticData: entry.linguisticData || {},
           createdBy: PLACEHOLDER_CREATED_BY,
           feedbackStats: { useful: 0, trusted: 0, needsReview: 0 },
         });
