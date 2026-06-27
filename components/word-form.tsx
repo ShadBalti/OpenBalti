@@ -20,6 +20,10 @@ interface WordFormProps {
     balti: string
     english: string
     phonetic ? : string
+    scripts ? : Array < { script: "persoArabic" | "yige" | "roman" | "ipa"; text: string; isPrimary?: boolean } >
+    definitions ? : Array < { language: "english" | "urdu" | "balti"; text: string; isPrimary?: boolean } >
+    partOfSpeech: string
+    searchTerms ? : string[]
     categories ? : string[]
     dialect ? : string
     usageNotes ? : string
@@ -44,6 +48,15 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
   const [balti, setBalti] = useState("")
   const [english, setEnglish] = useState("")
   const [phonetic, setPhonetic] = useState("")
+  const [persoArabic, setPersoArabic] = useState("")
+  const [yige, setYige] = useState("")
+  const [roman, setRoman] = useState("")
+  const [ipa, setIpa] = useState("")
+  const [urduDefinition, setUrduDefinition] = useState("")
+  const [baltiDefinition, setBaltiDefinition] = useState("")
+  const [partOfSpeech, setPartOfSpeech] = useState("unknown")
+  const [searchTermInput, setSearchTermInput] = useState("")
+  const [searchTerms, setSearchTerms] = useState < string[] > ([])
   const [categoryInput, setCategoryInput] = useState("")
   const [categories, setCategories] = useState < string[] > ([])
   const [dialect, setDialect] = useState("")
@@ -65,6 +78,14 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setBalti(initialData.balti)
       setEnglish(initialData.english)
       setPhonetic(initialData.phonetic || "")
+      setPersoArabic(initialData.scripts?.find((form) => form.script === "persoArabic")?.text || "")
+      setYige(initialData.scripts?.find((form) => form.script === "yige")?.text || "")
+      setRoman(initialData.scripts?.find((form) => form.script === "roman")?.text || initialData.balti || "")
+      setIpa(initialData.scripts?.find((form) => form.script === "ipa")?.text || initialData.phonetic || "")
+      setUrduDefinition(initialData.definitions?.find((definition) => definition.language === "urdu")?.text || "")
+      setBaltiDefinition(initialData.definitions?.find((definition) => definition.language === "balti")?.text || "")
+      setPartOfSpeech(initialData.partOfSpeech || "unknown")
+      setSearchTerms(initialData.searchTerms || [])
       setCategories(initialData.categories || [])
       setDialect(initialData.dialect || "")
       setUsageNotes(initialData.usageNotes || "")
@@ -79,6 +100,14 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setBalti("")
       setEnglish("")
       setPhonetic("")
+      setPersoArabic("")
+      setYige("")
+      setRoman("")
+      setIpa("")
+      setUrduDefinition("")
+      setBaltiDefinition("")
+      setPartOfSpeech("unknown")
+      setSearchTerms([])
       setCategories([])
       setDialect("")
       setUsageNotes("")
@@ -118,10 +147,27 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       return
     }
     
+    const scripts = [
+      { script: "persoArabic" as const, text: persoArabic.trim(), isPrimary: false },
+      { script: "yige" as const, text: yige.trim(), isPrimary: false },
+      { script: "roman" as const, text: roman.trim() || balti.trim(), isPrimary: true },
+      { script: "ipa" as const, text: ipa.trim() || phonetic.trim(), isPrimary: false },
+    ].filter((form) => form.text)
+
+    const definitions = [
+      { language: "english" as const, text: english.trim(), isPrimary: true },
+      { language: "urdu" as const, text: urduDefinition.trim(), isPrimary: false },
+      { language: "balti" as const, text: baltiDefinition.trim(), isPrimary: false },
+    ].filter((definition) => definition.text)
+
     onSubmit({
       balti: balti.trim(),
       english: english.trim(),
-      phonetic: phonetic.trim() || undefined,
+      phonetic: phonetic.trim() || ipa.trim() || undefined,
+      scripts: scripts.length > 0 ? scripts : undefined,
+      definitions,
+      partOfSpeech,
+      searchTerms: searchTerms.length > 0 ? searchTerms : undefined,
       categories: categories.length > 0 ? categories : undefined,
       dialect: dialect.trim() || undefined,
       usageNotes: usageNotes.trim() || undefined,
@@ -140,6 +186,14 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
       setBalti("")
       setEnglish("")
       setPhonetic("")
+      setPersoArabic("")
+      setYige("")
+      setRoman("")
+      setIpa("")
+      setUrduDefinition("")
+      setBaltiDefinition("")
+      setPartOfSpeech("unknown")
+      setSearchTerms([])
       setCategories([])
       setDialect("")
       setUsageNotes("")
@@ -176,6 +230,17 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
   const removeRelatedWord = (word: string) => {
     setRelatedWords(relatedWords.filter((w) => w !== word))
   }
+
+  const addSearchTerm = () => {
+    if (searchTermInput.trim() && !searchTerms.includes(searchTermInput.trim())) {
+      setSearchTerms([...searchTerms, searchTermInput.trim()])
+      setSearchTermInput("")
+    }
+  }
+
+  const removeSearchTerm = (term: string) => {
+    setSearchTerms(searchTerms.filter((searchTerm) => searchTerm !== term))
+  }
   
   const addExample = () => {
     if (exampleBaltiInput.trim() && exampleEnglishInput.trim()) {
@@ -206,6 +271,13 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
     if (e.key === "Enter" && relatedWordInput.trim()) {
       e.preventDefault()
       addRelatedWord()
+    }
+  }
+
+  const handleSearchTermKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && searchTermInput.trim()) {
+      e.preventDefault()
+      addSearchTerm()
     }
   }
   
@@ -314,6 +386,34 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
               />
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="partOfSpeech">Part of Speech</Label>
+                <Select value={partOfSpeech} onValueChange={setPartOfSpeech}>
+                  <SelectTrigger id="partOfSpeech">
+                    <SelectValue placeholder="Select grammar category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="unknown">Unknown / needs review</SelectItem>
+                    <SelectItem value="noun">Noun</SelectItem>
+                    <SelectItem value="verb">Verb</SelectItem>
+                    <SelectItem value="adjective">Adjective</SelectItem>
+                    <SelectItem value="adverb">Adverb</SelectItem>
+                    <SelectItem value="pronoun">Pronoun</SelectItem>
+                    <SelectItem value="postposition">Postposition</SelectItem>
+                    <SelectItem value="conjunction">Conjunction</SelectItem>
+                    <SelectItem value="interjection">Interjection</SelectItem>
+                    <SelectItem value="phrase">Phrase</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="ipa">IPA</Label>
+                <Input id="ipa" value={ipa} onChange={(e) => setIpa(e.target.value)} placeholder="e.g., t͡ʃʰa" />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="dialect">Dialect Used In</Label>
               <Select value={dialect} onValueChange={setDialect}>
@@ -352,6 +452,68 @@ export default function WordForm({ initialData, onSubmit, onCancel, isSubmitting
             <div className="space-y-6 pt-4 border-t">
               <div className="space-y-4">
                 <h3 className="font-semibold text-foreground">Additional Details</h3>
+
+                <div className="space-y-4 rounded-lg border p-4">
+                  <div>
+                    <h4 className="font-medium">Script Forms</h4>
+                    <p className="text-sm text-muted-foreground">Store Perso-Arabic, Yige, Roman, and IPA together without replacing the legacy Balti field.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="persoArabic">Perso-Arabic</Label>
+                      <Input id="persoArabic" value={persoArabic} onChange={(e) => setPersoArabic(e.target.value)} placeholder="e.g., چھا" dir="rtl" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="yige">Yige</Label>
+                      <Input id="yige" value={yige} onChange={(e) => setYige(e.target.value)} placeholder="e.g., ཇ་" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="roman">Roman</Label>
+                      <Input id="roman" value={roman} onChange={(e) => setRoman(e.target.value)} placeholder="e.g., chha" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="advancedIpa">IPA</Label>
+                      <Input id="advancedIpa" value={ipa} onChange={(e) => setIpa(e.target.value)} placeholder="e.g., t͡ʃʰa" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 rounded-lg border p-4">
+                  <div>
+                    <h4 className="font-medium">Multilingual Definitions</h4>
+                    <p className="text-sm text-muted-foreground">English remains required for compatibility; Urdu and Balti definitions are optional.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="urduDefinition">Urdu Definition</Label>
+                      <Textarea id="urduDefinition" value={urduDefinition} onChange={(e) => setUrduDefinition(e.target.value)} placeholder="اردو تعریف" dir="rtl" rows={2} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="baltiDefinition">Balti Definition</Label>
+                      <Textarea id="baltiDefinition" value={baltiDefinition} onChange={(e) => setBaltiDefinition(e.target.value)} placeholder="Definition in Balti" rows={2} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="searchTerms">Search Terms</Label>
+                  <div className="flex gap-2">
+                    <Input id="searchTerms" value={searchTermInput} onChange={(e) => setSearchTermInput(e.target.value)} onKeyDown={handleSearchTermKeyDown} placeholder="Alternate spelling, dialect form, or misspelling" />
+                    <Button type="button" onClick={addSearchTerm} variant="outline" size="sm">Add</Button>
+                  </div>
+                  {searchTerms.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {searchTerms.map((term) => (
+                        <Badge key={term} variant="outline" className="flex items-center gap-1">
+                          {term}
+                          <button type="button" onClick={() => removeSearchTerm(term)} className="ml-1 rounded-full hover:bg-muted p-0.5" aria-label={`Remove search term: ${term}`}>
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="categories">Categories / Tags</Label>

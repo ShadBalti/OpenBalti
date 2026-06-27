@@ -23,8 +23,8 @@ export const validationPatterns = {
   password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/,
   phoneNumber: /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/,
   zipCode: /^\d{5}(-\d{4})?$/,
-  baltiWord: /^[^\s]{2,50}$/, // Non-whitespace, 2-50 chars
-  englishWord: /^[a-zA-Z\s]{2,50}$/, // Letters and spaces only
+  baltiWord: /^.{1,120}$/u, // Supports Perso-Arabic, Yige, Roman, IPA, and spacing
+  englishWord: /^[a-zA-Z\s,;:'"()!?-]{1,200}$/, // English definitions may include punctuation
 }
 
 /**
@@ -200,14 +200,20 @@ export const commonSchemas = {
   wordContribution: {
     english: {
       required: true,
-      minLength: 2,
-      maxLength: 50,
+      minLength: 1,
+      maxLength: 200,
       pattern: "englishWord" as const,
     },
     balti: {
       required: true,
+      minLength: 1,
+      maxLength: 120,
+      pattern: "baltiWord" as const,
+    },
+    partOfSpeech: {
+      required: true,
       minLength: 2,
-      maxLength: 50,
+      maxLength: 40,
     },
     phonetic: {
       minLength: 2,

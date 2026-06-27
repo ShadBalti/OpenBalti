@@ -47,7 +47,15 @@ export async function GET(req: NextRequest) {
 
     // Search query
     if (search) {
-      query.$or = [{ balti: { $regex: search, $options: "i" } }, { english: { $regex: search, $options: "i" } }]
+      query.$or = [
+        { balti: { $regex: search, $options: "i" } },
+        { english: { $regex: search, $options: "i" } },
+        { phonetic: { $regex: search, $options: "i" } },
+        { searchTerms: { $regex: search, $options: "i" } },
+        { "scripts.text": { $regex: search, $options: "i" } },
+        { "definitions.text": { $regex: search, $options: "i" } },
+        { partOfSpeech: { $regex: search, $options: "i" } },
+      ]
     }
 
     // Category filter
@@ -118,8 +126,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
     }
 
-    const { balti, english, phonetic, categories, dialect, usageNotes, relatedWords, difficultyLevel } =
-      await req.json()
+    const {
+      balti,
+      english,
+      phonetic,
+      scripts,
+      definitions,
+      partOfSpeech,
+      searchTerms,
+      categories,
+      dialect,
+      usageNotes,
+      relatedWords,
+      difficultyLevel,
+      examples,
+      etymology,
+      culturalNotes,
+      linguisticData,
+    } = await req.json()
 
     if (!balti || !english) {
       return NextResponse.json(
@@ -146,11 +170,19 @@ export async function POST(req: NextRequest) {
       balti,
       english,
       phonetic,
+      scripts,
+      definitions,
+      partOfSpeech: partOfSpeech || "unknown",
+      searchTerms,
       categories,
       dialect,
       usageNotes,
       relatedWords,
       difficultyLevel,
+      examples,
+      etymology,
+      culturalNotes,
+      linguisticData,
       createdBy: session.user.id,
       feedbackStats: { useful: 0, trusted: 0, needsReview: 0 },
     })

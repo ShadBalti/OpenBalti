@@ -18,13 +18,24 @@ export async function GET(req: NextRequest) {
     const suggestions = await Word.aggregate([
       {
         $match: {
-          $or: [{ balti: { $regex: query, $options: "i" } }, { english: { $regex: query, $options: "i" } }],
+          $or: [
+            { balti: { $regex: query, $options: "i" } },
+            { english: { $regex: query, $options: "i" } },
+            { phonetic: { $regex: query, $options: "i" } },
+            { searchTerms: { $regex: query, $options: "i" } },
+            { "scripts.text": { $regex: query, $options: "i" } },
+            { "definitions.text": { $regex: query, $options: "i" } },
+          ],
         },
       },
       {
         $project: {
           balti: 1,
           english: 1,
+          phonetic: 1,
+          scripts: 1,
+          definitions: 1,
+          partOfSpeech: 1,
           _id: 1,
         },
       },
