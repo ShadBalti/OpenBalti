@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 import type { IWord } from "@/models/Word"
 import WordFeedback from "@/components/word-feedback"
 import WordComments from "@/components/word-comments"
+import { WordLinguisticData } from "@/components/word-linguistic-data"
 
 interface WordDetailProps {
   word: IWord
@@ -186,6 +187,8 @@ export default function WordDetail({ word, onClose, showFullDetails = false }: W
             <p>{word.dialect}</p>
           </div>
         )}
+
+        <WordLinguisticData word={word} />
 
         {word.usageNotes && (
           <div className="p-3 bg-muted rounded-md">

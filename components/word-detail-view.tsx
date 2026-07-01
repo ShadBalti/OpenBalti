@@ -15,6 +15,7 @@ import WordComments from "@/components/word-comments"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { ShareArticle } from "@/components/share-article"
 import { BreadcrumbNav } from "@/components/breadcrumb-nav"
+import { WordLinguisticData } from "@/components/word-linguistic-data"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -299,6 +300,8 @@ export default function WordDetailView({ word, history }: WordDetailViewProps) {
           </Card>
         )}
       </div>
+
+      <WordLinguisticData word={word} />
 
       {/* Tabs for different sections */}
       <Tabs defaultValue="details" className="w-full">
